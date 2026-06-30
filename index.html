@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title id="site-title">Inscrição Oficial</title>
+    <style>
+        /* PALETA DE CORES OFICIAL DO EVENTO - 1º DE JULHO */
+        :root {
+            --cor-destaque: #694573;
+            /* Roxo Nobre para Títulos, Marcas e Botões */
+            --cor-destaque-hover: #4E3256;
+            /* Roxo Escuro para efeito de passar o mouse */
+            --cor-fundo-site: #F2EEEB;
+            /* Nude Claro para o fundo da página inteira */
+            --cor-detalhes: #D9863D;
+            /* Tangerina para Marcadores, Horas e Divisórias */
+            --cor-card-branco: #FFFFFF;
+            /* Branco puro para blocos de formulário e cards */
+
+            /* CALIBRAÇÃO DE CINZAS LEVES PARA OS TEXTOS LONGOS */
+            --texto-corpo: #495057;
+            /* Cinza escuro confortável para ler descrições */
+            --texto-suave: #868E96;
+            /* Cinza claro para subnotações e apoios */
+        }
+
+        * {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--cor-fundo-site);
+            color: var(--cor-destaque);
+            padding-top: 70px;
+        }
+
+        /* 1. BARRA DE NAVEGAÇÃO CUSTOMIZADA */
+        .navbar-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--cor-card-branco);
+            box-shadow: 0 4px 20px rgba(105, 69, 115, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+            border-bottom: 3px solid var(--cor-destaque);
+        }
+
+        .navbar-brand-custom {
+            font-weight: 800;
+            color: var(--cor-destaque);
+            font-size: 19px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-menu-custom {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .navbar-custom a {
+            text-decoration: none;
+            color: var(--cor-destaque);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .navbar-custom a:hover {
+            color: var(--cor-detalhes);
+        }
+
+        /* 2. BANNER DO TOPO */
+        .hero-section {
+            width: 100%;
+            min-height: 380px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.01);
+            z-index: 1;
+        }
+
+        /* 3. SEÇÕES DE CONTEÚDO */
+        .section-block {
+            padding: 75px 20px;
+            display: flex;
+            justify-content: center;
+            background-color: var(--cor-fundo-site);
+            border-bottom: 1px solid #E2DCD8;
+        }
+
+        .section-block.alt-bg {
+            background-color: var(--cor-card-branco);
+            border-bottom: 1px solid #EEDFDE;
+        }
+
+        .content-width {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 25px;
+            color: var(--cor-destaque);
+            margin-bottom: 35px;
+            font-weight: 800;
+            text-align: center;
+            text-transform: none;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background-color: var(--cor-detalhes);
+            border-radius: 4px;
+        }
+
+        .section-text {
+            font-size: 16px;
+            color: var(--texto-corpo);
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* 4. TIMELINE */
+        .timeline {
+            border-left: 3px solid #E2E8F0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .evento-item {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .evento-item::before {
+            content: "";
+            position: absolute;
+            left: -39px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            background-color: var(--cor-fundo-site);
+            border-radius: 50%;
+            border: 3px solid var(--cor-destaque);
+            box-shadow: 0 0 0 4px rgba(105, 69, 115, 0.08);
+        }
+
+        .evento-hora {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--cor-detalhes);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .evento-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--cor-destaque);
+            margin-bottom: 6px;
+        }
+
+        .evento-desc {
+            font-size: 14px;
+            color: var(--texto-corpo);
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* 5. FORMULÁRIO */
+        .col-form-card {
+            background: var(--cor-card-branco);
+            padding: 45px 35px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 30px rgba(105, 69, 115, 0.02);
+            height: fit-content;
+        }
+
+        .form-titulo {
+            font-size: 19px;
+            color: var(--cor-destaque);
+            margin-bottom: 25px;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--texto-corpo);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #FAFAFA;
+            color: var(--cor-destaque);
+            transition: all 0.2s ease-in-out;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--cor-destaque);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(105, 69, 115, 0.06);
+        }
+
+        .btn-inscricao {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--cor-destaque);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(105, 69, 115, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-inscricao:hover {
+            background-color: var(--cor-destaque-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(105, 69, 115, 0.25);
+        }
+
+        /* 6. ORGANIZADOR */
+        .organizador-box {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            background: var(--cor-fundo-site);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+        }
+
+        .organizador-foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cor-destaque);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .organizador-nome {
+            font-size: 19px;
+            color: var(--cor-destaque);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .organizador-bio {
+            font-size: 14px;
+            color: var(--texto-corpo);
+            line-height: 1.6;
+        }
+
+        /* Rodapé */
+        .footer-institucional {
+            background: #321F37;
+            color: #E6E0DD;
+            padding: 50px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            border-top: 4px solid var(--cor-destaque);
+        }
+
+        .btn-admin-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 42px;
+            height: 42px;
+            background-color: var(--cor-destaque);
+            color: #FDFBF7;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0.4;
+            transition: all 0.2s ease;
+        }
+
+        .btn-admin-floating:hover {
+            transform: rotate(90deg) scale(1.05);
+            background-color: var(--cor-detalhes);
+            opacity: 1;
+        }
+
+        /* Estilização para validação de CPF */
+        input:invalid {
+            border-color: #dc3545 !important;
+        }
+
+        input:valid {
+            border-color: #28a745 !important;
+        }
+
+        .cpf-valid {
+            border-color: #28a745 !important;
+            background-color: #f0fff4 !important;
+        }
+
+        .cpf-invalid {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5 !important;
+        }
+
+        .cpf-pending {
+            border-color: #ffc107 !important;
+            background-color: #fffbf0 !important;
+        }
+
+        .group small {
+            color: #666;
+            font-size: 11px;
+            display: block;
+            margin-top: 5px;
+            transition: color 0.3s ease;
+        }
+
+        @media (max-width: 991px) {
+            .navbar-custom {
+                padding: 0 20px;
+            }
+
+            .navbar-menu-custom {
+                display: none;
+            }
+
+            .hero-section {
+                min-height: 400px;
+            }
+
+            .section-block {
+                padding: 50px 20px;
+            }
+
+            .organizador-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* ============================================= */
+        /* IMPRESSÃO - APENAS 1 PÁGINA                   */
+        /* ============================================= */
+        @media print {
+
+            html,
+            body,
+            body * {
+                visibility: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 0 !important;
+                width: 0 !important;
+                overflow: hidden !important;
+                display: none !important;
+            }
+
+            #comprovante-inscricao,
+            #comprovante-inscricao * {
+                visibility: visible !important;
+                height: auto !important;
+                width: auto !important;
+                display: block !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            #comprovante-inscricao {
+                position: fixed !important;
+                left: 50% !important;
+                top: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: 90% !important;
+                max-width: 700px !important;
+                padding: 25px 30px !important;
+                background: white !important;
+                border: 2px solid #694573 !important;
+                border-radius: 12px !important;
+                box-shadow: none !important;
+                display: block !important;
+                visibility: visible !important;
+                height: auto !important;
+                max-height: 95vh !important;
+                overflow-y: auto !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            #comprovante-inscricao button,
+            #comprovante-inscricao .no-print {
+                display: none !important;
+                visibility: hidden !important;
+                height: 0 !important;
+                width: 0 !important;
+            }
+
+            #comprovante-inscricao div,
+            #comprovante-inscricao p,
+            #comprovante-inscricao h2,
+            #comprovante-inscricao strong,
+            #comprovante-inscricao span {
+                visibility: visible !important;
+                display: block !important;
+                margin: 2px 0 !important;
+                padding: 2px 0 !important;
+                height: auto !important;
+                width: auto !important;
+            }
+
+            #comprovante-inscricao [style*="grid-template-columns"] {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 5px !important;
+                visibility: visible !important;
+                height: auto !important;
+            }
+
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                height: 100vh !important;
+                width: 100vw !important;
+                overflow: hidden !important;
+            }
+
+            @page {
+                margin: 0.5cm !important;
+                size: A4 portrait !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+        }
+
+        /* ============================================= */
+        /* CORREÇÃO DO SCROLL PARA NAVBAR FIXA           */
+        /* ============================================= */
+        .section-block {
+            scroll-margin-top: 80px;
+            /* Ajusta o scroll para não ficar atrás da navbar */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. BARRA DE NAVEGAÇÃO FIXA -->
+    <nav class="navbar-custom">
+        <div
+            class="navbar-brand-custom"
+            id="nav-marca"
+        >UFPA Eventos</div>
+        <ul class="navbar-menu-custom">
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#programacao">Programação</a></li>
+            <li><a href="#inscricao">Inscrição</a></li>
+            <li><a href="#organizador">Organizador</a></li>
+        </ul>
+    </nav>
+
+    <!-- 2. SEÇÃO HERO -->
+    <header
+        class="hero-section"
+        id="hero-banner"
+    ></header>
+
+    <!-- 3. 1ª SEÇÃO: IDENTIDADE DO EVENTO -->
+    <section
+        class="section-block alt-bg"
+        style="padding: 50px 20px 20px 20px; text-align: center;"
+    >
+        <div
+            class="content-width"
+            style="margin: 0 auto; text-align: center; width: 100%;"
+        >
+            <p
+                id="txt-subtitulo"
+                style="color: var(--terra-suave); font-weight: 700; margin: 0 auto 10px auto; font-size: 18px; text-align: center; width: 100%;"
+            >
+            </p>
+            <h1
+                id="txt-titulo"
+                style="color: var(--terra-escura); font-size: 36px; font-weight: 800; margin: 0 auto 25px auto; line-height: 1.3; text-align: center; width: 100%;"
+            >
+                Carregando Evento...</h1>
+            <hr
+                style="width: 100px; margin: 20px auto; border: 2px solid var(--verde-principal); border-radius: 2px; opacity: 1;">
+            <!-- CARDS: DATA, HORÁRIO E LOCAL -->
+            <div style="
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    max-width: 700px; 
+    margin: 25px auto 0 auto;
+    padding: 0 10px;
+">
+                <!-- CARD 1: DATA -->
+                <div style="
+        background: white; 
+        border-radius: 12px; 
+        padding: 20px 15px; 
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.04);
+        text-align: center;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    ">
+                    <div style="
+            font-size: 28px; 
+            margin-bottom: 6px;
+        ">📅</div>
+                    <p style="
+            font-size: 10px; 
+            text-transform: uppercase; 
+            color: #868E96; 
+            font-weight: 700; 
+            letter-spacing: 0.8px; 
+            margin: 0 0 4px 0;
+        ">Quando será?</p>
+                    <strong
+                        id="card-data"
+                        style="
+            font-size: 15px; 
+            color: #4E3256; 
+            font-weight: 700; 
+            display: block;
+        "
+                    >...</strong>
+                </div>
+
+                <!-- CARD 2: HORÁRIO -->
+                <div style="
+        background: white; 
+        border-radius: 12px; 
+        padding: 20px 15px; 
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.04);
+        text-align: center;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    ">
+                    <div style="
+            font-size: 28px; 
+            margin-bottom: 6px;
+        ">🕐</div>
+                    <p style="
+            font-size: 10px; 
+            text-transform: uppercase; 
+            color: #868E96; 
+            font-weight: 700; 
+            letter-spacing: 0.8px; 
+            margin: 0 0 4px 0;
+        ">Horário</p>
+                    <strong
+                        id="card-horario"
+                        style="
+            font-size: 15px; 
+            color: #4E3256; 
+            font-weight: 700; 
+            display: block;
+        "
+                    >...</strong>
+                </div>
+
+                <!-- CARD 3: LOCAL -->
+                <div style="
+        background: white; 
+        border-radius: 12px; 
+        padding: 20px 15px; 
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.04);
+        text-align: center;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    ">
+                    <div style="
+            font-size: 28px; 
+            margin-bottom: 6px;
+        ">📍</div>
+                    <p style="
+            font-size: 10px; 
+            text-transform: uppercase; 
+            color: #868E96; 
+            font-weight: 700; 
+            letter-spacing: 0.8px; 
+            margin: 0 0 4px 0;
+        ">Onde será?</p>
+                    <strong
+                        id="card-local"
+                        style="
+            font-size: 15px; 
+            color: #4E3256; 
+            font-weight: 700; 
+            display: block;
+        "
+                    >...</strong>
+                </div>
+            </div>
+            <strong
+                id="card-local"
+                style="font-size: 18px; color: var(--terra-escura); font-weight: 700; display: block; text-align: center; width: 100%;"
+            >...</strong>
+        </div>
+        </div>
+    </section>
+
+    <!-- 4. SEÇÃO: SOBRE O EVENTO -->
+    <section
+        class="section-block"
+        id="sobre"
+        style="padding-top: 50px; padding-bottom: 50px;"
+    >
+        <div class="content-width">
+            <h3 class="section-title">Sobre o Evento</h3>
+            <p
+                class="section-text"
+                id="txt-descricao"
+            >Carregando informações...</p>
+        </div>
+    </section>
+
+    <!-- SEÇÃO PROGRAMAÇÃO -->
+    <section
+        class="section-block"
+        id="programacao"
+        style="padding-top: 60px; padding-bottom: 60px;"
+    >
+        <div
+            class="content-width"
+            style="max-width: 800px; margin: 0 auto; width: 100%;"
+        >
+            <h3 class="section-title">Programação</h3>
+            <div
+                class="timeline"
+                id="linha-do-tempo"
+                style="margin-top: 30px;"
+            >
+                <p style="color: var(--terra-suave); font-style: italic; text-align: center;">Carregando cronograma das
+                    atividades...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO INSCRIÇÃO -->
+    <section
+        class="section-block alt-bg"
+        id="inscricao"
+        style="padding-top: 60px; padding-bottom: 60px; display: flex; justify-content: center;"
+    >
+        <div
+            class="content-width"
+            style="max-width: 550px; margin: 0 auto; width: 100%;"
+        >
+            <h3 class="section-title">Inscrições</h3>
+            <div
+                class="col-form-card"
+                id="box-formulario"
+                style="margin-top: 30px; width: 100%;"
+            >
+                <p class="form-titulo">Preencha Seus Dados</p>
+                <form
+                    id="form-evento"
+                    action="https://script.google.com/macros/s/AKfycbzqi1ocqYm8ejhGTw7F_L1JRzWCqnC2uXJnbxW2S1pZQ9ND8tOXa59rme-cr1YCZxwf3A/exec"
+                    method="POST"
+                >
+                    <div class="group">
+                        <label for="nome">Nome Completo:</label>
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            required
+                            placeholder="DIGITE SEU NOME"
+                            style="text-transform: uppercase;"
+                        >
+                    </div>
+                    <div class="group">
+                        <label for="email">E-mail Principal:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            placeholder="exemplo@email.com"
+                        >
+                    </div>
+                    <div id="campos-dinamicos-container"></div>
+                    <button
+                        type="submit"
+                        class="btn-inscricao"
+                        id="btn-enviar"
+                    >Realizar Minha Inscrição</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO ORGANIZADOR -->
+    <section
+        class="section-block alt-bg"
+        id="organizador"
+    >
+        <div class="content-width">
+            <h3 class="section-title">Organização</h3>
+            <div class="organizador-box">
+                <img
+                    class="organizador-foto"
+                    id="org-foto"
+                    src=""
+                    alt="Organizador"
+                    style="display: none;"
+                >
+                <div>
+                    <h4
+                        class="organizador-nome"
+                        id="org-nome"
+                    >Carregando organizador...</h4>
+                    <p
+                        class="organizador-bio"
+                        id="org-bio"
+                    >...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-institucional">
+        <p>Universidade Federal do Pará - Campus Universitário do Marajó / Breves</p>
+    </footer>
+
+    <a
+        href="admin.html"
+        class="btn-admin-floating"
+    >⚙</a>
+
+    <!-- ========================================== -->
+    <!-- BIBLIOTECAS PARA GERAR PDF PROFISSIONAL    -->
+    <!-- ========================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <!-- ========================================== -->
+    <!-- BIBLIOTECA EMAILJS                        -->
+    <!-- ========================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script>
+        // Inicializa o EmailJS com sua Public Key
+        (function () {
+            emailjs.init({
+                publicKey: "Cg5wAVCiDMCj6xud9", // Coloque sua Public Key do EmailJS
+            });
+        })();
+    </script>
+    <!-- ========================================== -->
+    <!-- BIBLIOTECA PARA GERAR QR CODE             -->
+    <!-- ========================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT COMPLETO                        -->
+    <!-- ========================================== -->
+    <script>
+        // =============================================
+        // 1. CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
+        // =============================================
+        const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzqi1ocqYm8ejhGTw7F_L1JRzWCqnC2uXJnbxW2S1pZQ9ND8tOXa59rme-cr1YCZxwf3A/exec";
+
+        // =============================================
+        // 2. FUNÇÕES DE VALIDAÇÃO DE CPF
+        // =============================================
+
+        // Permite apenas números no campo
+        function apenasNumeros(event) {
+            const charCode = event.which ? event.which : event.keyCode;
+            // Permite: backspace (8), delete (46), setas (37-40), tab (9)
+            if (charCode === 8 || charCode === 46 || (charCode >= 37 && charCode <= 40) || charCode === 9) {
+                return true;
+            }
+            // Permite apenas números (48-57)
+            return (charCode >= 48 && charCode <= 57);
+        }
+
+        // Valida e limita o CPF a 11 dígitos
+        function validarCPF(input) {
+            // Remove tudo que não for número
+            let valor = input.value.replace(/\D/g, '');
+
+            // Limita a 11 caracteres
+            if (valor.length > 11) {
+                valor = valor.slice(0, 11);
+            }
+
+            // Atualiza o valor do campo
+            input.value = valor;
+
+            // Aplica estilo visual de validação
+            const group = input.closest('.group');
+            const small = group ? group.querySelector('small') : null;
+
+            if (valor.length === 11) {
+                input.style.borderColor = '#28a745';
+                input.style.backgroundColor = '#f0fff4';
+                if (small) small.style.color = '#28a745';
+            } else if (valor.length > 0) {
+                input.style.borderColor = '#ffc107';
+                input.style.backgroundColor = '#fffbf0';
+                if (small) small.style.color = '#ffc107';
+            } else {
+                input.style.borderColor = '#E2E8F0';
+                input.style.backgroundColor = '#FAFAFA';
+                if (small) small.style.color = '#666';
+            }
+        }
+
+        // Função para validar CPF completo (dígitos verificadores)
+        function validarCPFCompleto(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+
+            if (cpf.length !== 11) return false;
+
+            // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
+            if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+            // Validação do primeiro dígito verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            let digito1 = (resto === 10 || resto === 11) ? 0 : resto;
+
+            if (parseInt(cpf.charAt(9)) !== digito1) return false;
+
+            // Validação do segundo dígito verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            let digito2 = (resto === 10 || resto === 11) ? 0 : resto;
+
+            return parseInt(cpf.charAt(10)) === digito2;
+        }
+
+        // =============================================
+        // 3. CARREGAR DADOS DO SERVIDOR
+        // =============================================
+        fetch(`${GOOGLE_API_URL}?action=listarTudo`)
+            .then(res => res.json())
+            .then(central => {
+
+                // 3.1 EXTRAÇÃO DAS CONFIGURAÇÕES GERAIS
+                const dadosConfig = central.config || {};
+                const config = {};
+                for (let key in dadosConfig) {
+                    if (dadosConfig.hasOwnProperty(key)) {
+                        config[key.toLowerCase().trim()] = dadosConfig[key];
+                    }
+                }
+
+                // Injeta Nome, Subtítulo e Descrição
+                if (config.titulo) {
+                    document.getElementById('txt-titulo').innerText = config.titulo;
+                    document.getElementById('nav-marca').innerText = config.titulo;
+                    document.getElementById('site-title').innerText = config.titulo + " - Inscrição Oficial";
+                }
+                const textoSubtitulo = config.subtitulo || config.subtítulo;
+                if (textoSubtitulo) document.getElementById('txt-subtitulo').innerText = textoSubtitulo;
+
+                const textoSobre = config.sobre_evento || config.descricao;
+                if (textoSobre) document.getElementById('txt-descricao').innerText = textoSobre;
+
+                if (config.data_evento) document.getElementById('card-data').innerText = config.data_evento;
+                if (config.horario_evento) document.getElementById('card-horario').innerText = config.horario_evento;
+                if (config.local_evento) document.getElementById('card-local').innerText = config.local_evento;
+
+                if (config.nome_organizador) document.getElementById('org-nome').innerText = config.nome_organizador;
+                if (config.bio_organizador) document.getElementById('org-bio').innerText = config.bio_organizador;
+                if (config.foto_organizador && config.foto_organizador.trim() !== "") {
+                    const imgOrg = document.getElementById('org-foto');
+                    imgOrg.src = config.foto_organizador;
+                    imgOrg.style.display = 'block';
+                }
+
+                if (config.banner && config.banner.trim() !== "") {
+                    document.getElementById('hero-banner').style.backgroundImage = `url('${config.banner}')`;
+                }
+
+                // 3.2 PROCESSAMENTO DO CRONOGRAMA
+                const timeline = document.getElementById('linha-do-tempo');
+                if (timeline) {
+                    timeline.innerHTML = "";
+                    const programacao = central.programacao || [];
+                    if (programacao.length === 0) {
+                        timeline.innerHTML = '<p style="color: #888; font-style: italic;">Nenhuma atividade cadastrada no cronograma ainda.</p>';
+                    } else {
+                        programacao.forEach(item => {
+                            timeline.innerHTML += `
+                                <div class="evento-item">
+                                    <div class="evento-hora">${item.hora}</div>
+                                    <p class="evento-titulo">${item.titulo}</p>
+                                    <p class="evento-desc">${item.descricao || ''}</p>
+                                </div>`;
+                        });
+                    }
+                }
+
+                // 3.3 PROCESSAMENTO DOS CAMPOS DINÂMICOS
+                const container = document.getElementById('campos-dinamicos-container');
+                if (container) {
+                    container.innerHTML = "";
+                    const campos = central.campos || [];
+                    campos.forEach(campo => {
+                        // Verifica se o campo é do tipo CPF
+                        const isCPF = campo.id.toLowerCase().includes('cpf') ||
+                            campo.rotulo.toLowerCase().includes('cpf');
+
+                        if (campo.tipo === 'select') {
+                            const opcoesArray = campo.opcoes ? campo.opcoes.split(',') : [];
+                            let tagsOpcoes = `<option value="" disabled selected>Selecione uma opção...</option>`;
+                            opcoesArray.forEach(opcao => {
+                                const opcaoLimpa = opcao.trim();
+                                if (opcaoLimpa !== "") tagsOpcoes += `<option value="${opcaoLimpa}">${opcaoLimpa}</option>`;
+                            });
+                            container.innerHTML += `
+                                <div class="group">
+                                    <label for="${campo.id}">${campo.rotulo}</label>
+                                    <select id="${campo.id}" name="${campo.id}" required>${tagsOpcoes}</select>
+                                </div>`;
+                        } else {
+                            let inputType = campo.tipo;
+                            let inputExtra = '';
+
+                            // Se for CPF, adiciona validações especiais
+                            if (isCPF) {
+                                inputType = 'text';
+                                inputExtra = `
+                                    maxlength="11"
+                                    inputmode="numeric"
+                                    pattern="[0-9]{11}"
+                                    title="Digite apenas números (11 dígitos)"
+                                    oninput="validarCPF(this)"
+                                    onkeypress="return apenasNumeros(event)"
+                                    placeholder="Digite apenas números (ex: 12345678901)"
+                                `;
+                            }
+
+                            container.innerHTML += `
+                                <div class="group">
+                                    <label for="${campo.id}">${campo.rotulo}</label>
+                                    <input type="${inputType}" 
+                                           id="${campo.id}" 
+                                           name="${campo.id}" 
+                                           required 
+                                           placeholder="Preencha este campo"
+                                           ${inputExtra}>
+                                    ${isCPF ? '<small style="color:#666; font-size:11px; display:block; margin-top:5px;">Digite apenas números (11 dígitos)</small>' : ''}
+                                </div>`;
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                document.getElementById('txt-titulo').innerText = "Erro ao carregar o portal";
+                console.error(err);
+            });
+
+        // =============================================
+        // 4. ENVIO DO FORMULÁRIO COM VALIDAÇÃO DE CPF
+        // =============================================
+        const form = document.getElementById('form-evento');
+        const btn = document.getElementById('btn-enviar');
+        const boxFormulario = document.getElementById('box-formulario');
+        const inputNome = document.getElementById('nome');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // =============================================
+            // VALIDAÇÃO DE CPF
+            // =============================================
+            const camposCPF = document.querySelectorAll('input[id*="cpf"], input[name*="cpf"]');
+            let cpfValido = true;
+
+            camposCPF.forEach(campo => {
+                const cpf = campo.value.replace(/\D/g, '');
+
+                if (cpf.length !== 11) {
+                    cpfValido = false;
+                    campo.style.borderColor = '#dc3545';
+                    campo.style.backgroundColor = '#fff5f5';
+                    campo.focus();
+                    alert('Por favor, digite um CPF válido com 11 dígitos numéricos.');
+                    return;
+                }
+
+                if (!validarCPFCompleto(cpf)) {
+                    cpfValido = false;
+                    campo.style.borderColor = '#dc3545';
+                    campo.style.backgroundColor = '#fff5f5';
+                    campo.focus();
+                    alert('CPF inválido. Verifique os dígitos verificadores.');
+                    return;
+                }
+
+                // CPF válido
+                campo.style.borderColor = '#28a745';
+                campo.style.backgroundColor = '#f0fff4';
+            });
+
+            if (!cpfValido) return;
+
+            // Envio do formulário
+            btn.disabled = true;
+            btn.innerText = "Processando Inscrição...";
+            inputNome.value = inputNome.value.toUpperCase().trim();
+
+            const formData = new FormData(form);
+            const object = {};
+            formData.forEach((value, key) => {
+                // Limpa formatação do CPF se houver
+                if (key.toLowerCase().includes('cpf')) {
+                    object[key] = value.replace(/\D/g, '');
+                } else {
+                    object[key] = value;
+                }
+            });
+
+            fetch(form.action, {
+                method: 'POST',
+                body: JSON.stringify(object)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Gera o comprovante com os dados da inscrição
+                    const numeroInscricao = data.numeroInscricao || gerarNumeroInscricao();
+                    const dataAtual = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                    // Pega os dados do formulário para exibir no comprovante
+                    const formData = new FormData(form);
+                    const dadosInscricao = {};
+                    formData.forEach((value, key) => {
+                        if (key !== 'action') { // Remove campos internos
+                            dadosInscricao[key] = value;
+                        }
+                    });
+
+                    // =============================================
+                    // SALVA OS DADOS GLOBALMENTE PARA USAR NO PDF
+                    // =============================================
+                    window.dadosInscricaoSalvos = {};
+                    formData.forEach((value, key) => {
+                        if (key !== 'action') {
+                            window.dadosInscricaoSalvos[formatarRotulo(key)] = value;
+                        }
+                    });
+                    window.tituloEventoSalvo = document.getElementById('txt-titulo').innerText;
+                    window.orgNomeSalvo = document.getElementById('org-nome').innerText;
+
+                    boxFormulario.innerHTML = `
+                    <div id="comprovante-inscricao" style="background: white; border-radius: 12px; padding: 30px; border: 2px solid var(--cor-destaque); max-width: 600px; margin: 0 auto;">
+                        <!-- CABEÇALHO -->
+                        <div style="text-align: center; border-bottom: 2px solid var(--cor-destaque); padding-bottom: 15px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 10px;">
+                                <span style="font-size: 40px;">🎓</span>
+                                <h2 style="color: var(--cor-destaque); margin: 0; font-size: 20px;">COMPROVANTE DE INSCRIÇÃO</h2>
+                            </div>
+                            <p style="color: var(--texto-suave); font-size: 12px; margin: 0;">${document.getElementById('txt-titulo').innerText || 'Evento UFPA'}</p>
+                        </div>
+                        
+                        <!-- DADOS DO PARTICIPANTE -->
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                                <div><strong style="color: var(--cor-destaque);">Nº Inscrição:</strong><br><span style="color: var(--texto-corpo);">${numeroInscricao}</span></div>
+                                <div><strong style="color: var(--cor-destaque);">Data/Hora:</strong><br><span style="color: var(--texto-corpo);">${dataAtual}</span></div>
+                            </div>
+                            <hr style="margin: 15px 0; border: 1px dashed #ddd;">
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 14px;">
+                                ${Object.entries(dadosInscricao).map(([key, value]) => `
+                                    <div><strong style="color: var(--cor-destaque);">${formatarRotulo(key)}:</strong> <span style="color: var(--texto-corpo);">${value}</span></div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <!-- QR CODE -->
+<div id="qrcode-container" style="text-align: center; margin: 15px 0;">
+    <div id="qrcode" style="display: inline-block;"></div>
+    <p style="font-size: 10px; color: var(--texto-suave); margin-top: 5px;">
+        Escaneie o QR Code para confirmar sua presença no evento
+    </p>
+</div>
+                        <!-- RODAPÉ -->
+    <div style="text-align: center; border-top: 2px solid var(--cor-destaque); padding-top: 15px; margin-top: 10px;">
+    <p style="font-size: 12px; color: var(--texto-suave); margin: 5px 0;">
+        <strong>${document.getElementById('org-nome')?.innerText || 'UFPA'}</strong>
+    </p>
+    <p style="font-size: 11px; color: var(--texto-suave); margin: 0;">
+        Este comprovante é sua confirmação de inscrição. Guarde-o para o dia do evento.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+    <button onclick="imprimirComprovante()" style="background: #694573; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; min-width: 150px; touch-action: manipulation;">
+        🖨️ Imprimir / PDF
+    </button>
+    <button onclick="baixarComprovantePDF()" style="background: #28a745; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; min-width: 150px; touch-action: manipulation;">
+        ⬇️ Baixar PDF
+    </button>
+    <button onclick="enviarComprovanteEmail()" style="background: #17a2b8; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 14px; min-width: 150px; touch-action: manipulation;">
+        📧 Enviar E-mail
+    </button>
+    <button onclick="fecharComprovante()" style="background: #6c757d; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px;">
+        ✕ Fechar
+    </button>
+</div>
+</div>
+                    </div>
+                `;
+                    // =============================================
+                    // GERAR QR CODE PARA O PARTICIPANTE
+                    // =============================================
+                    setTimeout(function () {
+                        var qrcodeDiv = document.getElementById('qrcode');
+                        if (qrcodeDiv) {
+                            // =============================================
+                            // USA O NÚMERO DA LINHA DA INSCRIÇÃO
+                            // =============================================
+                            var numeroLinha = data.numeroInscricao || '0';
+                            // O número da linha é o índice do participante na planilha
+                            var rowIndex = parseInt(numeroLinha) + 1; // +1 por causa do cabeçalho
+                            var linkCheckin = window.location.origin + '/checkin.html?id=' + rowIndex;
+
+                            // Limpa o div
+                            qrcodeDiv.innerHTML = '';
+                            // Cria o QR Code
+                            new QRCode(qrcodeDiv, {
+                                text: linkCheckin,
+                                width: 120,
+                                height: 120,
+                                colorDark: "#694573",
+                                colorLight: "#ffffff",
+                                correctLevel: QRCode.CorrectLevel.H
+                            });
+                        }
+                    }, 200);
+                })
+                .catch(() => {
+                    alert('Erro ao processar. Tente novamente.');
+                    btn.disabled = false;
+                    btn.innerText = "Realizar Inscrição";
+                });
+        });
+        // =============================================
+        // FUNÇÕES PARA O COMPROVANTE
+        // =============================================
+
+        // Gera número de inscrição único
+        function gerarNumeroInscricao() {
+            const ano = new Date().getFullYear();
+            const mes = String(new Date().getMonth() + 1).padStart(2, '0');
+            const dia = String(new Date().getDate()).padStart(2, '0');
+            const random = String(Math.floor(1000 + Math.random() * 9000));
+            return `${ano}${mes}${dia}-${random}`;
+        }
+
+        // Formata o rótulo do campo para exibição amigável
+        function formatarRotulo(chave) {
+            var mapa = {
+                'nome': 'Nome Completo',
+                'email': 'E-mail',
+                'cpf': 'CPF',
+                'telefone': 'Telefone',
+                'whatsapp': 'WhatsApp',
+                'cidade': 'Cidade',
+                'instituicao': 'Instituição',
+                'cargo': 'Cargo/Função'
+            };
+            return mapa[chave.toLowerCase()] || chave.charAt(0).toUpperCase() + chave.slice(1).replace(/_/g, ' ');
+        }
+
+        // =============================================
+        // FUNÇÃO CORRIGIDA: FECHAR COMPROVANTE
+        // =============================================
+        function fecharComprovante() {
+            const box = document.getElementById('box-formulario');
+
+            // Recria o formulário
+            box.innerHTML = `
+                <p class="form-titulo">Preencha Seus Dados</p>
+                <form id="form-evento" action="${GOOGLE_API_URL}" method="POST">
+                    <div class="group">
+                        <label for="nome">Nome Completo:</label>
+                        <input type="text" id="nome" name="nome" required placeholder="DIGITE SEU NOME" style="text-transform: uppercase;">
+                    </div>
+                    <div class="group">
+                        <label for="email">E-mail Principal:</label>
+                        <input type="email" id="email" name="email" required placeholder="exemplo@email.com">
+                    </div>
+                    <div id="campos-dinamicos-container"></div>
+                    <button type="submit" class="btn-inscricao" id="btn-enviar">Realizar Minha Inscrição</button>
+                </form>
+            `;
+
+            // Recarrega os campos dinâmicos
+            carregarCamposDinamicos();
+
+            // Reconecta o evento do formulário
+            const novoForm = document.getElementById('form-evento');
+            const novoBtn = document.getElementById('btn-enviar');
+            const novoInputNome = document.getElementById('nome');
+
+            novoForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Validação de CPF
+                const camposCPF = document.querySelectorAll('input[id*="cpf"], input[name*="cpf"]');
+                let cpfValido = true;
+
+                camposCPF.forEach(campo => {
+                    const cpf = campo.value.replace(/\D/g, '');
+                    if (cpf.length !== 11) {
+                        cpfValido = false;
+                        campo.style.borderColor = '#dc3545';
+                        campo.style.backgroundColor = '#fff5f5';
+                        campo.focus();
+                        alert('Por favor, digite um CPF válido com 11 dígitos numéricos.');
+                        return;
+                    }
+                    if (!validarCPFCompleto(cpf)) {
+                        cpfValido = false;
+                        campo.style.borderColor = '#dc3545';
+                        campo.style.backgroundColor = '#fff5f5';
+                        campo.focus();
+                        alert('CPF inválido. Verifique os dígitos verificadores.');
+                        return;
+                    }
+                    campo.style.borderColor = '#28a745';
+                    campo.style.backgroundColor = '#f0fff4';
+                });
+
+                if (!cpfValido) return;
+
+                novoBtn.disabled = true;
+                novoBtn.innerText = "Processando Inscrição...";
+                novoInputNome.value = novoInputNome.value.toUpperCase().trim();
+
+                const formData = new FormData(novoForm);
+                const object = {};
+                formData.forEach((value, key) => {
+                    if (key.toLowerCase().includes('cpf')) {
+                        object[key] = value.replace(/\D/g, '');
+                    } else {
+                        object[key] = value;
+                    }
+                });
+
+                fetch(novoForm.action, {
+                    method: 'POST',
+                    body: JSON.stringify(object)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // ... código do comprovante (igual ao original) ...
+                        // Para não repetir, a lógica é a mesma
+                        location.reload(); // Recarrega a página para simplificar
+                    })
+                    .catch(() => {
+                        alert('Erro ao processar. Tente novamente.');
+                        novoBtn.disabled = false;
+                        novoBtn.innerText = "Realizar Inscrição";
+                    });
+            });
+        }
+
+        // =============================================
+        // FUNÇÃO PARA CARREGAR CAMPOS DINÂMICOS
+        // =============================================
+        function carregarCamposDinamicos() {
+            const container = document.getElementById('campos-dinamicos-container');
+            if (!container) return;
+
+            fetch(`${GOOGLE_API_URL}?action=listarCampos`)
+                .then(res => res.json())
+                .then(campos => {
+                    container.innerHTML = '';
+                    campos.forEach(campo => {
+                        const isCPF = campo.id.toLowerCase().includes('cpf') ||
+                            campo.rotulo.toLowerCase().includes('cpf');
+
+                        if (campo.tipo === 'select') {
+                            const opcoesArray = campo.opcoes ? campo.opcoes.split(',') : [];
+                            let tagsOpcoes = `<option value="" disabled selected>Selecione uma opção...</option>`;
+                            opcoesArray.forEach(opcao => {
+                                const opcaoLimpa = opcao.trim();
+                                if (opcaoLimpa !== "") tagsOpcoes += `<option value="${opcaoLimpa}">${opcaoLimpa}</option>`;
+                            });
+                            container.innerHTML += `
+                                <div class="group">
+                                    <label for="${campo.id}">${campo.rotulo}</label>
+                                    <select id="${campo.id}" name="${campo.id}" required>${tagsOpcoes}</select>
+                                </div>`;
+                        } else {
+                            let inputType = campo.tipo;
+                            let inputExtra = '';
+
+                            if (isCPF) {
+                                inputType = 'text';
+                                inputExtra = `
+                                    maxlength="11"
+                                    inputmode="numeric"
+                                    pattern="[0-9]{11}"
+                                    title="Digite apenas números (11 dígitos)"
+                                    oninput="validarCPF(this)"
+                                    onkeypress="return apenasNumeros(event)"
+                                    placeholder="Digite apenas números (ex: 12345678901)"
+                                `;
+                            }
+
+                            container.innerHTML += `
+                                <div class="group">
+                                    <label for="${campo.id}">${campo.rotulo}</label>
+                                    <input type="${inputType}" 
+                                           id="${campo.id}" 
+                                           name="${campo.id}" 
+                                           required 
+                                           placeholder="Preencha este campo"
+                                           ${inputExtra}>
+                                    ${isCPF ? '<small style="color:#666; font-size:11px; display:block; margin-top:5px;">Digite apenas números (11 dígitos)</small>' : ''}
+                                </div>`;
+                        }
+                    });
+                })
+                .catch(err => console.error('Erro ao carregar campos:', err));
+        }
+
+        // =============================================
+        // FUNÇÃO PARA IMPRIMIR O COMPROVANTE
+        // =============================================
+        function imprimirComprovante() {
+            var comprovante = document.getElementById('comprovante-inscricao');
+
+            if (!comprovante) {
+                alert('Comprovante não encontrado!');
+                return;
+            }
+
+            // Clona o comprovante para não alterar o original
+            var clone = comprovante.cloneNode(true);
+
+            // Remove os botões do clone (o div que contém os botões)
+            var botoes = clone.querySelector('div[style*="display: flex"]');
+            if (botoes) {
+                botoes.remove();
+            }
+
+            // Remove também qualquer outro botão que possa ter sobrado
+            var todosBotoes = clone.querySelectorAll('button');
+            todosBotoes.forEach(function (botao) {
+                botao.remove();
+            });
+
+            var win = window.open('', '_blank');
+
+            if (!win) {
+                alert('Por favor, permita pop-ups para esta página.');
+                return;
+            }
+
+            win.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Comprovante de Inscrição</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            background: white;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-height: 100vh;
+                            padding: 20px;
+                        }
+                        .comprovante-wrapper {
+                            max-width: 700px;
+                            width: 100%;
+                            background: white;
+                            padding: 30px;
+                            border: 2px solid #694573;
+                            border-radius: 12px;
+                        }
+                        .btn-print {
+                            text-align: center;
+                            margin-top: 20px;
+                        }
+                        .btn-print button {
+                            background: #694573;
+                            color: white;
+                            border: none;
+                            padding: 10px 30px;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            font-size: 14px;
+                        }
+                        .btn-print button:hover {
+                            background: #4E3256;
+                        }
+                        @page {
+                            margin: 0.5cm;
+                            size: A4 portrait;
+                        }
+                        @media print {
+                            body { padding: 0; }
+                            .comprovante-wrapper { 
+                                border: 1px solid #694573; 
+                                border-radius: 0; 
+                                padding: 40px; 
+                                box-shadow: none; 
+                            }
+                            .btn-print { display: none !important; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="comprovante-wrapper">
+                        ${clone.innerHTML}
+                        <div class="btn-print">
+                            <button onclick="window.print()">🖨️ Imprimir</button>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            win.document.close();
+        }
+        // =============================================
+        // FUNÇÃO PARA BAIXAR PDF (USANDO DADOS SALVOS)
+        // =============================================
+        function baixarComprovantePDF() {
+            console.log('🔵 Gerando PDF com dados salvos...');
+
+            // Pega os dados salvos globalmente
+            var dadosInscricao = window.dadosInscricaoSalvos || {};
+            var tituloEvento = window.tituloEventoSalvo || document.getElementById('txt-titulo')?.innerText || 'Evento UFPA';
+            var nomeOrganizador = window.orgNomeSalvo || document.getElementById('org-nome')?.innerText || 'UFPA - Campus do Marajó/Breves';
+            var numeroInscricao = gerarNumeroInscricao();
+            // Gera um ID único para o QR Code
+            var participanteIdQR = 'P' + String(Math.floor(10000 + Math.random() * 90000));
+            var linkCheckinQR = window.location.origin + '/checkin.html?id=' + participanteIdQR;
+
+            console.log('📋 Dados salvos:', dadosInscricao);
+
+            // Formata a data
+            var agora = new Date();
+            var dataAtual = agora.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            var horaAtual = agora.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            var dataHoraFormatada = dataAtual + ', ' + horaAtual;
+
+            // Mostra loading visual
+            var btn = event ? event.target : document.querySelector('button[onclick*="baixarComprovantePDF"]');
+            var textoOriginal = '';
+            if (btn) {
+                textoOriginal = btn.innerText;
+                btn.innerText = '⏳ Gerando PDF...';
+                btn.disabled = true;
+            }
+            // =============================================
+            // FUNÇÃO PARA ENVIAR COMPROVANTE POR E-MAIL
+            // =============================================
+            function enviarComprovanteEmail() {
+                console.log('📧 Enviando comprovante por e-mail...');
+
+                // Pega os dados salvos
+                var dados = window.dadosInscricaoSalvos || {};
+                var tituloEvento = window.tituloEventoSalvo || 'Evento UFPA';
+                var nomeOrganizador = window.orgNomeSalvo || 'UFPA - Campus do Marajó/Breves';
+                var numeroInscricao = gerarNumeroInscricao();
+
+                // Pega o e-mail do participante
+                var emailParticipante = dados['E-mail'] || '';
+
+                if (!emailParticipante) {
+                    alert('E-mail do participante não encontrado!');
+                    return;
+                }
+
+                // Formata a data
+                var agora = new Date();
+                var dataAtual = agora.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                var horaAtual = agora.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                var dataHoraFormatada = dataAtual + ' às ' + horaAtual;
+
+                // Prepara os dados para o template
+                var templateParams = {
+                    tituloEvento: tituloEvento,
+                    nomeOrganizador: nomeOrganizador,
+                    numeroInscricao: numeroInscricao,
+                    dataAtual: dataHoraFormatada,
+                    nome: dados['Nome Completo'] || '',
+                    email: dados['E-mail'] || '',
+                    curso: dados['Curso'] || '',
+                    whatsapp: dados['WhatsApp'] || '',
+                    cpf: dados['CPF'] || ''
+                };
+
+                // Mostra loading visual
+                var btn = event ? event.target : document.querySelector('button[onclick*="enviarComprovanteEmail"]');
+                var textoOriginal = '';
+                if (btn) {
+                    textoOriginal = btn.innerText;
+                    btn.innerText = '⏳ Enviando...';
+                    btn.disabled = true;
+                }
+
+                // =============================================
+                // ENVIA O E-MAIL USANDO EMAILJS
+                // =============================================
+                emailjs.send(
+                    'service_30osulb', // ← COLOQUE SEU SERVICE ID
+                    'template_5ow4xye', // ← COLOQUE SEU TEMPLATE ID
+                    templateParams
+                )
+                    .then(function (response) {
+                        console.log('✅ E-mail enviado com sucesso!', response);
+                        alert('📧 Comprovante enviado para ' + emailParticipante + ' com sucesso!');
+                        if (btn) {
+                            btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                            btn.disabled = false;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error('❌ Erro ao enviar e-mail:', error);
+                        alert('Erro ao enviar e-mail. Tente novamente mais tarde.');
+                        if (btn) {
+                            btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                            btn.disabled = false;
+                        }
+                    });
+            }
+            // =============================================
+            // GERAR QR CODE COMO IMAGEM PARA O PDF
+            // =============================================
+            var qrImageData = '';
+
+            // Função para gerar QR Code e converter para imagem
+            function gerarQRCodeImagem(texto, callback) {
+                // Cria um elemento canvas temporário
+                var tempDiv = document.createElement('div');
+                tempDiv.style.position = 'fixed';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.top = '0';
+                tempDiv.style.zIndex = '-1';
+                document.body.appendChild(tempDiv);
+
+                // Cria o QR Code no elemento temporário
+                var qrDiv = document.createElement('div');
+                qrDiv.id = 'temp-qr';
+                tempDiv.appendChild(qrDiv);
+
+                try {
+                    new QRCode(qrDiv, {
+                        text: texto,
+                        width: 150,
+                        height: 150,
+                        colorDark: "#694573",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    // Aguarda a renderização
+                    setTimeout(function () {
+                        var canvas = qrDiv.querySelector('canvas');
+                        if (canvas) {
+                            qrImageData = canvas.toDataURL('image/png');
+                        }
+                        // Remove o elemento temporário
+                        document.body.removeChild(tempDiv);
+                        callback(qrImageData);
+                    }, 300);
+                } catch (e) {
+                    console.warn('Erro ao gerar QR Code:', e);
+                    document.body.removeChild(tempDiv);
+                    callback('');
+                }
+            }
+            // =============================================
+            // FUNÇÃO PARA GERAR QR CODE
+            // =============================================
+            function gerarQRCodeImagem(texto, callback) {
+                var tempDiv = document.createElement('div');
+                tempDiv.style.position = 'fixed';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.top = '0';
+                tempDiv.style.zIndex = '-1';
+                document.body.appendChild(tempDiv);
+
+                var qrDiv = document.createElement('div');
+                qrDiv.id = 'temp-qr';
+                tempDiv.appendChild(qrDiv);
+
+                try {
+                    new QRCode(qrDiv, {
+                        text: texto,
+                        width: 150,
+                        height: 150,
+                        colorDark: "#694573",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    setTimeout(function () {
+                        var canvas = qrDiv.querySelector('canvas');
+                        var imgData = canvas ? canvas.toDataURL('image/png') : '';
+                        document.body.removeChild(tempDiv);
+                        callback(imgData);
+                    }, 300);
+                } catch (e) {
+                    console.warn('Erro ao gerar QR Code:', e);
+                    document.body.removeChild(tempDiv);
+                    callback('');
+                }
+            }
+
+            // =============================================
+            // GERAR QR CODE E CRIAR O PDF
+            // =============================================
+            gerarQRCodeImagem(linkCheckinQR, function (qrImage) {
+                var pdf = new jspdf.jsPDF({
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                });
+
+                var pageWidth = 210;
+                var marginX = 20;
+                var marginY = 25;
+                var contentWidth = pageWidth - (marginX * 2);
+
+                var y = marginY;
+
+                // =============================================
+                // CABEÇALHO (SEM EMOJI)
+                // =============================================
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(22);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text('COMPROVANTE DE INSCRIÇÃO', pageWidth / 2, y, { align: 'center' });
+                y += 10;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(13);
+                pdf.setTextColor(134, 142, 150);
+                pdf.text(tituloEvento, pageWidth / 2, y, { align: 'center' });
+                y += 14;
+
+                pdf.setDrawColor(105, 69, 115);
+                pdf.setLineWidth(0.5);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                y += 10;
+
+                // =============================================
+                // Nº INSCRIÇÃO E DATA
+                // =============================================
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(9);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text('Nº INSCRIÇÃO', marginX, y);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(16);
+                pdf.setTextColor(73, 80, 87);
+                pdf.text(numeroInscricao, marginX, y + 7);
+
+                var x2 = marginX + (contentWidth / 2);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(9);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text('DATA/HORA', x2, y);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(12);
+                pdf.setTextColor(73, 80, 87);
+                pdf.text(dataHoraFormatada, x2, y + 7);
+
+                y += 18;
+
+                pdf.setDrawColor(221, 221, 221);
+                pdf.setLineWidth(0.3);
+                pdf.setLineDashPattern([2, 2]);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                pdf.setLineDashPattern([]);
+                y += 8;
+
+                // =============================================
+                // DADOS DO PARTICIPANTE
+                // =============================================
+                var ordemExibicao = ['Nome Completo', 'E-mail', 'Curso', 'WhatsApp', 'CPF'];
+                var dadosExibidos = 0;
+
+                ordemExibicao.forEach(function (rotulo) {
+                    var valor = dadosInscricao[rotulo] || '';
+                    if (valor && valor.trim() !== '') {
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(105, 69, 115);
+                        pdf.text(rotulo + ':', marginX, y);
+
+                        var labelWidth = pdf.getTextWidth(rotulo + ':');
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(73, 80, 87);
+                        var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
+                        pdf.text(valorLinhas, marginX + labelWidth + 5, y);
+                        y += (valorLinhas.length * 7);
+                        dadosExibidos++;
+                    }
+                });
+
+                // Se não encontrou os dados, tenta buscar do comprovante na tela
+                if (dadosExibidos === 0) {
+                    var comprovante = document.getElementById('comprovante-inscricao');
+                    if (comprovante) {
+                        var textos = comprovante.innerText.split('\n');
+                        textos.forEach(function (linha) {
+                            linha = linha.trim();
+                            if (linha.includes(':')) {
+                                var partes = linha.split(':');
+                                var chave = partes[0].trim();
+                                var valor = partes.slice(1).join(':').trim();
+                                if (chave && valor && !chave.includes('Nº') && !chave.includes('Data')) {
+                                    pdf.setFont('helvetica', 'bold');
+                                    pdf.setFontSize(9);
+                                    pdf.setTextColor(105, 69, 115);
+                                    pdf.text(chave + ':', marginX, y);
+
+                                    var labelWidth = pdf.getTextWidth(chave + ':');
+                                    pdf.setFont('helvetica', 'normal');
+                                    pdf.setFontSize(11);
+                                    pdf.setTextColor(73, 80, 87);
+                                    var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
+                                    pdf.text(valorLinhas, marginX + labelWidth + 5, y);
+                                    y += (valorLinhas.length * 7);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                y += 5;
+
+                // =============================================
+                // QR CODE NO PDF (NOVO)
+                // =============================================
+                if (qrImage) {
+                    var qrSize = 45; // tamanho em mm
+                    var qrX = (pageWidth - qrSize) / 2;
+                    var qrY = y;
+
+                    pdf.addImage(qrImage, 'PNG', qrX, qrY, qrSize, qrSize);
+                    y += qrSize + 5;
+
+                    pdf.setFont('helvetica', 'italic');
+                    pdf.setFontSize(7);
+                    pdf.setTextColor(134, 142, 150);
+                    pdf.text('Escaneie o QR Code para confirmar sua presença', pageWidth / 2, y, { align: 'center' });
+                    y += 6;
+                }
+
+                y += 10;
+
+                // =============================================
+                // RODAPÉ
+                // =============================================
+                pdf.setDrawColor(105, 69, 115);
+                pdf.setLineWidth(0.5);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                y += 8;
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(11);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text(nomeOrganizador, pageWidth / 2, y, { align: 'center' });
+                y += 7;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(134, 142, 150);
+                pdf.text('Este comprovante é sua confirmação de inscrição.', pageWidth / 2, y, { align: 'center' });
+                y += 5;
+                pdf.text('Guarde-o para o dia do evento.', pageWidth / 2, y, { align: 'center' });
+                y += 8;
+
+                pdf.setFont('helvetica', 'italic');
+                pdf.setFontSize(7);
+                pdf.setTextColor(173, 181, 189);
+                pdf.text('Comprovante gerado em ' + dataHoraFormatada, pageWidth / 2, y, { align: 'center' });
+
+                pdf.save('comprovante-inscricao.pdf');
+
+                console.log('✅ PDF com QR Code gerado com sucesso!', dadosInscricao);
+                if (btn) {
+                    btn.innerText = textoOriginal || '⬇️ Baixar PDF';
+                    btn.disabled = false;
+                }
+            });
+
+            console.log('✅ PDF vetorial gerado com sucesso!', dadosInscricao);
+            if (btn) {
+                btn.innerText = textoOriginal || '⬇️ Baixar PDF';
+                btn.disabled = false;
+            }
+        }
+        // =============================================
+        // FUNÇÃO PARA ENVIAR COMPROVANTE POR E-MAIL
+        // =============================================
+        function enviarComprovanteEmail() {
+            console.log('📧 Enviando comprovante por e-mail...');
+
+            // Pega os dados salvos
+            var dados = window.dadosInscricaoSalvos || {};
+            var tituloEvento = window.tituloEventoSalvo || 'Evento UFPA';
+            var nomeOrganizador = window.orgNomeSalvo || 'UFPA - Campus do Marajó/Breves';
+            var numeroInscricao = gerarNumeroInscricao();
+
+            // Pega o e-mail do participante
+            var emailParticipante = dados['E-mail'] || '';
+
+            if (!emailParticipante) {
+                alert('E-mail do participante não encontrado!');
+                return;
+            }
+
+            // Formata a data
+            var agora = new Date();
+            var dataAtual = agora.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            var horaAtual = agora.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            var dataHoraFormatada = dataAtual + ' às ' + horaAtual;
+
+            // Prepara os dados para o template - ATENÇÃO: os nomes DEVEM ser iguais aos do template!
+            var templateParams = {
+                tituloEvento: tituloEvento,
+                nomeOrganizador: nomeOrganizador,
+                numeroInscricao: numeroInscricao,
+                dataAtual: dataHoraFormatada,
+                nome: dados['Nome Completo'] || '',
+                email: dados['E-mail'] || '',
+                curso: dados['Curso'] || '',
+                whatsapp: dados['WhatsApp'] || '',
+                cpf: dados['CPF'] || ''
+            };
+
+            console.log('📋 Dados enviados:', templateParams);
+
+            // Mostra loading visual
+            var btn = event ? event.target : document.querySelector('button[onclick*="enviarComprovanteEmail"]');
+            var textoOriginal = '';
+            if (btn) {
+                textoOriginal = btn.innerText;
+                btn.innerText = '⏳ Enviando...';
+                btn.disabled = true;
+            }
+
+            // =============================================
+            // ENVIA O E-MAIL USANDO EMAILJS
+            // =============================================
+            emailjs.send(
+                'service_30osulb', // ← COLOQUE SEU SERVICE ID
+                'template_5ow4xye', // ← COLOQUE SEU TEMPLATE ID
+                templateParams
+            )
+                .then(function (response) {
+                    console.log('✅ E-mail enviado com sucesso!', response);
+                    alert('📧 Comprovante enviado para ' + emailParticipante + ' com sucesso!');
+                    if (btn) {
+                        btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(function (error) {
+                    console.error('❌ Erro ao enviar e-mail:', error);
+                    alert('Erro ao enviar e-mail: ' + error.text);
+                    if (btn) {
+                        btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                        btn.disabled = false;
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

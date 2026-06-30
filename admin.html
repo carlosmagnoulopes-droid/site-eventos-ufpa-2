@@ -1,0 +1,3481 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>Painel Multieventos - Admin Pro</title>
+    <style>
+        /* ============================================ */
+        /* RESET E BASE                                 */
+        /* ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f3f0;
+            min-height: 100vh;
+            padding: 24px;
+            color: #2d2d2d;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ============================================ */
+        /* LOGIN                                        */
+        /* ============================================ */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .login-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .login-box h2 {
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+            font-size: 22px;
+            letter-spacing: -0.3px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #4a4a4a;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #faf9f7;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            font-family: inherit;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2d5a3f;
+            box-shadow: 0 0 0 4px rgba(45, 90, 63, 0.1);
+            background: #ffffff;
+        }
+
+        /* ============================================ */
+        /* ALERTAS                                      */
+        /* ============================================ */
+        .alert {
+            padding: 14px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #1e6b2e;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-error {
+            background: #fbe9e7;
+            color: #a83a32;
+            border: 1px solid #ffcdd2;
+        }
+
+        /* ============================================ */
+        /* PAINEL PRINCIPAL                            */
+        /* ============================================ */
+        .painel-container {
+            display: none;
+        }
+
+        .header-painel {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 28px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .header-painel h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+        }
+
+        .header-painel h1::before {
+            content: "⚙️ ";
+            font-size: 18px;
+        }
+
+        /* ============================================ */
+        /* CARDS                                        */
+        /* ============================================ */
+        .form-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.25s ease;
+        }
+
+        .form-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-card h2 {
+            color: #1a1a1a;
+            margin-bottom: 18px;
+            font-size: 17px;
+            font-weight: 600;
+            border-left: 4px solid #2d5a3f;
+            padding-left: 14px;
+            letter-spacing: -0.2px;
+        }
+
+        /* ============================================ */
+        /* FORMULÁRIOS                                  */
+        /* ============================================ */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 13px;
+            color: #4a4a4a;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px 14px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #faf9f7;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2d5a3f;
+            box-shadow: 0 0 0 4px rgba(45, 90, 63, 0.1);
+            background: #ffffff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group small {
+            color: #8a8a8a;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* ============================================ */
+        /* BOTÕES - ESTILO MODERNO E MENORES           */
+        /* ============================================ */
+
+        /* Base para todos os botões */
+        .btn-submit,
+        .btn-login,
+        .btn-salvar-fundo,
+        .btn-buscar,
+        .btn-baixar,
+        .btn-salvar-edicao,
+        .btn-gerar-certificado,
+        .btn-enviar,
+        .btn-submit-orange,
+        .btn-edit,
+        .btn-ver-participante,
+        .export-btn,
+        .export-btn-excel,
+        .btn-testar-fundo,
+        .btn-remover-fundo,
+        .btn-limpar,
+        .btn-restaurar-padrao,
+        .btn-cancelar,
+        .btn-delete,
+        .btn-excluir,
+        .btn-logout {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 500;
+            font-size: 13px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 34px;
+            min-height: 34px;
+            padding: 0 16px;
+            line-height: 1;
+            text-decoration: none;
+            box-sizing: border-box;
+            letter-spacing: 0.01em;
+        }
+
+        /* -------- 1. BOTÕES PRIMÁRIOS (Verde) -------- */
+        .btn-submit,
+        .btn-login,
+        .btn-salvar-fundo,
+        .btn-baixar,
+        .btn-salvar-edicao,
+        .btn-gerar-certificado,
+        .btn-enviar,
+        .btn-submit-orange {
+            background: #2d5a3f;
+            color: #ffffff;
+        }
+
+        .btn-submit:hover,
+        .btn-login:hover,
+        .btn-salvar-fundo:hover,
+        .btn-baixar:hover,
+        .btn-salvar-edicao:hover,
+        .btn-gerar-certificado:hover,
+        .btn-enviar:hover,
+        .btn-submit-orange:hover {
+            background: #1f4030;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(45, 90, 63, 0.25);
+        }
+
+        .btn-submit:active,
+        .btn-login:active,
+        .btn-salvar-fundo:active,
+        .btn-baixar:active,
+        .btn-salvar-edicao:active,
+        .btn-gerar-certificado:active,
+        .btn-enviar:active,
+        .btn-submit-orange:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* -------- 2. BOTÕES SECUNDÁRIOS (Marrom/Dourado) -------- */
+        .btn-edit,
+        .btn-ver-participante {
+            background: #c4a882;
+            color: #ffffff;
+        }
+
+        .btn-edit:hover,
+        .btn-ver-participante:hover {
+            background: #b3976f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(196, 168, 130, 0.3);
+        }
+
+        /* -------- 3. BOTÕES DE EXPORTAÇÃO (Azul acinzentado) -------- */
+        .export-btn,
+        .export-btn-excel {
+            background: #4a6a7a;
+            color: #ffffff;
+        }
+
+        .export-btn:hover,
+        .export-btn-excel:hover {
+            background: #3a5a6a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 106, 122, 0.25);
+        }
+
+        /* -------- 4. BOTÕES UTILIÁRIOS (Verde claro) -------- */
+        .btn-testar-fundo,
+        .btn-remover-fundo {
+            background: #5a8a6a;
+            color: #ffffff;
+        }
+
+        .btn-testar-fundo:hover,
+        .btn-remover-fundo:hover {
+            background: #4a7a5a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 138, 106, 0.25);
+        }
+
+        /* -------- 5. BOTÕES DE BUSCA (Roxo suave) -------- */
+        .btn-buscar {
+            background: #7a6a8a;
+            color: #ffffff;
+        }
+
+        .btn-buscar:hover {
+            background: #6a5a7a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(122, 106, 138, 0.25);
+        }
+
+        /* -------- 6. BOTÕES NEUTROS (Cinza claro) -------- */
+        .btn-limpar,
+        .btn-restaurar-padrao,
+        .btn-cancelar {
+            background: #f0ece6;
+            color: #4a4a4a;
+            border: 1px solid #e2ddd6;
+        }
+
+        .btn-limpar:hover,
+        .btn-restaurar-padrao:hover,
+        .btn-cancelar:hover {
+            background: #e5e0d8;
+            border-color: #d5cec4;
+            transform: translateY(-1px);
+        }
+
+        /* -------- 7. BOTÕES DE PERIGO (Vermelho terroso) -------- */
+        .btn-delete,
+        .btn-excluir {
+            background: #b55a4a;
+            color: #ffffff;
+        }
+
+        .btn-delete:hover,
+        .btn-excluir:hover {
+            background: #a04a3a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(181, 90, 74, 0.3);
+        }
+
+        /* -------- 8. BOTÃO LOGOUT (Cinza médio) -------- */
+        .btn-logout {
+            background: #d5cec4;
+            color: #3d3d3d;
+            height: 32px;
+            min-height: 32px;
+            padding: 0 14px;
+            font-size: 12px;
+        }
+
+        .btn-logout:hover {
+            background: #c8c0b4;
+            transform: translateY(-1px);
+        }
+
+        /* ============================================ */
+        /* TABELAS                                      */
+        /* ============================================ */
+        .table-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px 24px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .table-container h2 {
+            color: #1a1a1a;
+            margin-bottom: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            border-left: 4px solid #2d5a3f;
+            padding-left: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f6f3ef;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 500;
+            color: #4a4a4a;
+            border-bottom: 1px solid #e2ddd6;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0ece6;
+            color: #4a4a4a;
+        }
+
+        tr:hover td {
+            background: #f8f6f2;
+        }
+
+        /* ============================================ */
+        /* TABELA DE PARTICIPANTES                     */
+        /* ============================================ */
+        .table-participantes {
+            max-height: 520px;
+            overflow-y: auto;
+            border: 1px solid #e2ddd6;
+            border-radius: 10px;
+        }
+
+        .table-participantes table {
+            font-size: 13px;
+        }
+
+        .table-participantes th {
+            background: #2d5a3f;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .table-participantes td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0ece6;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .table-participantes tr:nth-child(even) {
+            background: #faf9f7;
+        }
+
+        .table-participantes tr:hover td {
+            background: #f3f0eb;
+        }
+
+        .total-inscritos {
+            background: #f0ece6;
+            color: #4a4a4a;
+            padding: 8px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 500;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .total-inscritos span {
+            color: #2d5a3f;
+            font-weight: 600;
+        }
+
+        /* ============================================ */
+        /* BUSCA                                        */
+        /* ============================================ */
+        .busca-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            align-items: center;
+        }
+
+        .busca-container input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #faf9f7;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            font-family: inherit;
+        }
+
+        .busca-container input:focus {
+            outline: none;
+            border-color: #2d5a3f;
+            box-shadow: 0 0 0 4px rgba(45, 90, 63, 0.1);
+            background: #ffffff;
+        }
+
+        .resultado-busca-info {
+            background: #f3f0eb;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #4a4a4a;
+            border-left: 3px solid #2d5a3f;
+            margin-bottom: 10px;
+        }
+
+        .resultado-busca-info strong {
+            color: #2d5a3f;
+        }
+
+        /* ============================================ */
+        /* PAGINAÇÃO                                    */
+        /* ============================================ */
+        .paginacao-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2ddd6;
+        }
+
+        .paginacao-info {
+            font-size: 13px;
+            color: #5a5a5a;
+        }
+
+        .paginacao-info strong {
+            color: #2d5a3f;
+        }
+
+        .paginacao-botoes {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .paginacao-botoes button {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            border: 1.5px solid #e2ddd6;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a4a4a;
+            transition: all 0.2s ease;
+            height: 30px;
+            min-height: 30px;
+        }
+
+        .paginacao-botoes button:hover:not(:disabled) {
+            background: #f3f0eb;
+            border-color: #2d5a3f;
+        }
+
+        .paginacao-botoes button.active {
+            background: #2d5a3f;
+            color: white;
+            border-color: #2d5a3f;
+        }
+
+        .paginacao-botoes button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .paginacao-registros {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #5a5a5a;
+        }
+
+        .paginacao-registros select {
+            padding: 4px 10px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+            height: 30px;
+            min-height: 30px;
+            font-family: inherit;
+        }
+
+        .paginacao-registros select:focus {
+            outline: none;
+            border-color: #2d5a3f;
+        }
+
+        /* ============================================ */
+        /* CERTIFICADOS                                 */
+        /* ============================================ */
+        .certificado-container {
+            background: #f8f6f2;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 16px;
+            border: 1px solid #e2ddd6;
+        }
+
+        .certificado-preview {
+            background: white;
+            border: 2px solid #e2ddd6;
+            border-radius: 14px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            min-height: 380px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certificado-preview * {
+            box-sizing: border-box;
+        }
+
+        .certificado-preview>div {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .certificado-acoes {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .certificado-selecao {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .certificado-selecao select {
+            padding: 10px 16px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 10px;
+            font-size: 14px;
+            min-width: 220px;
+            background: white;
+            font-family: inherit;
+        }
+
+        .certificado-selecao select:focus {
+            outline: none;
+            border-color: #2d5a3f;
+        }
+
+        .upload-fundo-area {
+            background: #f8f6f2;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            border: 1.5px dashed #d5cec4;
+            transition: border-color 0.25s ease;
+        }
+
+        .upload-fundo-area:hover {
+            border-color: #2d5a3f;
+        }
+
+        .upload-fundo-area h3 {
+            font-size: 14px;
+            color: #2d5a3f;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .upload-fundo-area input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 14px;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            font-family: inherit;
+        }
+
+        .upload-fundo-area input:focus {
+            outline: none;
+            border-color: #2d5a3f;
+        }
+
+        .fundo-status {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #2d5a3f;
+            display: none;
+        }
+
+        .fundo-status.error {
+            color: #b55a4a;
+        }
+
+        /* ============================================ */
+        /* PERSONALIZAÇÃO DO CERTIFICADO               */
+        /* ============================================ */
+        .personalizacao-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .personalizacao-grid .form-group {
+            margin-bottom: 4px;
+        }
+
+        .personalizacao-grid .form-group label {
+            font-size: 12px;
+            color: #5a5a5a;
+            font-weight: 500;
+        }
+
+        .personalizacao-grid .form-group input,
+        .personalizacao-grid .form-group select {
+            padding: 8px 12px;
+            font-size: 13px;
+            width: 100%;
+            border: 1.5px solid #e2ddd6;
+            border-radius: 8px;
+            background: #faf9f7;
+            transition: border-color 0.25s ease;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .personalizacao-grid .form-group input:focus,
+        .personalizacao-grid .form-group select:focus {
+            outline: none;
+            border-color: #2d5a3f;
+            background: #ffffff;
+        }
+
+        .personalizacao-full {
+            grid-column: 1 / -1;
+        }
+
+        .personalizacao-status {
+            font-size: 13px;
+            color: #2d5a3f;
+            display: none;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .personalizacao-status.error {
+            color: #b55a4a;
+        }
+
+        /* ============================================ */
+        /* RESPONSIVO                                   */
+        /* ============================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+
+            .form-card {
+                padding: 18px 16px;
+            }
+
+            .login-box {
+                padding: 32px 24px;
+            }
+
+            .header-painel {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .personalizacao-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .certificado-preview {
+                padding: 20px;
+            }
+
+            .certificado-preview .nome-participante {
+                font-size: 24px;
+            }
+
+            .certificado-preview h1 {
+                font-size: 22px;
+            }
+
+            .paginacao-container {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .paginacao-botoes {
+                justify-content: center;
+            }
+
+            .paginacao-registros {
+                justify-content: center;
+            }
+
+            .table-participantes {
+                font-size: 12px;
+            }
+
+            .table-participantes th,
+            .table-participantes td {
+                padding: 6px 8px;
+                white-space: normal;
+                max-width: 100px;
+            }
+
+            .upload-fundo-area>div {
+                flex-direction: column;
+            }
+
+            .busca-container {
+                flex-direction: column;
+            }
+
+            .busca-container input {
+                min-width: 100%;
+            }
+
+            .certificado-selecao {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-submit,
+            .btn-login,
+            .btn-salvar-fundo,
+            .btn-buscar,
+            .btn-baixar,
+            .btn-salvar-edicao,
+            .btn-gerar-certificado,
+            .btn-edit,
+            .btn-testar-fundo,
+            .btn-remover-fundo,
+            .btn-ver-participante,
+            .export-btn,
+            .export-btn-excel,
+            .btn-limpar,
+            .btn-restaurar-padrao,
+            .btn-cancelar,
+            .btn-delete,
+            .btn-excluir,
+            .btn-submit-orange,
+            .btn-enviar {
+                width: 100%;
+                justify-content: center;
+                height: 38px;
+                min-height: 38px;
+                padding: 0 16px;
+                font-size: 14px;
+            }
+
+            .btn-logout {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .form-card h2 {
+                font-size: 15px;
+            }
+
+            .header-painel h1 {
+                font-size: 17px;
+            }
+
+            .login-box {
+                padding: 24px 16px;
+            }
+
+            .login-box h2 {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- TELA DE LOGIN -->
+        <div
+            class="login-container"
+            id="loginScreen"
+        >
+            <div class="login-box">
+                <h2>Área do Organizador</h2>
+                <form id="formLogin">
+                    <div class="input-group">
+                        <label>Usuário:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div class="input-group">
+                        <label>Senha:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            required
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn-login"
+                    >Entrar no Sistema</button>
+                    <div
+                        class="error-message"
+                        id="loginError"
+                    >Credenciais inválidas.</div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PAINEL COMPLETO -->
+        <div
+            class="painel-container"
+            id="painelScreen"
+        >
+            <div class="header-painel">
+                <h1>Painel de Gestão de Eventos</h1>
+                <div>
+                    <span style="margin-right:15px;">Operador: <strong id="labelUser"></strong></span>
+                    <button
+                        class="btn-logout"
+                        id="btnLogout"
+                    >Sair</button>
+                </div>
+            </div>
+
+            <div
+                class="alert alert-success"
+                id="alertSuccess"
+            ></div>
+            <div
+                class="alert alert-error"
+                id="alertError"
+            ></div>
+            <!-- CARD 1: EDITAR IDENTIDADE DO EVENTO (EXPANDIDO) -->
+            <div class="form-card">
+                <h2>1. Configurações Gerais (Identidade do Evento)</h2>
+                <form id="formConfig">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome Principal do Evento:</label>
+                            <input
+                                type="text"
+                                id="configTitulo"
+                                required
+                                placeholder="Ex: I Seminário de Tecnologia"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Subtítulo / Instituição:</label>
+                            <input
+                                type="text"
+                                id="configSubtitulo"
+                                required
+                                placeholder="Ex: UFPA - Campus Breves"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Data do Evento:</label>
+                            <input
+                                type="text"
+                                id="configDataEvento"
+                                required
+                                placeholder="Ex: Sexta, 26 de junho de 2026"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>🕐 Horário do Evento:</label>
+                            <input
+                                type="text"
+                                id="configHorarioEvento"
+                                placeholder="Ex: 14h"
+                            >
+                            <small style="color:#868E96; font-size:11px;">Deixe em branco se não quiser exibir o
+                                horário</small>
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Local do Evento:</label>
+                            <input
+                                type="text"
+                                id="configLocalEvento"
+                                placeholder="Ex: Auditório da UFPA"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>📍 Cidade do Evento:</label>
+                            <input
+                                type="text"
+                                id="configCidade"
+                                placeholder="Ex: Breves - PA"
+                            >
+                            <small style="color:#868E96; font-size:11px;">Cidade onde o evento será realizado</small>
+                        </div>
+                    </div>
+
+
+                    <div
+                        class="form-group"
+                        style="margin-bottom:15px;"
+                    >
+                        <label>Texto Detalhado (Seção 'Sobre o Evento'):</label>
+                        <textarea
+                            id="configDescricao"
+                            required
+                            placeholder="Escreva a introdução acadêmica detalhada do evento..."
+                        ></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome da Organização:</label>
+                            <input
+                                type="text"
+                                id="configNomeOrg"
+                                required
+                                placeholder="Ex: Faculdade de Ciências Humanas"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Link da Foto/Logo do Organizador:</label>
+                            <input
+                                type="text"
+                                id="configFotoOrg"
+                                placeholder="Ex: https://site.com"
+                            >
+                        </div>
+                    </div>
+                    <div
+                        class="form-group"
+                        style="margin-bottom:15px;"
+                    >
+                        <label>Minibiografia da Organização:</label>
+                        <textarea
+                            id="configBioOrg"
+                            required
+                            placeholder="Breve resumo da comissão organizadora..."
+                        ></textarea>
+                    </div>
+                    <div
+                        class="form-group"
+                        style="margin-bottom:20px;"
+                    >
+                        <label>Link Direto do Banner de Fundo (Capa):</label>
+                        <input
+                            type="text"
+                            id="configBanner"
+                            placeholder="Ex: https://ibb.co"
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                        id="btnSalvarConfig"
+                    >Atualizar Informações Gerais do Site</button>
+                </form>
+            </div>
+
+            <!-- CARD 2: CONFIGURAÇÃO DE CAMPOS DO FORMULÁRIO -->
+            <div class="form-card">
+                <h2>2. Configuração dos Campos do Formulário de Inscrição</h2>
+                <form id="formCampoDinamico">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Identificador Técnico (Sem espaços/acentos):</label>
+                            <input
+                                type="text"
+                                id="campoId"
+                                required
+                                placeholder="Ex: cpf, cargo"
+                                style="text-transform: lowercase;"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Rótulo / Pergunta da tela:</label>
+                            <input
+                                type="text"
+                                id="campoRotulo"
+                                required
+                                placeholder="Ex: Digite seu CPF:"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Entrada:</label>
+                            <select
+                                id="campoTipo"
+                                required
+                                onchange="verificarTipoCampo(this.value)"
+                            >
+                                <option value="text">Texto Simples</option>
+                                <option value="tel">Telefone / WhatsApp</option>
+                                <option value="email">E-mail Secundário</option>
+                                <option value="select">Lista Suspensa (Opções)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group"
+                        id="grupoOpcoes"
+                        style="display: none; margin-bottom: 15px;"
+                    >
+                        <label>Opções da Lista (Separe por vírgulas):</label>
+                        <input
+                            type="text"
+                            id="campoOpcoes"
+                            placeholder="Ex: Graduação, Mestrado, Doutorado"
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn-submit-orange"
+                        id="btnSalvarCampo"
+                    >Criar Nova Pergunta no Formulário</button>
+                </form>
+                <div style="margin-top:20px;">
+                    <h3 style="font-size:14px; margin-bottom:10px; color:#3E2723;">Perguntas Adicionais Ativas:</h3>
+                    <div
+                        id="listaCamposGerenciar"
+                        style="display:flex; flex-wrap:wrap; gap:10px;"
+                    >Carregando perguntas...</div>
+                </div>
+            </div>
+
+            <!-- CARD 3: ADICIONAR ATIVIDADE -->
+            <div class="form-card">
+                <h2>3. Grade de Horários (Cronograma)</h2>
+                <form id="formAtividade">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Horário (Ex: 09:00 - 10:30):</label>
+                            <input
+                                type="text"
+                                id="hora"
+                                required
+                                placeholder="Digite o horário"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label>Título da Atividade:</label>
+                            <input
+                                type="text"
+                                id="titulo"
+                                required
+                                placeholder="Nome da palestra ou mesa"
+                            >
+                        </div>
+                    </div>
+                    <div
+                        class="form-group"
+                        style="margin-bottom:15px;"
+                    >
+                        <label>Detalhes / Palestrantes:</label>
+                        <textarea
+                            id="descricao"
+                            placeholder="Doutores, convidados e sala..."
+                        ></textarea>
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                        id="btnSalvar"
+                    >Adicionar Atividade</button>
+                </form>
+            </div>
+
+            <!-- CARD 4: TABELA CRONOGRAMA COM EDIÇÃO -->
+            <div class="table-container">
+                <h2>Visualização do Cronograma Atual</h2>
+                <div
+                    id="tableLoading"
+                    style="text-align:center; padding:20px; color:#666;"
+                >Buscando dados na planilha...</div>
+                <table
+                    id="tabelaAtividades"
+                    style="display:none;"
+                >
+                    <thead>
+                        <tr>
+                            <th style="width:15%">Horário</th>
+                            <th style="width:30%">Título</th>
+                            <th style="width:35%">Palestrantes/Descrição</th>
+                            <th style="width:20%">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+            <!-- CARD 5: LISTA DE PARTICIPANTES -->
+            <div
+                class="form-card"
+                id="card-participantes"
+            >
+                <h2>5. Lista de Participantes</h2>
+                <!-- BOTÃO PARA CHECK-IN -->
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <a
+                        href="checkin.html"
+                        target="_blank"
+                        class="btn-submit"
+                        style="background: #17a2b8; text-decoration: none;"
+                    >
+                        📋 Check-in com QR Code
+                    </a>
+                </div>
+
+                <!-- CAMPO DE BUSCA -->
+                <div class="busca-container">
+                    <input
+                        type="text"
+                        id="busca-participante"
+                        placeholder="🔍 Buscar por nome, CPF ou e-mail..."
+                        onkeyup="buscarParticipante(event)"
+                    >
+                    <button
+                        class="btn-buscar"
+                        onclick="buscarParticipante()"
+                    >🔍 Buscar</button>
+                    <button
+                        class="btn-limpar"
+                        onclick="limparBusca()"
+                    >✕ Limpar</button>
+                </div>
+
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                    <div
+                        class="total-inscritos"
+                        id="total-inscritos"
+                    >
+                        👥 Total de Inscritos: <span id="total-count">0</span>
+                    </div>
+                    <div
+                        id="resultado-info"
+                        class="resultado-busca-info"
+                        style="display:none;"
+                    >
+                        🔍 Resultados encontrados: <strong id="resultado-count">0</strong>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button
+                            class="export-btn"
+                            onclick="exportarParticipantesCSV()"
+                        >
+                            📊 Exportar CSV
+                        </button>
+                        <button
+                            class="export-btn export-btn-excel"
+                            onclick="exportarParticipantesExcel()"
+                        >
+                            📋 Exportar Excel
+                        </button>
+                        <button
+                            class="btn-submit-orange"
+                            onclick="carregarParticipantes()"
+                            style="padding: 10px 20px;"
+                        >
+                            🔄 Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    id="participantes-loading"
+                    style="text-align:center; padding:30px; color:#666;"
+                >
+                    ⏳ Carregando lista de participantes...
+                </div>
+
+                <div
+                    class="table-participantes"
+                    id="participantes-container"
+                    style="display:none;"
+                >
+                    <table>
+                        <thead>
+                            <tr id="participantes-headers"></tr>
+                        </thead>
+                        <tbody id="participantes-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINAÇÃO -->
+                <div
+                    id="paginacao-container"
+                    class="paginacao-container"
+                    style="display:none;"
+                >
+                    <div class="paginacao-info">
+                        Mostrando <strong id="paginacao-inicio">0</strong> a <strong id="paginacao-fim">0</strong> de
+                        <strong id="paginacao-total">0</strong> registros
+                    </div>
+                    <div
+                        class="paginacao-botoes"
+                        id="paginacao-botoes"
+                    ></div>
+                    <div class="paginacao-registros">
+                        <label for="paginacao-tamanho">Registros por página:</label>
+                        <select
+                            id="paginacao-tamanho"
+                            onchange="mudarTamanhoPagina()"
+                        >
+                            <option value="5">5</option>
+                            <option
+                                value="10"
+                                selected
+                            >10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div
+                    id="participantes-empty"
+                    style="display:none; text-align:center; padding:30px; color:#888;"
+                >
+                    📭 Nenhum participante inscrito ainda.
+                </div>
+            </div>
+            <!-- CARD 6: CERTIFICADOS -->
+            <div
+                class="form-card"
+                id="card-certificados"
+            >
+                <h2>6. Certificados de Participação</h2>
+                <!-- ============================================= -->
+                <!-- PERSONALIZAÇÃO DO CERTIFICADO                -->
+                <!-- ============================================= -->
+                <div
+                    style="background: #f8f6f4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e0d5c1;">
+                    <h3 style="font-size: 14px; color: #694573; margin-bottom: 10px;">⚙️ Personalização do Certificado
+                    </h3>
+
+                    <div class="personalizacao-grid">
+                        <!-- Link da Logo -->
+                        <div class="form-group personalizacao-full">
+                            <label for="cert-logo-url">🔗 Link da Logo (imagem no topo)</label>
+                            <input
+                                type="text"
+                                id="cert-logo-url"
+                                placeholder="https://seusite.com/logo.png"
+                            >
+                            <small style="color:#868E96; font-size:11px;">Deixe em branco para não exibir logo. Tamanho
+                                recomendado: 120x40px</small>
+                        </div>
+
+                        <!-- Título -->
+                        <div class="form-group">
+                            <label for="cert-titulo">📌 Título do Certificado</label>
+                            <input
+                                type="text"
+                                id="cert-titulo"
+                                value="CERTIFICADO DE PARTICIPAÇÃO"
+                            >
+                        </div>
+
+                        <!-- Subtítulo -->
+                        <div class="form-group">
+                            <label for="cert-subtitulo">📌 Subtítulo / Texto de abertura</label>
+                            <input
+                                type="text"
+                                id="cert-subtitulo"
+                                value="Certificamos que"
+                            >
+                        </div>
+
+                        <!-- Carga Horária -->
+                        <div class="form-group">
+                            <label for="cert-carga">⏱️ Carga Horária</label>
+                            <input
+                                type="text"
+                                id="cert-carga"
+                                value="20 horas"
+                            >
+                        </div>
+
+                        <!-- Cor da Linha -->
+                        <div class="form-group">
+                            <label for="cert-cor-linha">🎨 Cor da Linha Decorativa</label>
+                            <input
+                                type="color"
+                                id="cert-cor-linha"
+                                value="#694573"
+                                style="height:40px; padding:4px; cursor:pointer;"
+                            >
+                        </div>
+                        <!-- Nome do Assinante -->
+                        <div class="form-group">
+                            <label for="cert-assinante">✍️ Nome do Assinante (aparece na assinatura)</label>
+                            <input
+                                type="text"
+                                id="cert-assinante"
+                                value="COMISSÃO ORGANIZADORA"
+                                style="width:100%; padding:8px 12px; border:2px solid #e0d5c1; border-radius:6px; font-size:13px;"
+                            >
+                            <small style="color:#868E96; font-size:11px;">Nome que aparecerá abaixo da linha de
+                                assinatura</small>
+                        </div>
+
+
+                        <!-- Botões -->
+                        <div
+                            class="form-group personalizacao-full"
+                            style="display: flex; gap:10px; align-items: center; flex-wrap: wrap;"
+                        >
+                            <button
+                                onclick="salvarPersonalizacaoCertificado()"
+                                class="btn-submit"
+                                style="background:#694573; padding:10px 25px;"
+                            >💾 Salvar Personalização</button>
+                            <button
+                                onclick="restaurarPersonalizacaoCertificado()"
+                                class="btn-submit"
+                                style="background:#6c757d; padding:10px 25px;"
+                            >🔄 Restaurar Padrão</button>
+                            <span
+                                id="cert-personalizacao-status"
+                                class="personalizacao-status"
+                            >✅ Salvo!</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- ÁREA DE UPLOAD DA IMAGEM DE FUNDO -->
+                <div class="upload-fundo-area">
+                    <h3>🖼️ Imagem de Fundo do Certificado</h3>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <input
+                            type="text"
+                            id="certificado-fundo-url"
+                            placeholder="Cole o link da imagem aqui (ex: https://seusite.com/fundo.png)"
+                        >
+                        <button
+                            onclick="salvarFundoCertificado()"
+                            class="btn-salvar-fundo"
+                        >💾 Salvar Fundo</button>
+                        <button
+                            onclick="testarFundoCertificado()"
+                            class="btn-testar-fundo"
+                        >👁️ Testar</button>
+                        <button
+                            onclick="removerFundoCertificado()"
+                            class="btn-remover-fundo"
+                            style="background:#dc3545; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:700;"
+                        >🗑️ Remover Fundo</button>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #868E96;">
+                        ⚠️ Use o link direto da imagem. Tamanho recomendado: 1200 x 848px (proporção A4 paisagem).
+                        <br>💡 Hospede no Google Drive, Imgur ou seu servidor.
+                    </div>
+                    <div
+                        id="fundo-status"
+                        class="fundo-status"
+                    >✅ Fundo salvo com sucesso!</div>
+                </div>
+
+                <!-- SELEÇÃO DO PARTICIPANTE -->
+                <div class="certificado-selecao">
+                    <label
+                        for="certificado-participante"
+                        style="font-weight:600; font-size:14px; color:#495057;"
+                    >
+                        👤 Selecionar Participante:
+                    </label>
+                    <select id="certificado-participante">
+                        <option value="">Carregando participantes...</option>
+                    </select>
+                    <button
+                        onclick="gerarCertificado()"
+                        class="btn-submit"
+                        style="background:#694573; padding: 10px 25px;"
+                    >🎓 Gerar Certificado</button>
+                </div>
+
+                <!-- LOADING -->
+                <div
+                    id="certificado-loading"
+                    style="text-align:center; padding:20px; color:#666; display:none;"
+                >
+                    ⏳ Gerando certificado...
+                </div>
+
+                <!-- PREVIEW DO CERTIFICADO -->
+                <div
+                    id="certificado-container"
+                    class="certificado-container"
+                    style="display:none;"
+                >
+                    <div
+                        class="certificado-preview"
+                        id="certificado-preview"
+                    >
+                        <!-- O certificado será inserido aqui -->
+                    </div>
+                    <div class="certificado-acoes">
+                        <button
+                            class="btn-baixar"
+                            onclick="baixarCertificado()"
+                        >⬇️ Baixar PDF</button>
+                        <button
+                            class="btn-enviar"
+                            onclick="enviarCertificadoEmail()"
+                        >📧 Enviar por E-mail</button>
+                    </div>
+                </div>
+            </div>
+            <!-- MODAL DE EDIÇÃO (OCULTO INICIALMENTE) -->
+            <div
+                id="modalEdicao"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; padding:20px;"
+            >
+                <div
+                    style="background:white; border-radius:15px; padding:30px; max-width:600px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.3); max-height:90vh; overflow-y:auto;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h2 style="color:#2d5a3f; margin:0;">Editar Atividade</h2>
+                        <button
+                            onclick="fecharModalEdicao()"
+                            style="background:none; border:none; font-size:28px; cursor:pointer; color:#666;"
+                        >&times;</button>
+                    </div>
+                    <form id="formEdicaoAtividade">
+                        <input
+                            type="hidden"
+                            id="editRowIndex"
+                        >
+                        <div
+                            class="form-group"
+                            style="margin-bottom:15px;"
+                        >
+                            <label>Horário (Ex: 09:00 - 10:30):</label>
+                            <input
+                                type="text"
+                                id="editHora"
+                                required
+                                placeholder="Digite o horário"
+                            >
+                        </div>
+                        <div
+                            class="form-group"
+                            style="margin-bottom:15px;"
+                        >
+                            <label>Título da Atividade:</label>
+                            <input
+                                type="text"
+                                id="editTitulo"
+                                required
+                                placeholder="Nome da palestra ou mesa"
+                            >
+                        </div>
+                        <div
+                            class="form-group"
+                            style="margin-bottom:20px;"
+                        >
+                            <label>Detalhes / Palestrantes:</label>
+                            <textarea
+                                id="editDescricao"
+                                placeholder="Doutores, convidados e sala..."
+                                rows="4"
+                            ></textarea>
+                        </div>
+                        <div style="display:flex; gap:10px; justify-content:flex-end;">
+                            <button
+                                type="button"
+                                onclick="fecharModalEdicao()"
+                                style="background:#ccc; color:#333; border:none; padding:10px 25px; border-radius:6px; font-weight:bold; cursor:pointer;"
+                            >Cancelar</button>
+                            <button
+                                type="submit"
+                                class="btn-submit"
+                                id="btnSalvarEdicao"
+                                style="background:#d4a373;"
+                            >Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- ========================================== -->
+            <!-- BIBLIOTECAS PARA GERAR PDF                 -->
+            <!-- ========================================== -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+            </script>
+            <script>
+                // CENTRAL MESTRE: Link de comunicação direto com o Google Apps Script
+                const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzqi1ocqYm8ejhGTw7F_L1JRzWCqnC2uXJnbxW2S1pZQ9ND8tOXa59rme-cr1YCZxwf3A/exec";
+
+                const loginScreen = document.getElementById('loginScreen');
+                const painelScreen = document.getElementById('painelScreen');
+                const formLogin = document.getElementById('formLogin');
+                const labelUser = document.getElementById('labelUser');
+                const btnLogout = document.getElementById('btnLogout');
+                const formConfig = document.getElementById('formConfig');
+                const formAtividade = document.getElementById('formAtividade');
+                const formCampoDinamico = document.getElementById('formCampoDinamico'); // ID Corrigido
+                const btnSalvar = document.getElementById('btnSalvar');
+                const btnSalvarConfig = document.getElementById('btnSalvarConfig');
+                const btnSalvarCampo = document.getElementById('btnSalvarCampo');
+                const tableLoading = document.getElementById('tableLoading');
+                const tabelaAtividades = document.getElementById('tabelaAtividades');
+                const corpoTabela = document.getElementById('corpoTabela');
+                const listaCamposGerenciar = document.getElementById('listaCamposGerenciar');
+
+                // Controla o campo oculto de opções da lista suspensa
+                function verificarTipoCampo(valor) {
+                    document.getElementById('grupoOpcoes').style.display = (valor === 'select') ? 'block' : 'none';
+                }
+
+                // Validação de Acesso
+                formLogin.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (document.getElementById('username').value === "carlosmagno" && document.getElementById('password').value === "1752922") {
+                        document.getElementById('loginError').style.display = 'none';
+                        loginScreen.style.display = 'none';
+                        painelScreen.style.display = 'block';
+                        labelUser.innerText = "Carlos Magno";
+                        localStorage.setItem('adminLogado', 'true');
+                        localStorage.setItem('adminUsuario', 'Carlos Magno');
+                        carregarConfigsPai();
+                        carregarProgramacao();
+                        carregarAbasCampos();
+                        carregarParticipantes();
+                        carregarParticipantesSelect(); // ← VERIFIQUE SE ESTA LINHA EXISTE
+                        carregarFundoSalvo(); // ← VERIFIQUE SE ESTA LINHA EXISTE
+                        carregarPersonalizacaoCertificado();
+                    } else {
+                        document.getElementById('loginError').style.display = 'block';
+                    }
+                });
+
+                btnLogout.onclick = function () {
+                    painelScreen.style.display = 'none';
+                    loginScreen.style.display = 'flex';
+                    localStorage.removeItem('adminLogado');
+                    localStorage.removeItem('adminUsuario');
+                };
+                // Carrega os dados das Configurações Gerais do Servidor
+                function carregarConfigsPai() {
+                    fetch(`${GOOGLE_API_URL}?action=listarConfig`)
+                        .then(res => res.json())
+                        .then(config => {
+                            if (config.titulo) document.getElementById('configTitulo').value = config.titulo;
+                            if (config.subtitulo) document.getElementById('configSubtitulo').value = config.subtitulo;
+                            if (config.descricao) document.getElementById('configDescricao').value = config.descricao;
+                            if (config.banner) document.getElementById('configBanner').value = config.banner;
+                            if (config.data_evento) document.getElementById('configDataEvento').value = config.data_evento;
+                            if (config.horario_evento) document.getElementById('configHorarioEvento').value = config.horario_evento;
+                            // =============================================
+                            // ESTA LINHA DEVE EXISTIR
+                            // =============================================
+                            if (config.local_evento) document.getElementById('configLocalEvento').value = config.local_evento;
+                            if (config.cidade) document.getElementById('configCidade').value = config.cidade;
+                            if (config.nome_organizador) document.getElementById('configNomeOrg').value = config.nome_organizador;
+                            if (config.bio_organizador) document.getElementById('configBioOrg').value = config.bio_organizador;
+                            if (config.foto_organizador) document.getElementById('configFotoOrg').value = config.foto_organizador;
+                        });
+                }
+
+                // Salva as Configurações Gerais do Site do Público
+                formConfig.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    btnSalvarConfig.disabled = true;
+                    btnSalvarConfig.innerText = "Atualizando...";
+                    const payload = {
+                        action: "salvarConfig",
+                        titulo: document.getElementById('configTitulo').value,
+                        subtitulo: document.getElementById('configSubtitulo').value,
+                        descricao: document.getElementById('configDescricao').value,
+                        banner: document.getElementById('configBanner').value,
+                        data_evento: document.getElementById('configDataEvento').value,
+                        horario_evento: document.getElementById('configHorarioEvento').value,
+                        // =============================================
+                        // ESTA LINHA DEVE EXISTIR
+                        // =============================================
+                        local_evento: document.getElementById('configLocalEvento').value,
+                        cidade: document.getElementById('configCidade').value,
+                        nome_organizador: document.getElementById('configNomeOrg').value,
+                        bio_organizador: document.getElementById('configBioOrg').value,
+                        foto_organizador: document.getElementById('configFotoOrg').value
+                    };
+                    fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify(payload) })
+                        .then(res => res.json())
+                        .then(() => {
+                            btnSalvarConfig.disabled = false;
+                            btnSalvarConfig.innerText = "Atualizar Informações Gerais do Site";
+                            mostrarAlerta('success', 'Configurações do portal de eventos atualizadas!');
+                        });
+                });
+
+                // CORREÇÃO CIRÚRGICA: Salva um novo campo no formulário cruzando o ID do botão
+                formCampoDinamico.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    btnSalvarCampo.disabled = true;
+                    btnSalvarCampo.innerText = "Criando...";
+
+                    const idLimpo = document.getElementById('campoId').value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+                    const payload = {
+                        action: "adicionarCampo",
+                        id: idLimpo,
+                        rotulo: document.getElementById('campoRotulo').value,
+                        tipo: document.getElementById('campoTipo').value,
+                        opcoes: document.getElementById('campoOpcoes').value
+                    };
+
+                    fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify(payload) })
+                        .then(res => res.json())
+                        .then(data => {
+                            btnSalvarCampo.disabled = false;
+                            btnSalvarCampo.innerText = "Criar Nova Pergunta no Formulário";
+                            if (data.success) {
+                                formCampoDinamico.reset();
+                                document.getElementById('grupoOpcoes').style.display = 'none';
+                                mostrarAlerta('success', 'Nova pergunta adicionada ao formulário do público!');
+                                carregarAbasCampos(); // Atualiza a lista visual do painel
+                            } else {
+                                mostrarAlerta('error', 'Erro do servidor: ' + data.message);
+                            }
+                        })
+                        .catch(() => {
+                            btnSalvarCampo.disabled = false;
+                            btnSalvarCampo.innerText = "Criar Nova Pergunta no Formulário";
+                            mostrarAlerta('error', 'Erro de conexão ao salvar campo.');
+                        });
+                });
+                // Carrega e monta as caixinhas das perguntas personalizadas ativas
+                function carregarAbasCampos() {
+                    listaCamposGerenciar.innerHTML = '<span style="color:#888;">Carregando perguntas adicionais...</span>';
+                    fetch(`${GOOGLE_API_URL}?action=listarCampos`)
+                        .then(res => res.json())
+                        .then(campos => {
+                            listaCamposGerenciar.innerHTML = '';
+                            if (!campos || campos.length === 0) {
+                                listaCamposGerenciar.innerHTML = '<span style="color:#888; font-style:italic;">Nenhuma pergunta personalizada ativa (Apenas Nome e E-mail padrões).</span>';
+                                return;
+                            }
+                            campos.forEach(campo => {
+                                const divBox = document.createElement('div');
+                                divBox.style.cssText = "background:#f5f0e8; border:1px solid #d4a373; padding:8px 12px; border-radius:6px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600;";
+                                divBox.innerHTML = `<span>${campo.rotulo} (${campo.id})</span><button type="button" style="background:none; border:none; color:red; font-weight:bold; cursor:pointer;" onclick="excluirCampoDinamico(${campo.rowIndex})">✕</button>`;
+                                listaCamposGerenciar.appendChild(divBox);
+                            });
+                        });
+                }
+
+                // Remove Pergunta do formulário via botão ✕
+                window.excluirCampoDinamico = function (numLinha) {
+                    if (!confirm("Tem certeza que deseja remover essa pergunta do formulário do público?")) return;
+                    fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify({ action: "excluirCampo", rowIndex: numLinha }) })
+                        .then(() => { mostrarAlerta('success', 'Pergunta removida do site!'); carregarAbasCampos(); });
+                };
+
+                // ============================================================================
+                // FUNÇÃO PARA CARREGAR PROGRAMAÇÃO COM BOTÃO DE EDITAR
+                // ============================================================================
+                function carregarProgramacao() {
+                    tableLoading.style.display = 'block';
+                    tabelaAtividades.style.display = 'none';
+                    corpoTabela.innerHTML = '';
+
+                    fetch(`${GOOGLE_API_URL}?action=listar`)
+                        .then(res => res.json())
+                        .then(data => {
+                            tableLoading.style.display = 'none';
+                            tabelaAtividades.style.display = 'table';
+
+                            if (!data || data.length === 0) {
+                                corpoTabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888;">Nenhuma atividade cadastrada.</td></tr>';
+                                return;
+                            }
+
+                            data.forEach(item => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                        <td><strong>${item.hora}</strong></td>
+                        <td>${item.titulo}</td>
+                        <td>${item.descricao || ''}</td>
+                        <td style="display:flex; gap:5px; flex-wrap:wrap;">
+                            <button class="btn-edit" onclick="abrirModalEdicao(${item.rowIndex})" 
+                                    style="background:#d4a373; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn-delete" onclick="excluirAtividade(${item.rowIndex})" 
+                                    style="background:#c33; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:bold;">
+                                🗑️ Excluir
+                            </button>
+                        </td>
+                    `;
+                                corpoTabela.appendChild(tr);
+                            });
+                        })
+                        .catch(err => {
+                            tableLoading.style.display = 'none';
+                            tabelaAtividades.style.display = 'table';
+                            corpoTabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">Erro ao carregar dados. Verifique a conexão.</td></tr>';
+                            console.error('Erro ao carregar programação:', err);
+                        });
+                }
+
+                // ============================================================================
+                // FUNÇÃO PARA ABRIR O MODAL DE EDIÇÃO
+                // ============================================================================
+                function abrirModalEdicao(rowIndex) {
+                    // Buscar os dados atuais da atividade
+                    fetch(`${GOOGLE_API_URL}?action=listar`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const atividade = data.find(item => item.rowIndex === rowIndex);
+                            if (!atividade) {
+                                alert('Atividade não encontrada!');
+                                return;
+                            }
+
+                            // Preencher o formulário de edição
+                            document.getElementById('editRowIndex').value = rowIndex;
+                            document.getElementById('editHora').value = atividade.hora;
+                            document.getElementById('editTitulo').value = atividade.titulo;
+                            document.getElementById('editDescricao').value = atividade.descricao || '';
+
+                            // Mostrar o modal
+                            document.getElementById('modalEdicao').style.display = 'flex';
+                        })
+                        .catch(err => {
+                            alert('Erro ao carregar dados da atividade para edição.');
+                            console.error(err);
+                        });
+                }
+
+                // ============================================================================
+                // FUNÇÃO PARA FECHAR O MODAL DE EDIÇÃO
+                // ============================================================================
+                function fecharModalEdicao() {
+                    document.getElementById('modalEdicao').style.display = 'none';
+                    document.getElementById('formEdicaoAtividade').reset();
+                }
+
+                // ============================================================================
+                // FUNÇÃO PARA SALVAR A EDIÇÃO DA ATIVIDADE
+                // ============================================================================
+                document.getElementById('formEdicaoAtividade').addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const btnSalvar = document.getElementById('btnSalvarEdicao');
+                    btnSalvar.disabled = true;
+                    btnSalvar.innerText = 'Salvando...';
+
+                    const payload = {
+                        action: 'atualizarAtividade',
+                        rowIndex: parseInt(document.getElementById('editRowIndex').value),
+                        hora: document.getElementById('editHora').value,
+                        titulo: document.getElementById('editTitulo').value,
+                        descricao: document.getElementById('editDescricao').value
+                    };
+
+                    fetch(GOOGLE_API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            btnSalvar.disabled = false;
+                            btnSalvar.innerText = 'Salvar Alterações';
+
+                            if (data.success) {
+                                mostrarAlerta('success', 'Atividade atualizada com sucesso!');
+                                fecharModalEdicao();
+                                carregarProgramacao(); // Recarregar a tabela
+                            } else {
+                                mostrarAlerta('error', 'Erro: ' + data.message);
+                            }
+                        })
+                        .catch(err => {
+                            btnSalvar.disabled = false;
+                            btnSalvar.innerText = 'Salvar Alterações';
+                            mostrarAlerta('error', 'Erro de conexão ao salvar alterações.');
+                            console.error(err);
+                        });
+                });
+
+                // Fechar modal ao clicar fora dele
+                document.getElementById('modalEdicao').addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        fecharModalEdicao();
+                    }
+                });
+
+                // Fechar modal com tecla ESC
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        fecharModalEdicao();
+                    }
+                });
+
+                // Adiciona Palestra/Atividade
+                formAtividade.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    btnSalvar.disabled = true;
+                    btnSalvar.innerText = "Adicionando...";
+                    const payload = {
+                        action: "adicionar",
+                        hora: "'" + document.getElementById('hora').value,
+                        titulo: document.getElementById('titulo').value,
+                        descricao: document.getElementById('descricao').value
+                    };
+                    fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify(payload) })
+                        .then(() => {
+                            btnSalvar.disabled = false; btnSalvar.innerText = "Adicionar Atividade"; formAtividade.reset();
+                            mostrarAlerta('success', 'Atividade incluída com sucesso!'); carregarProgramacao();
+                        });
+                });
+
+                // Remove Palestra/Atividade da Tabela
+                window.excluirAtividade = function (numLinha) {
+                    if (!confirm("Deseja apagar esta atividade?")) return;
+                    fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify({ action: "excluir", rowIndex: numLinha }) })
+                        .then(() => { mostrarAlerta('success', 'Atividade removida com sucesso!'); carregarProgramacao(); });
+                };
+
+                // Gerador de Avisos na Tela
+                function mostrarAlerta(tipo, msg) {
+                    const el = tipo === 'success' ? document.getElementById('alertSuccess') : document.getElementById('alertError');
+                    el.innerText = msg; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 4000);
+                }
+                // =============================================
+                // FUNÇÕES PARA LISTA DE PARTICIPANTES
+                // =============================================
+
+                function carregarParticipantes() {
+    const container = document.getElementById('participantes-container');
+    const loading = document.getElementById('participantes-loading');
+    const empty = document.getElementById('participantes-empty');
+    const thead = document.getElementById('participantes-headers');
+    const tbody = document.getElementById('participantes-body');
+    const totalCount = document.getElementById('total-count');
+
+    // Mostra loading
+    loading.style.display = 'block';
+    container.style.display = 'none';
+    empty.style.display = 'none';
+
+    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+        .then(res => res.json())
+        .then(data => {
+            loading.style.display = 'none';
+
+            if (!data.success) {
+                alert('Erro ao carregar participantes: ' + data.message);
+                return;
+            }
+
+            if (data.total === 0) {
+                empty.style.display = 'block';
+                totalCount.textContent = '0';
+                return;
+            }
+
+            // Atualiza total
+            totalCount.textContent = data.total;
+
+            // Monta cabeçalhos
+            thead.innerHTML = '';
+            var headers = data.headers || [];
+            
+            // =============================================
+            // ADICIONA A COLUNA "STATUS" (NOVO)
+            // =============================================
+            headers.forEach(function(header) {
+                var th = document.createElement('th');
+                th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+                thead.appendChild(th);
+            });
+            // Adiciona coluna de STATUS
+            var thStatus = document.createElement('th');
+            thStatus.textContent = 'Status';
+            thead.appendChild(thStatus);
+            
+            // Adiciona coluna de Ação
+            var thAcao = document.createElement('th');
+            thAcao.textContent = 'Ações';
+            thead.appendChild(thAcao);
+
+            // Monta corpo da tabela
+            tbody.innerHTML = '';
+            data.data.forEach(function(item) {
+                var tr = document.createElement('tr');
+                
+                // Dados do participante
+                headers.forEach(function(header) {
+                    var td = document.createElement('td');
+                    var value = item[header.toLowerCase()] || '';
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                
+                // =============================================
+                // COLUNA "STATUS" (NOVO)
+                // =============================================
+                var tdStatus = document.createElement('td');
+                var presente = item.presente || '';
+                if (presente && presente.includes('✅')) {
+                    tdStatus.innerHTML = '✅ Presente';
+                    tdStatus.style.color = '#28a745';
+                    tdStatus.style.fontWeight = 'bold';
+                } else {
+                    tdStatus.innerHTML = '⬜ Ausente';
+                    tdStatus.style.color = '#868E96';
+                }
+                tr.appendChild(tdStatus);
+                
+                // Coluna de ação
+                var tdAcao = document.createElement('td');
+                tdAcao.innerHTML = `
+                    <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
+                `;
+                tr.appendChild(tdAcao);
+                tbody.appendChild(tr);
+            });
+
+            container.style.display = 'block';
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            alert('Erro ao carregar participantes. Verifique o console.');
+            console.error('Erro:', err);
+        });
+}
+
+                // =============================================
+                // FUNÇÃO PARA VER DETALHES DO PARTICIPANTE
+                // =============================================
+                function verParticipante(rowIndex) {
+    var participante = todosParticipantes.find(function(item) {
+        return item._rowIndex == rowIndex;
+    });
+
+    if (!participante) {
+        participante = participantesFiltrados.find(function(item) {
+            return item._rowIndex == rowIndex;
+        });
+    }
+
+    if (!participante) {
+        alert('Participante não encontrado!');
+        return;
+    }
+
+    var mensagem = '📋 DETALHES DO PARTICIPANTE\n';
+    mensagem += '═'.repeat(40) + '\n';
+    for (var chave in participante) {
+        if (chave !== '_rowIndex') {
+            var label = chave.charAt(0).toUpperCase() + chave.slice(1).replace(/_/g, ' ');
+            var valor = participante[chave] || '';
+            // =============================================
+            // MOSTRA O STATUS DE PRESENÇA (NOVO)
+            // =============================================
+            if (chave === 'presente') {
+                if (valor && valor.includes('✅')) {
+                    valor = '✅ Presente - ' + valor.replace('✅ Presente - ', '');
+                } else {
+                    valor = '⬜ Ausente';
+                }
+            }
+            mensagem += label + ': ' + valor + '\n';
+        }
+    }
+    mensagem += '═'.repeat(40);
+    alert(mensagem);
+}
+
+                // =============================================
+                // FUNÇÃO PARA EXPORTAR CSV
+                // =============================================
+                function exportarParticipantesCSV() {
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (!data.success || data.total === 0) {
+                                alert('Nenhum participante para exportar.');
+                                return;
+                            }
+
+                            var headers = data.headers || [];
+                            var rows = data.data;
+
+                            // Cria o CSV
+                            var csv = headers.join(',') + '\n';
+                            rows.forEach(function (item) {
+                                var linha = headers.map(function (header) {
+                                    var valor = item[header.toLowerCase()] || '';
+                                    // Escapa vírgulas e aspas
+                                    if (valor.includes(',') || valor.includes('"')) {
+                                        valor = '"' + valor.replace(/"/g, '""') + '"';
+                                    }
+                                    return valor;
+                                }).join(',');
+                                csv += linha + '\n';
+                            });
+
+                            // Baixa o arquivo
+                            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                            var link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = 'participantes_' + new Date().toISOString().slice(0, 10) + '.csv';
+                            link.click();
+                            URL.revokeObjectURL(link.href);
+                        });
+                }
+
+                // =============================================
+                // FUNÇÃO PARA EXPORTAR EXCEL (TSV)
+                // =============================================
+                function exportarParticipantesExcel() {
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (!data.success || data.total === 0) {
+                                alert('Nenhum participante para exportar.');
+                                return;
+                            }
+
+                            var headers = data.headers || [];
+                            var rows = data.data;
+
+                            // Cria TSV (Tab Separated Values - funciona no Excel)
+                            var tsv = headers.join('\t') + '\n';
+                            rows.forEach(function (item) {
+                                var linha = headers.map(function (header) {
+                                    var valor = item[header.toLowerCase()] || '';
+                                    return valor;
+                                }).join('\t');
+                                tsv += linha + '\n';
+                            });
+
+                            // Baixa o arquivo
+                            var blob = new Blob([tsv], { type: 'text/tab-separated-values;charset=utf-8;' });
+                            var link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = 'participantes_' + new Date().toISOString().slice(0, 10) + '.xls';
+                            link.click();
+                            URL.revokeObjectURL(link.href);
+                        });
+                }
+                // =============================================
+                // VARIÁVEIS PARA ARMAZENAR DADOS DA BUSCA
+                // =============================================
+                var todosParticipantes = [];
+                var participantesFiltrados = [];
+
+                // =============================================
+                // FUNÇÃO PARA BUSCAR PARTICIPANTES
+                // =============================================
+                function buscarParticipante(event) {
+                    // Se for evento de tecla, verifica se é Enter
+                    if (event && event.key && event.key !== 'Enter') {
+                        return;
+                    }
+
+                    var termo = document.getElementById('busca-participante').value.trim().toLowerCase();
+                    var resultadoInfo = document.getElementById('resultado-info');
+                    var resultadoCount = document.getElementById('resultado-count');
+                    var totalCount = document.getElementById('total-count');
+                    var tbody = document.getElementById('participantes-body');
+
+                    if (!termo) {
+                        // Se o termo estiver vazio, mostra todos
+                        limparBusca();
+                        return;
+                    }
+
+                    // Filtra os participantes
+                    participantesFiltrados = todosParticipantes.filter(function (item) {
+                        // Busca em todas as propriedades do objeto
+                        for (var chave in item) {
+                            if (chave === '_rowIndex') continue;
+                            var valor = (item[chave] || '').toString().toLowerCase();
+                            if (valor.includes(termo)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+
+                    // Atualiza contadores
+                    resultadoCount.textContent = participantesFiltrados.length;
+                    resultadoInfo.style.display = 'block';
+
+                    // Renderiza os resultados
+                    renderizarTabela(participantesFiltrados);
+                }
+
+                // =============================================
+                // FUNÇÃO PARA LIMPAR A BUSCA
+                // =============================================
+                function limparBusca() {
+                    document.getElementById('busca-participante').value = '';
+                    document.getElementById('resultado-info').style.display = 'none';
+                    participantesFiltrados = [];
+                    renderizarTabela(todosParticipantes);
+                }
+
+                // =============================================
+                // FUNÇÃO PARA RENDERIZAR TABELA COM DADOS
+                // =============================================
+                function renderizarTabela(dados) {
+    var headers = document.querySelector('#participantes-headers');
+    var tbody = document.getElementById('participantes-body');
+    var totalCount = document.getElementById('total-count');
+
+    if (!dados || dados.length === 0) {
+        if (document.getElementById('busca-participante').value.trim() !== '') {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
+        }
+        return;
+    }
+
+    // Monta cabeçalhos (apenas na primeira vez)
+    if (headers.children.length === 0) {
+        var primeirosHeaders = Object.keys(dados[0]).filter(function(key) { 
+            return key !== '_rowIndex' && key !== 'presente'; 
+        });
+        primeirosHeaders.forEach(function(header) {
+            var th = document.createElement('th');
+            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+            headers.appendChild(th);
+        });
+        // Coluna de STATUS
+        var thStatus = document.createElement('th');
+        thStatus.textContent = 'Status';
+        headers.appendChild(thStatus);
+        
+        var thAcao = document.createElement('th');
+        thAcao.textContent = 'Ações';
+        headers.appendChild(thAcao);
+    }
+
+    // Monta corpo da tabela
+    tbody.innerHTML = '';
+    dados.forEach(function(item) {
+        var tr = document.createElement('tr');
+        for (var chave in item) {
+            if (chave === '_rowIndex' || chave === 'presente') continue;
+            var td = document.createElement('td');
+            var valor = item[chave] || '';
+            td.textContent = valor;
+            tr.appendChild(td);
+        }
+        
+        // Coluna de STATUS
+        var tdStatus = document.createElement('td');
+        var presente = item.presente || '';
+        if (presente && presente.includes('✅')) {
+            tdStatus.innerHTML = '✅ Presente';
+            tdStatus.style.color = '#28a745';
+            tdStatus.style.fontWeight = 'bold';
+        } else {
+            tdStatus.innerHTML = '⬜ Ausente';
+            tdStatus.style.color = '#868E96';
+        }
+        tr.appendChild(tdStatus);
+        
+        // Coluna de ação
+        var tdAcao = document.createElement('td');
+        tdAcao.innerHTML = `
+            <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
+        `;
+        tr.appendChild(tdAcao);
+        tbody.appendChild(tr);
+    });
+
+    totalCount.textContent = todosParticipantes.length;
+}
+
+                // =============================================
+                // FUNÇÃO MODIFICADA: CARREGAR PARTICIPANTES
+                // =============================================
+                function carregarParticipantes() {
+                    var container = document.getElementById('participantes-container');
+                    var loading = document.getElementById('participantes-loading');
+                    var empty = document.getElementById('participantes-empty');
+                    var headers = document.getElementById('participantes-headers');
+                    var tbody = document.getElementById('participantes-body');
+                    var totalCount = document.getElementById('total-count');
+                    var resultadoInfo = document.getElementById('resultado-info');
+
+                    // Limpa cabeçalhos para recriar
+                    headers.innerHTML = '';
+
+                    // Mostra loading
+                    loading.style.display = 'block';
+                    container.style.display = 'none';
+                    empty.style.display = 'none';
+                    resultadoInfo.style.display = 'none';
+
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            loading.style.display = 'none';
+
+                            if (!data.success) {
+                                alert('Erro ao carregar participantes: ' + data.message);
+                                return;
+                            }
+
+                            // Guarda todos os participantes
+                            todosParticipantes = data.data || [];
+
+                            if (todosParticipantes.length === 0) {
+                                empty.style.display = 'block';
+                                totalCount.textContent = '0';
+                                container.style.display = 'none';
+                                return;
+                            }
+
+                            // Atualiza total
+                            totalCount.textContent = todosParticipantes.length;
+
+                            // Renderiza a tabela
+                            renderizarTabela(todosParticipantes);
+                            container.style.display = 'block';
+                        })
+                        .catch(err => {
+                            loading.style.display = 'none';
+                            alert('Erro ao carregar participantes. Verifique o console.');
+                            console.error('Erro:', err);
+                        });
+                }
+                // =============================================
+                // VARIÁVEIS DE PAGINAÇÃO
+                // =============================================
+                var paginaAtual = 1;
+                var registrosPorPagina = 10;
+                var dadosExibindo = []; // Array com os dados atuais (todos ou filtrados)
+
+                // =============================================
+                // FUNÇÃO PARA RENDERIZAR TABELA COM PAGINAÇÃO
+                // =============================================
+                function renderizarTabelaComPaginacao(dados) {
+    var container = document.getElementById('participantes-container');
+    var tbody = document.getElementById('participantes-body');
+    var headers = document.getElementById('participantes-headers');
+    var paginacaoContainer = document.getElementById('paginacao-container');
+    var totalCount = document.getElementById('total-count');
+
+    dadosExibindo = dados || [];
+    totalCount.textContent = todosParticipantes.length;
+
+    if (!dadosExibindo || dadosExibindo.length === 0) {
+        var termo = document.getElementById('busca-participante').value.trim();
+        if (termo !== '') {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
+        } else {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
+        }
+        paginacaoContainer.style.display = 'none';
+        container.style.display = 'block';
+        return;
+    }
+
+    if (headers.children.length === 0) {
+        var primeirosHeaders = Object.keys(dadosExibindo[0]).filter(function(key) { 
+            return key !== '_rowIndex' && key !== 'presente'; 
+        });
+        primeirosHeaders.forEach(function(header) {
+            var th = document.createElement('th');
+            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+            headers.appendChild(th);
+        });
+        var thStatus = document.createElement('th');
+        thStatus.textContent = 'Status';
+        headers.appendChild(thStatus);
+        
+        var thAcao = document.createElement('th');
+        thAcao.textContent = 'Ações';
+        headers.appendChild(thAcao);
+    }
+
+    var totalRegistros = dadosExibindo.length;
+    var totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
+    if (paginaAtual > totalPaginas) {
+        paginaAtual = totalPaginas || 1;
+    }
+
+    var inicio = (paginaAtual - 1) * registrosPorPagina;
+    var fim = Math.min(inicio + registrosPorPagina, totalRegistros);
+    var paginaDados = dadosExibindo.slice(inicio, fim);
+
+    tbody.innerHTML = '';
+    paginaDados.forEach(function(item) {
+        var tr = document.createElement('tr');
+        for (var chave in item) {
+            if (chave === '_rowIndex' || chave === 'presente') continue;
+            var td = document.createElement('td');
+            var valor = item[chave] || '';
+            td.textContent = valor;
+            tr.appendChild(td);
+        }
+        
+        // Coluna de STATUS
+        var tdStatus = document.createElement('td');
+        var presente = item.presente || '';
+        if (presente && presente.includes('✅')) {
+            tdStatus.innerHTML = '✅ Presente';
+            tdStatus.style.color = '#28a745';
+            tdStatus.style.fontWeight = 'bold';
+        } else {
+            tdStatus.innerHTML = '⬜ Ausente';
+            tdStatus.style.color = '#868E96';
+        }
+        tr.appendChild(tdStatus);
+        
+        var tdAcao = document.createElement('td');
+        tdAcao.innerHTML = `
+            <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
+        `;
+        tr.appendChild(tdAcao);
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('paginacao-inicio').textContent = totalRegistros > 0 ? inicio + 1 : 0;
+    document.getElementById('paginacao-fim').textContent = fim;
+    document.getElementById('paginacao-total').textContent = totalRegistros;
+
+    // Gera botões de paginação
+    var botoesContainer = document.getElementById('paginacao-botoes');
+    botoesContainer.innerHTML = '';
+
+    var btnAnterior = document.createElement('button');
+    btnAnterior.textContent = '◀ Anterior';
+    btnAnterior.disabled = paginaAtual <= 1;
+    btnAnterior.onclick = function() {
+        if (paginaAtual > 1) {
+            paginaAtual--;
+            renderizarTabelaComPaginacao(dadosExibindo);
+        }
+    };
+    botoesContainer.appendChild(btnAnterior);
+
+    var maxBotoes = 5;
+    var inicioBotoes = Math.max(1, paginaAtual - Math.floor(maxBotoes / 2));
+    var fimBotoes = Math.min(totalPaginas, inicioBotoes + maxBotoes - 1);
+
+    if (fimBotoes - inicioBotoes < maxBotoes - 1) {
+        inicioBotoes = Math.max(1, fimBotoes - maxBotoes + 1);
+    }
+
+    for (var i = inicioBotoes; i <= fimBotoes; i++) {
+        var btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === paginaAtual) {
+            btn.className = 'active';
+        }
+        btn.onclick = function(num) {
+            return function() {
+                paginaAtual = num;
+                renderizarTabelaComPaginacao(dadosExibindo);
+            };
+        }(i);
+        botoesContainer.appendChild(btn);
+    }
+
+    var btnProximo = document.createElement('button');
+    btnProximo.textContent = 'Próximo ▶';
+    btnProximo.disabled = paginaAtual >= totalPaginas;
+    btnProximo.onclick = function() {
+        if (paginaAtual < totalPaginas) {
+            paginaAtual++;
+            renderizarTabelaComPaginacao(dadosExibindo);
+        }
+    };
+    botoesContainer.appendChild(btnProximo);
+
+    paginacaoContainer.style.display = 'flex';
+    container.style.display = 'block';
+}
+
+                // =============================================
+                // FUNÇÃO PARA MUDAR TAMANHO DA PÁGINA
+                // =============================================
+                function mudarTamanhoPagina() {
+                    registrosPorPagina = parseInt(document.getElementById('paginacao-tamanho').value);
+                    paginaAtual = 1;
+                    renderizarTabelaComPaginacao(dadosExibindo);
+                }
+
+                // =============================================
+                // FUNÇÃO MODIFICADA: BUSCAR PARTICIPANTES
+                // =============================================
+                function buscarParticipante(event) {
+                    if (event && event.key && event.key !== 'Enter') {
+                        return;
+                    }
+
+                    var termo = document.getElementById('busca-participante').value.trim().toLowerCase();
+                    var resultadoInfo = document.getElementById('resultado-info');
+                    var resultadoCount = document.getElementById('resultado-count');
+
+                    if (!termo) {
+                        limparBusca();
+                        return;
+                    }
+
+                    // Filtra os participantes
+                    participantesFiltrados = todosParticipantes.filter(function (item) {
+                        for (var chave in item) {
+                            if (chave === '_rowIndex') continue;
+                            var valor = (item[chave] || '').toString().toLowerCase();
+                            if (valor.includes(termo)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+
+                    // Atualiza contadores
+                    resultadoCount.textContent = participantesFiltrados.length;
+                    resultadoInfo.style.display = 'block';
+
+                    // Reseta para primeira página
+                    paginaAtual = 1;
+
+                    // Renderiza com paginação
+                    renderizarTabelaComPaginacao(participantesFiltrados);
+                }
+
+                // =============================================
+                // FUNÇÃO MODIFICADA: LIMPAR BUSCA
+                // =============================================
+                function limparBusca() {
+                    document.getElementById('busca-participante').value = '';
+                    document.getElementById('resultado-info').style.display = 'none';
+                    participantesFiltrados = [];
+                    paginaAtual = 1;
+                    renderizarTabelaComPaginacao(todosParticipantes);
+                }
+
+                // =============================================
+                // FUNÇÃO MODIFICADA: CARREGAR PARTICIPANTES
+                // =============================================
+                function carregarParticipantes() {
+                    var container = document.getElementById('participantes-container');
+                    var loading = document.getElementById('participantes-loading');
+                    var empty = document.getElementById('participantes-empty');
+                    var headers = document.getElementById('participantes-headers');
+                    var paginacaoContainer = document.getElementById('paginacao-container');
+                    var resultadoInfo = document.getElementById('resultado-info');
+
+                    // Limpa cabeçalhos para recriar
+                    headers.innerHTML = '';
+
+                    // Mostra loading
+                    loading.style.display = 'block';
+                    container.style.display = 'none';
+                    empty.style.display = 'none';
+                    paginacaoContainer.style.display = 'none';
+                    resultadoInfo.style.display = 'none';
+
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            loading.style.display = 'none';
+
+                            if (!data.success) {
+                                alert('Erro ao carregar participantes: ' + data.message);
+                                return;
+                            }
+
+                            // Guarda todos os participantes
+                            todosParticipantes = data.data || [];
+
+                            if (todosParticipantes.length === 0) {
+                                empty.style.display = 'block';
+                                document.getElementById('total-count').textContent = '0';
+                                return;
+                            }
+
+                            // Atualiza total
+                            document.getElementById('total-count').textContent = todosParticipantes.length;
+
+                            // Reseta para primeira página
+                            paginaAtual = 1;
+
+                            // Renderiza com paginação
+                            renderizarTabelaComPaginacao(todosParticipantes);
+                        })
+                        .catch(err => {
+                            loading.style.display = 'none';
+                            alert('Erro ao carregar participantes. Verifique o console.');
+                            console.error('Erro:', err);
+                        });
+                }
+                // =============================================
+                // VARIÁVEIS PARA CERTIFICADOS
+                // =============================================
+                var certificadoAtual = null;
+                var urlFundoCertificado = '';
+
+                // =============================================
+                // FUNÇÃO PARA SALVAR FUNDO DO CERTIFICADO
+                // =============================================
+                function salvarFundoCertificado() {
+                    var url = document.getElementById('certificado-fundo-url').value.trim();
+                    var status = document.getElementById('fundo-status');
+
+                    if (!url) {
+                        alert('Por favor, cole o link da imagem.');
+                        return;
+                    }
+
+                    // Testa se a imagem carrega
+                    var img = new Image();
+                    img.onload = function () {
+                        urlFundoCertificado = url;
+                        status.style.display = 'block';
+                        status.textContent = '✅ Fundo salvo com sucesso!';
+                        status.className = 'fundo-status';
+                        localStorage.setItem('fundoCertificado', url);
+                        console.log('✅ Fundo do certificado salvo:', url);
+
+                        // Se já tem certificado gerado, atualiza
+                        if (certificadoAtual) {
+                            certificadoAtual.fundoUrl = url;
+                            gerarCertificado();
+                        }
+                    };
+                    img.onerror = function () {
+                        status.style.display = 'block';
+                        status.textContent = '❌ Erro ao carregar a imagem. Verifique o link.';
+                        status.className = 'fundo-status error';
+                    };
+                    img.src = url;
+                }
+
+                // =============================================
+                // FUNÇÃO PARA TESTAR FUNDO DO CERTIFICADO
+                // =============================================
+                function testarFundoCertificado() {
+                    var url = document.getElementById('certificado-fundo-url').value.trim() || urlFundoCertificado;
+                    if (!url) {
+                        alert('Nenhum fundo configurado. Cole um link primeiro.');
+                        return;
+                    }
+
+                    var preview = document.getElementById('certificado-preview');
+                    var container = document.getElementById('certificado-container');
+
+                    preview.style.backgroundImage = 'url(' + url + ')';
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.backgroundPosition = 'center';
+
+                    preview.innerHTML = `
+                    <div style="position: relative; z-index: 2; padding: 40px; text-align: center;">
+                        <h1 style="color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); font-size: 28px;">✅ TESTE DE FUNDO</h1>
+                        <p style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 18px;">Se você está vendo este texto sobre a imagem, o fundo funcionou!</p>
+                        <p style="color: rgba(255,255,255,0.7); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 14px; margin-top: 10px;">Agora gere um certificado para ver o resultado completo.</p>
+                    </div>
+                `;
+
+                    container.style.display = 'block';
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                // =============================================
+                // FUNÇÃO PARA CARREGAR FUNDO SALVO
+                // =============================================
+                function carregarFundoSalvo() {
+                    var salvo = localStorage.getItem('fundoCertificado');
+                    if (salvo) {
+                        urlFundoCertificado = salvo;
+                        document.getElementById('certificado-fundo-url').value = salvo;
+                        var status = document.getElementById('fundo-status');
+                        status.style.display = 'block';
+                        status.textContent = '✅ Fundo carregado do cache';
+                        status.className = 'fundo-status';
+                        console.log('📂 Fundo carregado do cache:', salvo);
+                    }
+                }
+
+                // =============================================
+                // FUNÇÃO PARA CARREGAR PARTICIPANTES NO SELECT
+                // =============================================
+                function carregarParticipantesSelect() {
+                    var select = document.getElementById('certificado-participante');
+                    select.innerHTML = '<option value="">Carregando participantes...</option>';
+
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            select.innerHTML = '';
+                            if (!data.success || data.total === 0) {
+                                select.innerHTML = '<option value="">Nenhum participante encontrado</option>';
+                                return;
+                            }
+
+                            data.data.forEach(function (item) {
+                                var option = document.createElement('option');
+                                var nome = item.nome || item['Nome Completo'] || 'Participante';
+                                var email = item.email || item['E-mail'] || '';
+                                option.value = JSON.stringify({
+                                    nome: nome,
+                                    email: email,
+                                    curso: item.curso || item['Curso'] || '',
+                                    rowIndex: item._rowIndex
+                                });
+                                option.textContent = nome + ' - ' + email;
+                                select.appendChild(option);
+                            });
+                        })
+                        .catch(err => {
+                            select.innerHTML = '<option value="">Erro ao carregar participantes</option>';
+                            console.error('Erro:', err);
+                        });
+                }
+
+                // =============================================
+                // FUNÇÃO PARA GERAR CERTIFICADO (COM PERSONALIZAÇÃO)
+                // =============================================
+                function gerarCertificado() {
+                    var select = document.getElementById('certificado-participante');
+                    var loading = document.getElementById('certificado-loading');
+                    var container = document.getElementById('certificado-container');
+                    var preview = document.getElementById('certificado-preview');
+
+                    if (!select.value) {
+                        alert('Por favor, selecione um participante.');
+                        return;
+                    }
+
+                    var participante = JSON.parse(select.value);
+
+                    loading.style.display = 'block';
+                    container.style.display = 'none';
+
+                    // =============================================
+                    // DADOS DINÂMICOS
+                    // =============================================
+                    var tituloEvento = document.getElementById('configTitulo')?.value || 'Evento UFPA';
+                    var dataEvento = document.getElementById('configDataEvento')?.value || new Date().toLocaleDateString('pt-BR');
+                    var cidadeEvento = document.getElementById('configCidade')?.value || '';
+
+                    if (dataEvento && dataEvento.includes('a partir das')) {
+                        dataEvento = dataEvento.split('a partir das')[0].trim();
+                    }
+
+                    // =============================================
+                    // PERSONALIZAÇÃO
+                    // =============================================
+                    var personalizacao = getPersonalizacaoCertificado();
+
+                    var tituloCert = personalizacao.titulo;
+                    var subtituloCert = personalizacao.subtitulo;
+                    var cargaHoraria = personalizacao.cargaHoraria;
+                    var assinante = personalizacao.assinante;
+                    var corLinha = personalizacao.corLinha;
+                    var logoUrl = personalizacao.logoUrl;
+
+                    // =============================================
+                    // NOME DA ORGANIZAÇÃO (DAS CONFIGURAÇÕES GERAIS)
+                    // =============================================
+                    var nomeOrganizador = document.getElementById('configNomeOrg')?.value || 'UFPA';
+
+                    // Data de emissão
+                    var dataEmissao = new Date().toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+
+                    // Código de validação
+                    var codigoValidacao = 'UFPA-' + new Date().getFullYear() + '-' +
+                        String(Math.floor(10000 + Math.random() * 90000)) +
+                        String.fromCharCode(65 + Math.floor(Math.random() * 26));
+
+                    var fundoUrl = urlFundoCertificado || '';
+
+                    // =============================================
+                    // HTML DO CERTIFICADO (COM PERSONALIZAÇÃO)
+                    // =============================================
+                    var html = `
+                    <div style="
+                        position: relative; 
+                        padding: 50px 60px; 
+                        min-height: 380px; 
+                        width: 100%;
+                        max-width: 900px;
+                        margin: 0 auto;
+                        background: ${fundoUrl ? 'transparent' : '#ffffff'};
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        font-family: 'Georgia', 'Times New Roman', serif;
+                        box-sizing: border-box;
+                    ">
+                        ${fundoUrl ? `<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.90); border-radius: 8px; z-index: 1;"></div>` : ''}
+                        
+                        <div style="position: relative; z-index: 2; width: 100%;">
+                            
+                            <!-- LOGO -->
+                            ${logoUrl ? `<div style="text-align: center; margin-bottom: 15px;"><img src="${logoUrl}" style="max-height: 60px; width: auto;"></div>` : ''}
+                            
+                            <!-- TOPO: TÍTULO -->
+                            <div style="text-align: center; border-bottom: 3px solid ${corLinha}; padding-bottom: 15px; margin-bottom: 20px;">
+                                <div style="font-size: 22px; color: #694573; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;">
+                                    ${tituloCert}
+                                </div>
+                            </div>
+                            
+                            <!-- TEXTO DO CERTIFICADO -->
+                            <div style="text-align: center; padding: 10px 0;">
+                                <div style="font-size: 15px; color: #495057; line-height: 2.0; max-width: 650px; margin: 0 auto;">
+                                    ${subtituloCert}
+                                </div>
+                                
+                                <div style="
+                                    font-size: 32px; 
+                                    font-weight: 700; 
+                                    color: #2d5a3f; 
+                                    margin: 12px 0; 
+                                    font-family: 'Georgia', serif; 
+                                    letter-spacing: 1px;
+                                    text-transform: uppercase;
+                                ">
+                                    ${participante.nome}
+                                </div>
+                                
+                                <div style="
+                                    font-size: 15px; 
+                                    color: #495057; 
+                                    line-height: 2.2; 
+                                    max-width: 650px; 
+                                    margin: 0 auto;
+                                    padding: 0 10px;
+                                ">
+                                    participou do evento 
+                                    <span style="font-weight: 700; color: #694573;">"${tituloEvento}"</span>
+                                    ${participante.curso ? ', do curso ' + participante.curso : ''}
+                                    , realizado pela <strong>${nomeOrganizador}</strong>
+                                    , com carga horária de <strong>${cargaHoraria}</strong>.
+                                </div>
+                                
+                                <div style="
+    color: #868E96; 
+    font-size: 15px; 
+    margin-top: 18px;
+    font-weight: 500;
+    line-height: 1.8;
+">
+    ${cidadeEvento ? cidadeEvento + ', ' : ''}${dataEvento}
+</div>
+                            </div>
+                            
+                            <!-- RODAPÉ -->
+                            <div style="
+                                margin-top: 30px; 
+                                padding-top: 20px; 
+                                border-top: 2px solid #e0d5c1;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: flex-end;
+                                flex-wrap: wrap;
+                                gap: 20px;
+                            ">
+                                <div style="text-align: center; flex: 1; min-width: 160px;">
+                                    <div style="width: 180px; border-top: 1.5px solid #495057; margin: 5px auto;"></div>
+                                    <strong style="font-size: 13px; color: #495057;">${assinante}</strong>
+
+                                </div>
+                                
+                                <div style="text-align: center; flex: 1; min-width: 120px;">
+                                    <div style="font-size: 10px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1px;">Emissão</div>
+                                    <div style="font-size: 13px; color: #495057; font-weight: 600;">${dataEmissao}</div>
+                                </div>
+                                
+                                <div style="text-align: center; flex: 1; min-width: 160px;">
+                                    <div style="font-size: 9px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1px;">Código de Validação</div>
+                                    <div style="font-size: 12px; color: #694573; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 0.5px;">${codigoValidacao}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                    // Salva os dados do certificado
+                    certificadoAtual = {
+                        html: html,
+                        participante: participante,
+                        tituloEvento: tituloEvento,
+                        nomeOrganizador: nomeOrganizador,
+                        dataEvento: dataEvento,
+                        cidadeEvento: cidadeEvento,
+                        dataEmissao: dataEmissao,
+                        codigoValidacao: codigoValidacao,
+                        cargaHoraria: cargaHoraria,
+                        fundoUrl: fundoUrl,
+                        personalizacao: personalizacao
+                    };
+
+                    // Exibe o certificado
+                    preview.innerHTML = html;
+
+                    if (fundoUrl) {
+                        preview.style.backgroundImage = 'url(' + fundoUrl + ')';
+                        preview.style.backgroundSize = 'cover';
+                        preview.style.backgroundPosition = 'center';
+                        preview.style.backgroundColor = 'transparent';
+                    } else {
+                        preview.style.backgroundImage = 'none';
+                        preview.style.backgroundColor = '#ffffff';
+                    }
+
+                    preview.style.border = 'none';
+                    preview.style.borderRadius = '12px';
+                    preview.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+                    preview.style.padding = '20px';
+                    preview.style.maxWidth = '900px';
+                    preview.style.margin = '0 auto';
+
+                    container.style.display = 'block';
+                    loading.style.display = 'none';
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                // =============================================
+                // FUNÇÃO PARA BAIXAR CERTIFICADO (VERSÃO SIMPLIFICADA)
+                // =============================================
+                function baixarCertificado() {
+                    console.log('🔵 Função baixarCertificado() chamada!');
+
+                    if (!certificadoAtual) {
+                        alert('Gere um certificado primeiro.');
+                        return;
+                    }
+
+                    var btn = document.querySelector('.btn-baixar');
+                    var textoOriginal = btn ? btn.innerText : 'Baixar PDF';
+                    if (btn) {
+                        btn.innerText = '⏳ Gerando PDF...';
+                        btn.disabled = true;
+                    }
+
+                    var dados = certificadoAtual;
+                    var participante = dados.participante;
+                    var cidadeEvento = dados.cidadeEvento || '';
+                    var nomeOrganizador = dados.nomeOrganizador || document.getElementById('configNomeOrg')?.value || 'UFPA';
+
+
+                    // =============================================
+                    // PEGA OS DADOS DE PERSONALIZAÇÃO
+                    // =============================================
+                    var assinante = 'COMISSÃO ORGANIZADORA';
+                    var cargaHoraria = '20 horas';
+                    var tituloCert = 'CERTIFICADO DE PARTICIPAÇÃO';
+                    var subtituloCert = 'Certificamos que';
+                    var corLinha = '#694573';
+
+                    // Tenta carregar personalização salva
+                    try {
+                        var salvo = localStorage.getItem('certPersonalizacao');
+                        if (salvo) {
+                            var personalizacao = JSON.parse(salvo);
+                            assinante = personalizacao.assinante || assinante;
+                            cargaHoraria = personalizacao.cargaHoraria || cargaHoraria;
+                            tituloCert = personalizacao.titulo || tituloCert;
+                            subtituloCert = personalizacao.subtitulo || subtituloCert;
+                            corLinha = personalizacao.corLinha || corLinha;
+                        }
+                    } catch (e) {
+                        console.warn('Erro ao carregar personalização:', e);
+                    }
+
+                    // Nome da organização (das configurações)
+                    var nomeOrganizador = document.getElementById('configNomeOrg')?.value || 'UFPA';
+                    var dataEvento = dados.dataEvento || '';
+                    if (dataEvento && dataEvento.includes('a partir das')) {
+                        dataEvento = dataEvento.split('a partir das')[0].trim();
+                    }
+
+                    console.log('📋 Dados:', { participante: participante.nome, assinante, organizacao: nomeOrganizador });
+
+                    // =============================================
+                    // CRIA O PDF
+                    // =============================================
+                    try {
+                        var pdf = new jspdf.jsPDF({
+                            unit: 'mm',
+                            format: 'a4',
+                            orientation: 'landscape'
+                        });
+
+                        var pageWidth = 297;
+                        var pageHeight = 210;
+                        var marginX = 25;
+                        var marginY = 25;
+                        var contentWidth = pageWidth - (marginX * 2);
+
+                        var y = marginY + 10;
+                        var centerX = pageWidth / 2;
+
+                        // =============================================
+                        // FUNDO BRANCO
+                        // =============================================
+                        pdf.setFillColor(255, 255, 255);
+                        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+
+                        // =============================================
+                        // TÍTULO
+                        // =============================================
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(18);
+                        pdf.setTextColor(105, 69, 115);
+                        pdf.text(tituloCert, centerX, y, { align: 'center' });
+                        y += 12;
+
+                        // Linha decorativa
+                        pdf.setDrawColor(105, 69, 115);
+                        pdf.setLineWidth(0.5);
+                        pdf.line(marginX + 40, y, pageWidth - marginX - 40, y);
+                        y += 14;
+
+                        // =============================================
+                        // SUBTÍTULO
+                        // =============================================
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(12);
+                        pdf.setTextColor(73, 80, 87);
+                        pdf.text(subtituloCert, centerX, y, { align: 'center' });
+                        y += 12;
+
+                        // =============================================
+                        // NOME DO PARTICIPANTE
+                        // =============================================
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(24);
+                        pdf.setTextColor(45, 90, 63);
+                        pdf.text(participante.nome.toUpperCase(), centerX, y, { align: 'center' });
+                        y += 16;
+
+                        // =============================================
+                        // TEXTO PRINCIPAL
+                        // =============================================
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(73, 80, 87);
+
+                        var texto = 'participou do evento "' + dados.tituloEvento + '"';
+                        if (participante.curso) {
+                            texto += ', do curso ' + participante.curso;
+                        }
+                        texto += ', realizado pela ' + nomeOrganizador;
+                        texto += ', com carga horária de ' + cargaHoraria + '.';
+
+                        var linhas = pdf.splitTextToSize(texto, contentWidth - 20);
+                        var lineHeight = 7;
+                        var textoY = y;
+
+                        for (var i = 0; i < linhas.length; i++) {
+                            pdf.text(linhas[i], centerX, textoY, { align: 'center' });
+                            textoY += lineHeight;
+                        }
+                        y = textoY + 14;
+
+                        // =============================================
+                        // DATA DO EVENTO
+                        // =============================================
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(12);
+                        pdf.setTextColor(134, 142, 150);
+                        var dataComCidade = cidadeEvento ? cidadeEvento + ', ' + dataEvento : dataEvento;
+                        pdf.text(dataComCidade, centerX, y, { align: 'center' });
+                        y += 20;
+
+                        // =============================================
+                        // LINHA DIVISÓRIA
+                        // =============================================
+                        pdf.setDrawColor(200, 200, 200);
+                        pdf.setLineWidth(0.3);
+                        pdf.line(marginX + 30, y, pageWidth - marginX - 30, y);
+                        y += 16;
+
+                        // =============================================
+                        // RODAPÉ
+                        // =============================================
+                        var colWidth = contentWidth / 3;
+                        var col1 = marginX;
+                        var col2 = marginX + colWidth;
+                        var col3 = marginX + (colWidth * 2);
+
+                        // Assinatura
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(73, 80, 87);
+                        pdf.text('________________________', col1 + (colWidth / 2), y, { align: 'center' });
+                        y += 6;
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(10);
+                        pdf.text(assinante, col1 + (colWidth / 2), y, { align: 'center' });
+
+                        y -= 6;
+
+                        // Emissão
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(8);
+                        pdf.setTextColor(173, 181, 189);
+                        pdf.text('EMISSÃO', col2 + (colWidth / 2), y, { align: 'center' });
+                        y += 4;
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(12);
+                        pdf.setTextColor(73, 80, 87);
+                        pdf.text(dados.dataEmissao, col2 + (colWidth / 2), y, { align: 'center' });
+
+                        y -= 4;
+
+                        // Código
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(7);
+                        pdf.setTextColor(173, 181, 189);
+                        pdf.text('CÓDIGO DE VALIDAÇÃO', col3 + (colWidth / 2), y, { align: 'center' });
+                        y += 4;
+                        pdf.setFont('courier', 'bold');
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(105, 69, 115);
+                        pdf.text(dados.codigoValidacao, col3 + (colWidth / 2), y, { align: 'center' });
+
+                        // =============================================
+                        // SALVA
+                        // =============================================
+                        var nomeArquivo = 'certificado-' + participante.nome.replace(/\s/g, '_') + '.pdf';
+                        pdf.save(nomeArquivo);
+
+                        console.log('✅ PDF gerado com sucesso!');
+                        if (btn) {
+                            btn.innerText = textoOriginal || '⬇️ Baixar PDF';
+                            btn.disabled = false;
+                        }
+
+                    } catch (error) {
+                        console.error('❌ Erro:', error);
+                        alert('Erro ao gerar PDF: ' + error.message);
+                        if (btn) {
+                            btn.innerText = textoOriginal || '⬇️ Baixar PDF';
+                            btn.disabled = false;
+                        }
+                    }
+                }
+
+                // =============================================
+                // FUNÇÃO AUXILIAR: Hex para RGB
+                // =============================================
+                function hexToRgb(hex) {
+                    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                    return result ? {
+                        r: parseInt(result[1], 16),
+                        g: parseInt(result[2], 16),
+                        b: parseInt(result[3], 16)
+                    } : { r: 105, g: 69, b: 115 };
+                }
+
+                // =============================================
+                // FUNÇÃO PARA ENVIAR CERTIFICADO POR E-MAIL
+                // =============================================
+                function enviarCertificadoEmail() {
+                    if (!certificadoAtual) {
+                        alert('Gere um certificado primeiro.');
+                        return;
+                    }
+
+                    var participante = certificadoAtual.participante;
+                    var email = participante.email;
+
+                    if (!email) {
+                        alert('Este participante não tem e-mail cadastrado.');
+                        return;
+                    }
+
+                    if (!confirm('Enviar certificado para ' + email + '?')) {
+                        return;
+                    }
+
+                    var btn = event ? event.target : document.querySelector('.btn-enviar');
+                    var textoOriginal = btn.innerText;
+                    btn.innerText = '⏳ Enviando...';
+                    btn.disabled = true;
+
+                    var templateParams = {
+                        tituloEvento: certificadoAtual.tituloEvento,
+                        nomeOrganizador: certificadoAtual.nomeOrganizador,
+                        nome: participante.nome,
+                        email: participante.email,
+                        curso: participante.curso || '',
+                        dataEvento: certificadoAtual.dataEvento,
+                        numeroCertificado: certificadoAtual.numeroCertificado
+                    };
+
+                    // Usa o mesmo serviço do EmailJS já configurado
+                    // Substitua pelos seus IDs
+                    emailjs.send(
+                        'service_30osulb', // Seu Service ID
+                        'template_guoxeqg', // Seu Template ID para certificado
+                        templateParams
+                    )
+                        .then(function (response) {
+                            alert('✅ Certificado enviado para ' + email + ' com sucesso!');
+                            btn.innerText = textoOriginal || '📧 Enviar por E-mail';
+                            btn.disabled = false;
+                        })
+                        .catch(function (error) {
+                            console.error('Erro:', error);
+                            alert('Erro ao enviar e-mail. Tente novamente.');
+                            btn.innerText = textoOriginal || '📧 Enviar por E-mail';
+                            btn.disabled = false;
+                        });
+                }
+                // =============================================
+                // FUNÇÃO PARA REMOVER FUNDO DO CERTIFICADO
+                // =============================================
+                function removerFundoCertificado() {
+                    if (!confirm('Tem certeza que deseja remover a imagem de fundo?')) {
+                        return;
+                    }
+
+                    // Limpa a variável global
+                    urlFundoCertificado = '';
+
+                    // Limpa o campo de input
+                    document.getElementById('certificado-fundo-url').value = '';
+
+                    // Remove do localStorage
+                    localStorage.removeItem('fundoCertificado');
+
+                    // Remove a imagem de fundo do preview
+                    var preview = document.getElementById('certificado-preview');
+                    preview.style.backgroundImage = 'none';
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.backgroundPosition = 'center';
+
+                    // Atualiza o status
+                    var status = document.getElementById('fundo-status');
+                    status.style.display = 'block';
+                    status.textContent = '🗑️ Fundo removido com sucesso!';
+                    status.className = 'fundo-status';
+
+                    // Se um certificado foi gerado, recria sem fundo
+                    if (certificadoAtual) {
+                        certificadoAtual.fundoUrl = '';
+                        // Recria o certificado sem fundo
+                        gerarCertificado();
+                    }
+
+                    console.log('🗑️ Fundo removido com sucesso!');
+                }
+                // =============================================
+                // PERSONALIZAÇÃO DO CERTIFICADO
+                // =============================================
+
+                // Valores padrão
+                var PERSONALIZACAO_PADRAO = {
+                    logoUrl: '',
+                    titulo: 'CERTIFICADO DE PARTICIPAÇÃO',
+                    subtitulo: 'Certificamos que',
+                    cargaHoraria: '20 horas',
+                    assinante: 'COMISSÃO ORGANIZADORA',
+                    corLinha: '#694573'
+                };
+
+                // Carrega a personalização salva
+                function carregarPersonalizacaoCertificado() {
+                    try {
+                        var salvo = localStorage.getItem('certPersonalizacao');
+                        if (salvo) {
+                            var dados = JSON.parse(salvo);
+                            document.getElementById('cert-logo-url').value = dados.logoUrl || '';
+                            document.getElementById('cert-titulo').value = dados.titulo || PERSONALIZACAO_PADRAO.titulo;
+                            document.getElementById('cert-subtitulo').value = dados.subtitulo || PERSONALIZACAO_PADRAO.subtitulo;
+                            document.getElementById('cert-carga').value = dados.cargaHoraria || PERSONALIZACAO_PADRAO.cargaHoraria;
+                            document.getElementById('cert-assinante').value = dados.assinante || PERSONALIZACAO_PADRAO.assinante;
+                            document.getElementById('cert-cor-linha').value = dados.corLinha || PERSONALIZACAO_PADRAO.corLinha;
+                            console.log('📂 Personalização carregada do cache');
+                            return true;
+                        }
+                    } catch (e) {
+                        console.warn('⚠️ Erro ao carregar personalização:', e);
+                    }
+                    return false;
+                }
+
+                // Salva a personalização
+                function salvarPersonalizacaoCertificado() {
+                    var dados = {
+                        logoUrl: document.getElementById('cert-logo-url').value.trim(),
+                        titulo: document.getElementById('cert-titulo').value.trim(),
+                        subtitulo: document.getElementById('cert-subtitulo').value.trim(),
+                        cargaHoraria: document.getElementById('cert-carga').value.trim(),
+                        assinante: document.getElementById('cert-assinante').value.trim(),
+                        corLinha: document.getElementById('cert-cor-linha').value
+                    };
+
+                    localStorage.setItem('certPersonalizacao', JSON.stringify(dados));
+
+                    var status = document.getElementById('cert-personalizacao-status');
+                    status.style.display = 'inline-block';
+                    status.textContent = '✅ Personalização salva com sucesso!';
+                    status.className = 'personalizacao-status';
+
+                    setTimeout(function () {
+                        status.style.display = 'none';
+                    }, 3000);
+
+                    console.log('💾 Personalização salva:', dados);
+                }
+
+                // Restaura a personalização para os valores padrão
+                function restaurarPersonalizacaoCertificado() {
+                    if (!confirm('Restaurar todos os valores para o padrão?')) {
+                        return;
+                    }
+
+                    document.getElementById('cert-logo-url').value = PERSONALIZACAO_PADRAO.logoUrl;
+                    document.getElementById('cert-titulo').value = PERSONALIZACAO_PADRAO.titulo;
+                    document.getElementById('cert-subtitulo').value = PERSONALIZACAO_PADRAO.subtitulo;
+                    document.getElementById('cert-carga').value = PERSONALIZACAO_PADRAO.cargaHoraria;
+                    document.getElementById('cert-assinante').value = PERSONALIZACAO_PADRAO.assinante;  // ← CORRIGIDO
+                    document.getElementById('cert-cor-linha').value = PERSONALIZACAO_PADRAO.corLinha;
+
+                    localStorage.removeItem('certPersonalizacao');
+
+                    var status = document.getElementById('cert-personalizacao-status');
+                    status.style.display = 'inline-block';
+                    status.textContent = '🔄 Valores restaurados para o padrão!';
+                    status.className = 'personalizacao-status';
+
+                    setTimeout(function () {
+                        status.style.display = 'none';
+                    }, 3000);
+
+                    console.log('🔄 Personalização restaurada para o padrão');
+                }
+
+                // Pega a personalização (usado na geração do certificado)
+                function getPersonalizacaoCertificado() {
+                    try {
+                        var salvo = localStorage.getItem('certPersonalizacao');
+                        if (salvo) {
+                            var dados = JSON.parse(salvo);
+                            return {
+                                logoUrl: dados.logoUrl || PERSONALIZACAO_PADRAO.logoUrl,
+                                titulo: dados.titulo || PERSONALIZACAO_PADRAO.titulo,
+                                subtitulo: dados.subtitulo || PERSONALIZACAO_PADRAO.subtitulo,
+                                cargaHoraria: dados.cargaHoraria || PERSONALIZACAO_PADRAO.cargaHoraria,
+                                assinante: dados.assinante || PERSONALIZACAO_PADRAO.assinante,
+                                corLinha: dados.corLinha || PERSONALIZACAO_PADRAO.corLinha
+                            };
+                        }
+                    } catch (e) {
+                        console.warn('⚠️ Erro ao ler personalização:', e);
+                    }
+                    return Object.assign({}, PERSONALIZACAO_PADRAO);
+                }
+                // =============================================
+                // VERIFICA SE O USUÁRIO JÁ ESTÁ LOGADO
+                // =============================================
+                (function verificarLoginAutomatico() {
+                    var logado = localStorage.getItem('adminLogado');
+                    if (logado === 'true') {
+                        // Oculta a tela de login
+                        document.getElementById('loginScreen').style.display = 'none';
+                        // Mostra o painel
+                        document.getElementById('painelScreen').style.display = 'block';
+                        // Define o nome do usuário
+                        document.getElementById('labelUser').innerText = localStorage.getItem('adminUsuario') || 'Carlos Magno';
+
+                        // Carrega os dados
+                        carregarConfigsPai();
+                        carregarProgramacao();
+                        carregarAbasCampos();
+                        carregarParticipantes();
+                        carregarParticipantesSelect();
+                        carregarFundoSalvo();
+                        carregarPersonalizacaoCertificado();
+                    }
+                })();
+
+            </script>
+</body>
+
+</html>

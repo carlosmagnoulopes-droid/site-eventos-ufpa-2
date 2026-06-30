@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+    <title>Check-in - Evento UFPA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: #f0ece6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 30px 24px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            color: #2d5a3f;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #868E96;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a1a;
+            position: relative;
+        }
+
+        #reader video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #reader .qr-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2d5a3f;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1f4030;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #e8e3dc;
+            color: #4a4a4a;
+        }
+
+        .btn-secondary:hover {
+            background: #d5cec4;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        #resultado {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+        }
+
+        #resultado.sucesso {
+            display: block;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        #resultado.erro {
+            display: block;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        #resultado.info {
+            display: block;
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        #resultado .nome {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        #resultado .detalhes {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #f8f6f2;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #495057;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .status-container strong {
+            color: #2d5a3f;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.verde {
+            background: #28a745;
+        }
+
+        .status-dot.vermelho {
+            background: #dc3545;
+        }
+
+        .status-dot.cinza {
+            background: #868E96;
+        }
+
+        .status-dot.amarelo {
+            background: #ffc107;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .btn {
+                font-size: 13px;
+                padding: 10px 16px;
+            }
+
+            #reader .qr-overlay {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>📋 Check-in</h1>
+            <p>Escaneie o QR Code do participante</p>
+        </div>
+
+        <div id="reader">
+            <div class="qr-overlay"></div>
+        </div>
+
+        <div id="resultado">
+            <div
+                style="font-size: 40px; margin-bottom: 8px;"
+                id="resultado-icone"
+            >✅</div>
+            <div
+                class="nome"
+                id="resultado-nome"
+            >Participante</div>
+            <div
+                class="detalhes"
+                id="resultado-detalhes"
+            >Detalhes do participante</div>
+        </div>
+
+        <div class="btn-group">
+            <button
+                class="btn btn-primary"
+                id="btn-iniciar"
+            >📷 Iniciar Leitura</button>
+            <button
+                class="btn btn-secondary"
+                id="btn-parar"
+            >⏹️ Parar</button>
+        </div>
+
+        <div class="status-container">
+            <span class="status-item">
+                <span
+                    class="status-dot cinza"
+                    id="status-dot"
+                ></span>
+                <span id="status-texto">Aguardando...</span>
+            </span>
+            <span class="status-item">👥 Presentes: <strong id="total-presentes">0</strong></span>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script>
+        const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbzqi1ocqYm8ejhGTw7F_L1JRzWCqnC2uXJnbxW2S1pZQ9ND8tOXa59rme-cr1YCZxwf3A/exec";
+
+        var html5QrCode = null;
+        var scannerAtivo = false;
+        var participantes = {};
+        var idsParticipantes = {};
+        var participantesPorNome = {};
+        var participantesPorRowIndex = {};
+
+        function carregarParticipantes() {
+    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                participantes = {};
+                idsParticipantes = {};
+                participantesPorNome = {};
+                
+                data.data.forEach(function(item, index) {
+                    // =============================================
+                    // USA O rowIndex DA PLANILHA
+                    // =============================================
+                    var rowIndex = item._rowIndex || (index + 2);
+                    var id = 'P' + String(rowIndex).padStart(5, '0');
+                    
+                    var nome = item.nome || item['Nome Completo'] || 'Participante';
+                    var email = item.email || item['E-mail'] || '';
+                    var curso = item.curso || item['Curso'] || '';
+                    var presente = item.presente || '';
+                    
+                    participantes[id] = { 
+                        id: id, 
+                        nome: nome, 
+                        email: email, 
+                        curso: curso, 
+                        presente: (presente && presente.includes('✅')),
+                        rowIndex: rowIndex 
+                    };
+                    
+                    idsParticipantes[id] = { rowIndex, nome, email, curso };
+                    participantesPorNome[nome.toLowerCase()] = id;
+                    
+                    // =============================================
+                    // ARMAZENA POR rowIndex TAMBÉM
+                    // =============================================
+                    participantesPorRowIndex = participantesPorRowIndex || {};
+                    participantesPorRowIndex[rowIndex] = id;
+                });
+                
+                console.log('✅ Participantes carregados:', Object.keys(participantes).length);
+                atualizarContador();
+            }
+        })
+        .catch(err => console.error('Erro ao carregar participantes:', err));
+}
+
+        function marcarPresenca(id) {
+            var participante = participantes[id];
+            if (!participante) {
+                mostrarResultado('erro', '❌', 'Participante não encontrado!', 'ID inválido.');
+                return;
+            }
+            if (participante.presente) {
+                mostrarResultado('info', 'ℹ️', 'Presença já registrada!', participante.nome + ' já fez check-in.');
+                return;
+            }
+            participante.presente = true;
+            var payload = { action: 'marcarPresenca', rowIndex: participante.rowIndex, dataHora: new Date().toLocaleString('pt-BR') };
+            fetch(GOOGLE_API_URL, { method: 'POST', body: JSON.stringify(payload) })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarResultado('sucesso', '✅', 'Presença confirmada!', participante.nome + ' - ' + (participante.curso || ''));
+                        atualizarContador();
+                    } else {
+                        mostrarResultado('erro', '❌', 'Erro ao registrar!', data.message || 'Tente novamente.');
+                        participante.presente = false;
+                    }
+                })
+                .catch(err => {
+                    mostrarResultado('erro', '❌', 'Erro de conexão!', 'Verifique sua internet.');
+                    participante.presente = false;
+                });
+        }
+
+        function processarQRCode(dados) {
+    try {
+        var id = null;
+        // Tenta extrair o ID da URL
+        if (dados.includes('id=')) {
+            var params = new URLSearchParams(dados.split('?')[1] || '');
+            id = params.get('id');
+        } else {
+            id = dados.trim();
+        }
+        
+        console.log('📋 ID do QR Code:', id);
+        
+        if (id) {
+            // Converte para número (se for string)
+            var rowIndex = parseInt(id);
+            if (!isNaN(rowIndex)) {
+                // Busca o participante pelo rowIndex
+                var participante = null;
+                for (var key in participantes) {
+                    if (participantes[key].rowIndex === rowIndex) {
+                        participante = participantes[key];
+                        break;
+                    }
+                }
+                
+                if (participante) {
+                    marcarPresenca(participante.id);
+                } else {
+                    mostrarResultado('erro', '❌', 'Participante não encontrado!', 'ID: ' + id);
+                }
+            } else {
+                // Se não for número, busca pelo ID
+                if (participantes[id]) {
+                    marcarPresenca(id);
+                } else {
+                    mostrarResultado('erro', '❌', 'Participante não encontrado!', 'ID: ' + id);
+                }
+            }
+        } else {
+            mostrarResultado('erro', '❌', 'QR Code inválido!', 'O código não contém dados válidos.');
+        }
+    } catch (e) {
+        console.error('Erro ao processar QR Code:', e);
+        mostrarResultado('erro', '❌', 'Erro ao processar!', 'QR Code não reconhecido.');
+    }
+}
+
+        function mostrarResultado(tipo, icone, titulo, detalhes) {
+            var div = document.getElementById('resultado');
+            div.className = tipo;
+            document.getElementById('resultado-icone').textContent = icone;
+            document.getElementById('resultado-nome').textContent = titulo;
+            document.getElementById('resultado-detalhes').textContent = detalhes;
+            div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function atualizarContador() {
+            var presentes = Object.values(participantes).filter(function (p) { return p.presente; }).length;
+            document.getElementById('total-presentes').textContent = presentes;
+        }
+
+        function iniciarScanner() {
+            if (scannerAtivo) return;
+            document.getElementById('status-dot').className = 'status-dot amarelo';
+            document.getElementById('status-texto').textContent = '📸 Iniciando câmera...';
+            document.getElementById('btn-iniciar').disabled = true;
+            carregarParticipantes();
+            if (typeof Html5Qrcode === 'undefined') {
+                alert('Biblioteca de QR Code não carregou. Recarregue a página.');
+                document.getElementById('btn-iniciar').disabled = false;
+                return;
+            }
+            html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 200, height: 200 } },
+                function (decodedText) { processarQRCode(decodedText); },
+                function (errorMessage) { }
+            ).then(function () {
+                scannerAtivo = true;
+                document.getElementById('status-dot').className = 'status-dot verde';
+                document.getElementById('status-texto').textContent = '📷 Câmera ativa - Aponte para o QR Code';
+                document.getElementById('btn-iniciar').disabled = false;
+                document.getElementById('btn-iniciar').textContent = '📷 Recomeçar';
+            }).catch(function (err) {
+                document.getElementById('status-dot').className = 'status-dot vermelho';
+                document.getElementById('status-texto').textContent = '❌ Erro ao acessar câmera';
+                document.getElementById('btn-iniciar').disabled = false;
+                alert('Erro ao acessar a câmera. Verifique as permissões.');
+            });
+        }
+
+        function pararScanner() {
+            if (html5QrCode && scannerAtivo) {
+                html5QrCode.stop().then(function () {
+                    scannerAtivo = false;
+                    document.getElementById('status-dot').className = 'status-dot cinza';
+                    document.getElementById('status-texto').textContent = '⏹️ Scanner parado';
+                    document.getElementById('btn-iniciar').textContent = '📷 Iniciar Leitura';
+                }).catch(function (err) { console.error(err); });
+            }
+        }
+
+        document.getElementById('btn-iniciar').addEventListener('click', function () {
+            if (scannerAtivo) { pararScanner(); setTimeout(iniciarScanner, 500); } else { iniciarScanner(); }
+        });
+        document.getElementById('btn-parar').addEventListener('click', pararScanner);
+
+        carregarParticipantes();
+        setInterval(carregarParticipantes, 30000);
+    </script>
+</body>
+
+</html>
