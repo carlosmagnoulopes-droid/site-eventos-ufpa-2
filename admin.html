@@ -9,6 +9,7 @@
     >
     <title>Painel Multieventos - Admin Pro</title>
     <style>
+        
         /* ============================================ */
         /* RESET E BASE                                 */
         /* ============================================ */
@@ -1331,12 +1332,7 @@
                         🔍 Resultados encontrados: <strong id="resultado-count">0</strong>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button
-                            class="export-btn"
-                            onclick="exportarParticipantesCSV()"
-                        >
-                            📊 Exportar CSV
-                        </button>
+                        
                         <button
                             class="export-btn export-btn-excel"
                             onclick="exportarParticipantesExcel()"
@@ -1676,6 +1672,11 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
             </script>
             <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+            </script>
+            <!-- ========================================== -->
+            <!-- BIBLIOTECA PARA GERAR EXCEL               -->
+            <!-- ========================================== -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
             </script>
             <script>
                 // CENTRAL MESTRE: Link de comunicação direto com o Google Apps Script
@@ -2021,189 +2022,147 @@
                 // =============================================
 
                 function carregarParticipantes() {
-    const container = document.getElementById('participantes-container');
-    const loading = document.getElementById('participantes-loading');
-    const empty = document.getElementById('participantes-empty');
-    const thead = document.getElementById('participantes-headers');
-    const tbody = document.getElementById('participantes-body');
-    const totalCount = document.getElementById('total-count');
+                    const container = document.getElementById('participantes-container');
+                    const loading = document.getElementById('participantes-loading');
+                    const empty = document.getElementById('participantes-empty');
+                    const thead = document.getElementById('participantes-headers');
+                    const tbody = document.getElementById('participantes-body');
+                    const totalCount = document.getElementById('total-count');
 
-    // Mostra loading
-    loading.style.display = 'block';
-    container.style.display = 'none';
-    empty.style.display = 'none';
+                    // Mostra loading
+                    loading.style.display = 'block';
+                    container.style.display = 'none';
+                    empty.style.display = 'none';
 
-    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
-        .then(res => res.json())
-        .then(data => {
-            loading.style.display = 'none';
+                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
+                        .then(res => res.json())
+                        .then(data => {
+                            loading.style.display = 'none';
 
-            if (!data.success) {
-                alert('Erro ao carregar participantes: ' + data.message);
-                return;
-            }
+                            if (!data.success) {
+                                alert('Erro ao carregar participantes: ' + data.message);
+                                return;
+                            }
 
-            if (data.total === 0) {
-                empty.style.display = 'block';
-                totalCount.textContent = '0';
-                return;
-            }
+                            if (data.total === 0) {
+                                empty.style.display = 'block';
+                                totalCount.textContent = '0';
+                                return;
+                            }
 
-            // Atualiza total
-            totalCount.textContent = data.total;
+                            // Atualiza total
+                            totalCount.textContent = data.total;
 
-            // Monta cabeçalhos
-            thead.innerHTML = '';
-            var headers = data.headers || [];
-            
-            // =============================================
-            // ADICIONA A COLUNA "STATUS" (NOVO)
-            // =============================================
-            headers.forEach(function(header) {
-                var th = document.createElement('th');
-                th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
-                thead.appendChild(th);
-            });
-            // Adiciona coluna de STATUS
-            var thStatus = document.createElement('th');
-            thStatus.textContent = 'Status';
-            thead.appendChild(thStatus);
-            
-            // Adiciona coluna de Ação
-            var thAcao = document.createElement('th');
-            thAcao.textContent = 'Ações';
-            thead.appendChild(thAcao);
+                            // Monta cabeçalhos
+                            thead.innerHTML = '';
+                            var headers = data.headers || [];
 
-            // Monta corpo da tabela
-            tbody.innerHTML = '';
-            data.data.forEach(function(item) {
-                var tr = document.createElement('tr');
-                
-                // Dados do participante
-                headers.forEach(function(header) {
-                    var td = document.createElement('td');
-                    var value = item[header.toLowerCase()] || '';
-                    td.textContent = value;
-                    tr.appendChild(td);
-                });
-                
-                // =============================================
-                // COLUNA "STATUS" (NOVO)
-                // =============================================
-                var tdStatus = document.createElement('td');
-                var presente = item.presente || '';
-                if (presente && presente.includes('✅')) {
-                    tdStatus.innerHTML = '✅ Presente';
-                    tdStatus.style.color = '#28a745';
-                    tdStatus.style.fontWeight = 'bold';
-                } else {
-                    tdStatus.innerHTML = '⬜ Ausente';
-                    tdStatus.style.color = '#868E96';
-                }
-                tr.appendChild(tdStatus);
-                
-                // Coluna de ação
-                var tdAcao = document.createElement('td');
-                tdAcao.innerHTML = `
+                            // =============================================
+                            // ADICIONA A COLUNA "STATUS" (NOVO)
+                            // =============================================
+                            headers.forEach(function (header) {
+                                var th = document.createElement('th');
+                                th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+                                thead.appendChild(th);
+                            });
+                            // Adiciona coluna de STATUS
+                            var thStatus = document.createElement('th');
+                            thStatus.textContent = 'Status';
+                            thead.appendChild(thStatus);
+
+                            // Adiciona coluna de Ação
+                            var thAcao = document.createElement('th');
+                            thAcao.textContent = 'Ações';
+                            thead.appendChild(thAcao);
+
+                            // Monta corpo da tabela
+                            tbody.innerHTML = '';
+                            data.data.forEach(function (item) {
+                                var tr = document.createElement('tr');
+
+                                // Dados do participante
+                                headers.forEach(function (header) {
+                                    var td = document.createElement('td');
+                                    var value = item[header.toLowerCase()] || '';
+                                    td.textContent = value;
+                                    tr.appendChild(td);
+                                });
+
+                                // =============================================
+                                // COLUNA "STATUS" (NOVO)
+                                // =============================================
+                                var tdStatus = document.createElement('td');
+                                var presente = item.presente || '';
+                                if (presente && presente.includes('✅')) {
+                                    tdStatus.innerHTML = '✅ Presente';
+                                    tdStatus.style.color = '#28a745';
+                                    tdStatus.style.fontWeight = 'bold';
+                                } else {
+                                    tdStatus.innerHTML = '⬜ Ausente';
+                                    tdStatus.style.color = '#868E96';
+                                }
+                                tr.appendChild(tdStatus);
+
+                                // Coluna de ação
+                                var tdAcao = document.createElement('td');
+                                tdAcao.innerHTML = `
                     <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
                 `;
-                tr.appendChild(tdAcao);
-                tbody.appendChild(tr);
-            });
+                                tr.appendChild(tdAcao);
+                                tbody.appendChild(tr);
+                            });
 
-            container.style.display = 'block';
-        })
-        .catch(err => {
-            loading.style.display = 'none';
-            alert('Erro ao carregar participantes. Verifique o console.');
-            console.error('Erro:', err);
-        });
-}
+                            container.style.display = 'block';
+                        })
+                        .catch(err => {
+                            loading.style.display = 'none';
+                            alert('Erro ao carregar participantes. Verifique o console.');
+                            console.error('Erro:', err);
+                        });
+                }
 
                 // =============================================
                 // FUNÇÃO PARA VER DETALHES DO PARTICIPANTE
                 // =============================================
                 function verParticipante(rowIndex) {
-    var participante = todosParticipantes.find(function(item) {
-        return item._rowIndex == rowIndex;
-    });
+                    var participante = todosParticipantes.find(function (item) {
+                        return item._rowIndex == rowIndex;
+                    });
 
-    if (!participante) {
-        participante = participantesFiltrados.find(function(item) {
-            return item._rowIndex == rowIndex;
-        });
-    }
-
-    if (!participante) {
-        alert('Participante não encontrado!');
-        return;
-    }
-
-    var mensagem = '📋 DETALHES DO PARTICIPANTE\n';
-    mensagem += '═'.repeat(40) + '\n';
-    for (var chave in participante) {
-        if (chave !== '_rowIndex') {
-            var label = chave.charAt(0).toUpperCase() + chave.slice(1).replace(/_/g, ' ');
-            var valor = participante[chave] || '';
-            // =============================================
-            // MOSTRA O STATUS DE PRESENÇA (NOVO)
-            // =============================================
-            if (chave === 'presente') {
-                if (valor && valor.includes('✅')) {
-                    valor = '✅ Presente - ' + valor.replace('✅ Presente - ', '');
-                } else {
-                    valor = '⬜ Ausente';
-                }
-            }
-            mensagem += label + ': ' + valor + '\n';
-        }
-    }
-    mensagem += '═'.repeat(40);
-    alert(mensagem);
-}
-
-                // =============================================
-                // FUNÇÃO PARA EXPORTAR CSV
-                // =============================================
-                function exportarParticipantesCSV() {
-                    fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (!data.success || data.total === 0) {
-                                alert('Nenhum participante para exportar.');
-                                return;
-                            }
-
-                            var headers = data.headers || [];
-                            var rows = data.data;
-
-                            // Cria o CSV
-                            var csv = headers.join(',') + '\n';
-                            rows.forEach(function (item) {
-                                var linha = headers.map(function (header) {
-                                    var valor = item[header.toLowerCase()] || '';
-                                    // Escapa vírgulas e aspas
-                                    if (valor.includes(',') || valor.includes('"')) {
-                                        valor = '"' + valor.replace(/"/g, '""') + '"';
-                                    }
-                                    return valor;
-                                }).join(',');
-                                csv += linha + '\n';
-                            });
-
-                            // Baixa o arquivo
-                            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                            var link = document.createElement('a');
-                            link.href = URL.createObjectURL(blob);
-                            link.download = 'participantes_' + new Date().toISOString().slice(0, 10) + '.csv';
-                            link.click();
-                            URL.revokeObjectURL(link.href);
+                    if (!participante) {
+                        participante = participantesFiltrados.find(function (item) {
+                            return item._rowIndex == rowIndex;
                         });
+                    }
+
+                    if (!participante) {
+                        alert('Participante não encontrado!');
+                        return;
+                    }
+
+                    var mensagem = '📋 DETALHES DO PARTICIPANTE\n';
+                    mensagem += '═'.repeat(40) + '\n';
+                    for (var chave in participante) {
+                        if (chave !== '_rowIndex') {
+                            var label = chave.charAt(0).toUpperCase() + chave.slice(1).replace(/_/g, ' ');
+                            var valor = participante[chave] || '';
+                            // =============================================
+                            // MOSTRA O STATUS DE PRESENÇA (NOVO)
+                            // =============================================
+                            if (chave === 'presente') {
+                                if (valor && valor.includes('✅')) {
+                                    valor = '✅ Presente - ' + valor.replace('✅ Presente - ', '');
+                                } else {
+                                    valor = '⬜ Ausente';
+                                }
+                            }
+                            mensagem += label + ': ' + valor + '\n';
+                        }
+                    }
+                    mensagem += '═'.repeat(40);
+                    alert(mensagem);
                 }
 
-                // =============================================
-                // FUNÇÃO PARA EXPORTAR EXCEL (TSV)
-                // =============================================
                 function exportarParticipantesExcel() {
                     fetch(`${GOOGLE_API_URL}?action=listarInscritos`)
                         .then(res => res.json())
@@ -2213,28 +2172,93 @@
                                 return;
                             }
 
+                            // Verifica se a biblioteca XLSX está carregada
+                            if (typeof XLSX === 'undefined') {
+                                alert('Biblioteca de Excel não carregada. Recarregue a página.');
+                                console.error('XLSX não está definido!');
+                                return;
+                            }
+
                             var headers = data.headers || [];
                             var rows = data.data;
 
-                            // Cria TSV (Tab Separated Values - funciona no Excel)
-                            var tsv = headers.join('\t') + '\n';
+                            // =============================================
+                            // PREPARA OS DADOS
+                            // =============================================
+                            var dadosExcel = [];
+
+                            // Cabeçalhos (primeira linha)
+                            var cabecalhos = headers.map(function (h) {
+                                return h.charAt(0).toUpperCase() + h.slice(1).replace(/_/g, ' ');
+                            });
+                            dadosExcel.push(cabecalhos);
+
+                            // Dados (linhas seguintes)
                             rows.forEach(function (item) {
                                 var linha = headers.map(function (header) {
                                     var valor = item[header.toLowerCase()] || '';
-                                    return valor;
-                                }).join('\t');
-                                tsv += linha + '\n';
+                                    return String(valor).trim();
+                                });
+                                dadosExcel.push(linha);
                             });
 
-                            // Baixa o arquivo
-                            var blob = new Blob([tsv], { type: 'text/tab-separated-values;charset=utf-8;' });
+                            // =============================================
+                            // CRIA O EXCEL COM SHEETJS
+                            // =============================================
+                            // Cria um workbook (livro)
+                            var wb = XLSX.utils.book_new();
+
+                            // Converte os dados para uma planilha
+                            var ws = XLSX.utils.aoa_to_sheet(dadosExcel);
+
+                            // Adiciona a planilha ao livro
+                            XLSX.utils.book_append_sheet(wb, ws, 'Participantes');
+
+                            // =============================================
+                            // AJUSTA A LARGURA DAS COLUNAS
+                            // =============================================
+                            var colWidths = [];
+                            cabecalhos.forEach(function (h, index) {
+                                var maxLen = h.length;
+                                rows.forEach(function (item) {
+                                    var headerKey = headers[index].toLowerCase();
+                                    var valor = String(item[headerKey] || '');
+                                    if (valor.length > maxLen) maxLen = valor.length;
+                                });
+                                colWidths.push({ wch: Math.min(maxLen + 3, 50) });
+                            });
+                            ws['!cols'] = colWidths;
+
+                            // =============================================
+                            // BAIXA O ARQUIVO
+                            // =============================================
+                            var wbout = XLSX.write(wb, {
+                                bookType: 'xlsx',
+                                type: 'array',
+                                bookSST: false
+                            });
+
+                            var blob = new Blob([wbout], {
+                                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            });
+
                             var link = document.createElement('a');
                             link.href = URL.createObjectURL(blob);
-                            link.download = 'participantes_' + new Date().toISOString().slice(0, 10) + '.xls';
+                            link.download = 'participantes_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+                            document.body.appendChild(link);
                             link.click();
+                            document.body.removeChild(link);
                             URL.revokeObjectURL(link.href);
+
+                            console.log('✅ Excel exportado com sucesso!');
+                        })
+                        .catch(err => {
+                            alert('Erro ao exportar: ' + err.message);
+                            console.error('Erro:', err);
                         });
                 }
+
+                
                 // =============================================
                 // VARIÁVEIS PARA ARMAZENAR DADOS DA BUSCA
                 // =============================================
@@ -2297,75 +2321,75 @@
                 // FUNÇÃO PARA RENDERIZAR TABELA COM DADOS
                 // =============================================
                 function renderizarTabela(dados) {
-    var headers = document.querySelector('#participantes-headers');
-    var tbody = document.getElementById('participantes-body');
-    var totalCount = document.getElementById('total-count');
+                    var headers = document.querySelector('#participantes-headers');
+                    var tbody = document.getElementById('participantes-body');
+                    var totalCount = document.getElementById('total-count');
 
-    if (!dados || dados.length === 0) {
-        if (document.getElementById('busca-participante').value.trim() !== '') {
-            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
-        } else {
-            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
-        }
-        return;
-    }
+                    if (!dados || dados.length === 0) {
+                        if (document.getElementById('busca-participante').value.trim() !== '') {
+                            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
+                        }
+                        return;
+                    }
 
-    // Monta cabeçalhos (apenas na primeira vez)
-    if (headers.children.length === 0) {
-        var primeirosHeaders = Object.keys(dados[0]).filter(function(key) { 
-            return key !== '_rowIndex' && key !== 'presente'; 
-        });
-        primeirosHeaders.forEach(function(header) {
-            var th = document.createElement('th');
-            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
-            headers.appendChild(th);
-        });
-        // Coluna de STATUS
-        var thStatus = document.createElement('th');
-        thStatus.textContent = 'Status';
-        headers.appendChild(thStatus);
-        
-        var thAcao = document.createElement('th');
-        thAcao.textContent = 'Ações';
-        headers.appendChild(thAcao);
-    }
+                    // Monta cabeçalhos (apenas na primeira vez)
+                    if (headers.children.length === 0) {
+                        var primeirosHeaders = Object.keys(dados[0]).filter(function (key) {
+                            return key !== '_rowIndex' && key !== 'presente';
+                        });
+                        primeirosHeaders.forEach(function (header) {
+                            var th = document.createElement('th');
+                            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+                            headers.appendChild(th);
+                        });
+                        // Coluna de STATUS
+                        var thStatus = document.createElement('th');
+                        thStatus.textContent = 'Status';
+                        headers.appendChild(thStatus);
 
-    // Monta corpo da tabela
-    tbody.innerHTML = '';
-    dados.forEach(function(item) {
-        var tr = document.createElement('tr');
-        for (var chave in item) {
-            if (chave === '_rowIndex' || chave === 'presente') continue;
-            var td = document.createElement('td');
-            var valor = item[chave] || '';
-            td.textContent = valor;
-            tr.appendChild(td);
-        }
-        
-        // Coluna de STATUS
-        var tdStatus = document.createElement('td');
-        var presente = item.presente || '';
-        if (presente && presente.includes('✅')) {
-            tdStatus.innerHTML = '✅ Presente';
-            tdStatus.style.color = '#28a745';
-            tdStatus.style.fontWeight = 'bold';
-        } else {
-            tdStatus.innerHTML = '⬜ Ausente';
-            tdStatus.style.color = '#868E96';
-        }
-        tr.appendChild(tdStatus);
-        
-        // Coluna de ação
-        var tdAcao = document.createElement('td');
-        tdAcao.innerHTML = `
+                        var thAcao = document.createElement('th');
+                        thAcao.textContent = 'Ações';
+                        headers.appendChild(thAcao);
+                    }
+
+                    // Monta corpo da tabela
+                    tbody.innerHTML = '';
+                    dados.forEach(function (item) {
+                        var tr = document.createElement('tr');
+                        for (var chave in item) {
+                            if (chave === '_rowIndex' || chave === 'presente') continue;
+                            var td = document.createElement('td');
+                            var valor = item[chave] || '';
+                            td.textContent = valor;
+                            tr.appendChild(td);
+                        }
+
+                        // Coluna de STATUS
+                        var tdStatus = document.createElement('td');
+                        var presente = item.presente || '';
+                        if (presente && presente.includes('✅')) {
+                            tdStatus.innerHTML = '✅ Presente';
+                            tdStatus.style.color = '#28a745';
+                            tdStatus.style.fontWeight = 'bold';
+                        } else {
+                            tdStatus.innerHTML = '⬜ Ausente';
+                            tdStatus.style.color = '#868E96';
+                        }
+                        tr.appendChild(tdStatus);
+
+                        // Coluna de ação
+                        var tdAcao = document.createElement('td');
+                        tdAcao.innerHTML = `
             <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
         `;
-        tr.appendChild(tdAcao);
-        tbody.appendChild(tr);
-    });
+                        tr.appendChild(tdAcao);
+                        tbody.appendChild(tr);
+                    });
 
-    totalCount.textContent = todosParticipantes.length;
-}
+                    totalCount.textContent = todosParticipantes.length;
+                }
 
                 // =============================================
                 // FUNÇÃO MODIFICADA: CARREGAR PARTICIPANTES
@@ -2432,143 +2456,143 @@
                 // FUNÇÃO PARA RENDERIZAR TABELA COM PAGINAÇÃO
                 // =============================================
                 function renderizarTabelaComPaginacao(dados) {
-    var container = document.getElementById('participantes-container');
-    var tbody = document.getElementById('participantes-body');
-    var headers = document.getElementById('participantes-headers');
-    var paginacaoContainer = document.getElementById('paginacao-container');
-    var totalCount = document.getElementById('total-count');
+                    var container = document.getElementById('participantes-container');
+                    var tbody = document.getElementById('participantes-body');
+                    var headers = document.getElementById('participantes-headers');
+                    var paginacaoContainer = document.getElementById('paginacao-container');
+                    var totalCount = document.getElementById('total-count');
 
-    dadosExibindo = dados || [];
-    totalCount.textContent = todosParticipantes.length;
+                    dadosExibindo = dados || [];
+                    totalCount.textContent = todosParticipantes.length;
 
-    if (!dadosExibindo || dadosExibindo.length === 0) {
-        var termo = document.getElementById('busca-participante').value.trim();
-        if (termo !== '') {
-            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
-        } else {
-            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
-        }
-        paginacaoContainer.style.display = 'none';
-        container.style.display = 'block';
-        return;
-    }
+                    if (!dadosExibindo || dadosExibindo.length === 0) {
+                        var termo = document.getElementById('busca-participante').value.trim();
+                        if (termo !== '') {
+                            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">🔍 Nenhum participante encontrado com este termo.</td></tr>';
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">📭 Nenhum participante inscrito ainda.</td></tr>';
+                        }
+                        paginacaoContainer.style.display = 'none';
+                        container.style.display = 'block';
+                        return;
+                    }
 
-    if (headers.children.length === 0) {
-        var primeirosHeaders = Object.keys(dadosExibindo[0]).filter(function(key) { 
-            return key !== '_rowIndex' && key !== 'presente'; 
-        });
-        primeirosHeaders.forEach(function(header) {
-            var th = document.createElement('th');
-            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
-            headers.appendChild(th);
-        });
-        var thStatus = document.createElement('th');
-        thStatus.textContent = 'Status';
-        headers.appendChild(thStatus);
-        
-        var thAcao = document.createElement('th');
-        thAcao.textContent = 'Ações';
-        headers.appendChild(thAcao);
-    }
+                    if (headers.children.length === 0) {
+                        var primeirosHeaders = Object.keys(dadosExibindo[0]).filter(function (key) {
+                            return key !== '_rowIndex' && key !== 'presente';
+                        });
+                        primeirosHeaders.forEach(function (header) {
+                            var th = document.createElement('th');
+                            th.textContent = header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');
+                            headers.appendChild(th);
+                        });
+                        var thStatus = document.createElement('th');
+                        thStatus.textContent = 'Status';
+                        headers.appendChild(thStatus);
 
-    var totalRegistros = dadosExibindo.length;
-    var totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
-    if (paginaAtual > totalPaginas) {
-        paginaAtual = totalPaginas || 1;
-    }
+                        var thAcao = document.createElement('th');
+                        thAcao.textContent = 'Ações';
+                        headers.appendChild(thAcao);
+                    }
 
-    var inicio = (paginaAtual - 1) * registrosPorPagina;
-    var fim = Math.min(inicio + registrosPorPagina, totalRegistros);
-    var paginaDados = dadosExibindo.slice(inicio, fim);
+                    var totalRegistros = dadosExibindo.length;
+                    var totalPaginas = Math.ceil(totalRegistros / registrosPorPagina);
+                    if (paginaAtual > totalPaginas) {
+                        paginaAtual = totalPaginas || 1;
+                    }
 
-    tbody.innerHTML = '';
-    paginaDados.forEach(function(item) {
-        var tr = document.createElement('tr');
-        for (var chave in item) {
-            if (chave === '_rowIndex' || chave === 'presente') continue;
-            var td = document.createElement('td');
-            var valor = item[chave] || '';
-            td.textContent = valor;
-            tr.appendChild(td);
-        }
-        
-        // Coluna de STATUS
-        var tdStatus = document.createElement('td');
-        var presente = item.presente || '';
-        if (presente && presente.includes('✅')) {
-            tdStatus.innerHTML = '✅ Presente';
-            tdStatus.style.color = '#28a745';
-            tdStatus.style.fontWeight = 'bold';
-        } else {
-            tdStatus.innerHTML = '⬜ Ausente';
-            tdStatus.style.color = '#868E96';
-        }
-        tr.appendChild(tdStatus);
-        
-        var tdAcao = document.createElement('td');
-        tdAcao.innerHTML = `
+                    var inicio = (paginaAtual - 1) * registrosPorPagina;
+                    var fim = Math.min(inicio + registrosPorPagina, totalRegistros);
+                    var paginaDados = dadosExibindo.slice(inicio, fim);
+
+                    tbody.innerHTML = '';
+                    paginaDados.forEach(function (item) {
+                        var tr = document.createElement('tr');
+                        for (var chave in item) {
+                            if (chave === '_rowIndex' || chave === 'presente') continue;
+                            var td = document.createElement('td');
+                            var valor = item[chave] || '';
+                            td.textContent = valor;
+                            tr.appendChild(td);
+                        }
+
+                        // Coluna de STATUS
+                        var tdStatus = document.createElement('td');
+                        var presente = item.presente || '';
+                        if (presente && presente.includes('✅')) {
+                            tdStatus.innerHTML = '✅ Presente';
+                            tdStatus.style.color = '#28a745';
+                            tdStatus.style.fontWeight = 'bold';
+                        } else {
+                            tdStatus.innerHTML = '⬜ Ausente';
+                            tdStatus.style.color = '#868E96';
+                        }
+                        tr.appendChild(tdStatus);
+
+                        var tdAcao = document.createElement('td');
+                        tdAcao.innerHTML = `
             <button onclick="verParticipante('${item._rowIndex}')" style="background:#694573; color:white; border:none; padding:3px 10px; border-radius:4px; cursor:pointer; font-size:11px;">👁️ Ver</button>
         `;
-        tr.appendChild(tdAcao);
-        tbody.appendChild(tr);
-    });
+                        tr.appendChild(tdAcao);
+                        tbody.appendChild(tr);
+                    });
 
-    document.getElementById('paginacao-inicio').textContent = totalRegistros > 0 ? inicio + 1 : 0;
-    document.getElementById('paginacao-fim').textContent = fim;
-    document.getElementById('paginacao-total').textContent = totalRegistros;
+                    document.getElementById('paginacao-inicio').textContent = totalRegistros > 0 ? inicio + 1 : 0;
+                    document.getElementById('paginacao-fim').textContent = fim;
+                    document.getElementById('paginacao-total').textContent = totalRegistros;
 
-    // Gera botões de paginação
-    var botoesContainer = document.getElementById('paginacao-botoes');
-    botoesContainer.innerHTML = '';
+                    // Gera botões de paginação
+                    var botoesContainer = document.getElementById('paginacao-botoes');
+                    botoesContainer.innerHTML = '';
 
-    var btnAnterior = document.createElement('button');
-    btnAnterior.textContent = '◀ Anterior';
-    btnAnterior.disabled = paginaAtual <= 1;
-    btnAnterior.onclick = function() {
-        if (paginaAtual > 1) {
-            paginaAtual--;
-            renderizarTabelaComPaginacao(dadosExibindo);
-        }
-    };
-    botoesContainer.appendChild(btnAnterior);
+                    var btnAnterior = document.createElement('button');
+                    btnAnterior.textContent = '◀ Anterior';
+                    btnAnterior.disabled = paginaAtual <= 1;
+                    btnAnterior.onclick = function () {
+                        if (paginaAtual > 1) {
+                            paginaAtual--;
+                            renderizarTabelaComPaginacao(dadosExibindo);
+                        }
+                    };
+                    botoesContainer.appendChild(btnAnterior);
 
-    var maxBotoes = 5;
-    var inicioBotoes = Math.max(1, paginaAtual - Math.floor(maxBotoes / 2));
-    var fimBotoes = Math.min(totalPaginas, inicioBotoes + maxBotoes - 1);
+                    var maxBotoes = 5;
+                    var inicioBotoes = Math.max(1, paginaAtual - Math.floor(maxBotoes / 2));
+                    var fimBotoes = Math.min(totalPaginas, inicioBotoes + maxBotoes - 1);
 
-    if (fimBotoes - inicioBotoes < maxBotoes - 1) {
-        inicioBotoes = Math.max(1, fimBotoes - maxBotoes + 1);
-    }
+                    if (fimBotoes - inicioBotoes < maxBotoes - 1) {
+                        inicioBotoes = Math.max(1, fimBotoes - maxBotoes + 1);
+                    }
 
-    for (var i = inicioBotoes; i <= fimBotoes; i++) {
-        var btn = document.createElement('button');
-        btn.textContent = i;
-        if (i === paginaAtual) {
-            btn.className = 'active';
-        }
-        btn.onclick = function(num) {
-            return function() {
-                paginaAtual = num;
-                renderizarTabelaComPaginacao(dadosExibindo);
-            };
-        }(i);
-        botoesContainer.appendChild(btn);
-    }
+                    for (var i = inicioBotoes; i <= fimBotoes; i++) {
+                        var btn = document.createElement('button');
+                        btn.textContent = i;
+                        if (i === paginaAtual) {
+                            btn.className = 'active';
+                        }
+                        btn.onclick = function (num) {
+                            return function () {
+                                paginaAtual = num;
+                                renderizarTabelaComPaginacao(dadosExibindo);
+                            };
+                        }(i);
+                        botoesContainer.appendChild(btn);
+                    }
 
-    var btnProximo = document.createElement('button');
-    btnProximo.textContent = 'Próximo ▶';
-    btnProximo.disabled = paginaAtual >= totalPaginas;
-    btnProximo.onclick = function() {
-        if (paginaAtual < totalPaginas) {
-            paginaAtual++;
-            renderizarTabelaComPaginacao(dadosExibindo);
-        }
-    };
-    botoesContainer.appendChild(btnProximo);
+                    var btnProximo = document.createElement('button');
+                    btnProximo.textContent = 'Próximo ▶';
+                    btnProximo.disabled = paginaAtual >= totalPaginas;
+                    btnProximo.onclick = function () {
+                        if (paginaAtual < totalPaginas) {
+                            paginaAtual++;
+                            renderizarTabelaComPaginacao(dadosExibindo);
+                        }
+                    };
+                    botoesContainer.appendChild(btnProximo);
 
-    paginacaoContainer.style.display = 'flex';
-    container.style.display = 'block';
-}
+                    paginacaoContainer.style.display = 'flex';
+                    container.style.display = 'block';
+                }
 
                 // =============================================
                 // FUNÇÃO PARA MUDAR TAMANHO DA PÁGINA
