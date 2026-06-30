@@ -577,10 +577,7 @@
         text-align: center;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     ">
-                    <div style="
-            font-size: 28px; 
-            margin-bottom: 6px;
-        ">📅</div>
+                    
                     <p style="
             font-size: 10px; 
             text-transform: uppercase; 
@@ -610,10 +607,7 @@
         text-align: center;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     ">
-                    <div style="
-            font-size: 28px; 
-            margin-bottom: 6px;
-        ">🕐</div>
+                    
                     <p style="
             font-size: 10px; 
             text-transform: uppercase; 
@@ -643,10 +637,7 @@
         text-align: center;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     ">
-                    <div style="
-            font-size: 28px; 
-            margin-bottom: 6px;
-        ">📍</div>
+                    
                     <p style="
             font-size: 10px; 
             text-transform: uppercase; 
@@ -1508,349 +1499,349 @@
             win.document.close();
         }
         // =============================================
-// FUNÇÃO PARA BAIXAR PDF (USANDO DADOS SALVOS)
-// =============================================
-function baixarComprovantePDF() {
-    console.log('🔵 Gerando PDF com dados salvos...');
+        // FUNÇÃO PARA BAIXAR PDF (USANDO DADOS SALVOS)
+        // =============================================
+        function baixarComprovantePDF() {
+            console.log('🔵 Gerando PDF com dados salvos...');
 
-    var dadosInscricao = window.dadosInscricaoSalvos || {};
-    var tituloEvento = window.tituloEventoSalvo || document.getElementById('txt-titulo')?.innerText || 'Evento UFPA';
-    var nomeOrganizador = window.orgNomeSalvo || document.getElementById('org-nome')?.innerText || 'UFPA - Campus do Marajó/Breves';
-    var numeroInscricao = gerarNumeroInscricao();
+            var dadosInscricao = window.dadosInscricaoSalvos || {};
+            var tituloEvento = window.tituloEventoSalvo || document.getElementById('txt-titulo')?.innerText || 'Evento UFPA';
+            var nomeOrganizador = window.orgNomeSalvo || document.getElementById('org-nome')?.innerText || 'UFPA - Campus do Marajó/Breves';
+            var numeroInscricao = gerarNumeroInscricao();
 
-    var rowIndex = window.rowIndexGlobal || '0';
-    var linkCheckinQR = window.linkCheckinGlobal || (window.location.origin + '/checkin.html?id=' + rowIndex);
-    console.log('📋 Link do QR Code para o PDF:', linkCheckinQR);
+            var rowIndex = window.rowIndexGlobal || '0';
+            var linkCheckinQR = window.linkCheckinGlobal || (window.location.origin + '/checkin.html?id=' + rowIndex);
+            console.log('📋 Link do QR Code para o PDF:', linkCheckinQR);
 
-    console.log('📋 Dados salvos:', dadosInscricao);
+            console.log('📋 Dados salvos:', dadosInscricao);
 
-    var agora = new Date();
-    var dataAtual = agora.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-    var horaAtual = agora.toLocaleTimeString('pt-BR', {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    var dataHoraFormatada = dataAtual + ', ' + horaAtual;
-
-    var btn = event ? event.target : document.querySelector('button[onclick*="baixarComprovantePDF"]');
-    var textoOriginal = '';
-    if (btn) {
-        textoOriginal = btn.innerText;
-        btn.innerText = '⏳ Gerando PDF...';
-        btn.disabled = true;
-    }
-
-    // =============================================
-    // FUNÇÃO PARA GERAR QR CODE
-    // =============================================
-    function gerarQRCodeImagem(texto, callback) {
-        var tempDiv = document.createElement('div');
-        tempDiv.style.position = 'fixed';
-        tempDiv.style.left = '-9999px';
-        tempDiv.style.top = '0';
-        tempDiv.style.zIndex = '-1';
-        document.body.appendChild(tempDiv);
-
-        var qrDiv = document.createElement('div');
-        qrDiv.id = 'temp-qr';
-        tempDiv.appendChild(qrDiv);
-
-        try {
-            new QRCode(qrDiv, {
-                text: texto,
-                width: 150,
-                height: 150,
-                colorDark: "#694573",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+            var agora = new Date();
+            var dataAtual = agora.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
             });
+            var horaAtual = agora.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            var dataHoraFormatada = dataAtual + ', ' + horaAtual;
 
-            setTimeout(function() {
-                var canvas = qrDiv.querySelector('canvas');
-                var imgData = canvas ? canvas.toDataURL('image/png') : '';
-                document.body.removeChild(tempDiv);
-                callback(imgData);
-            }, 300);
-        } catch (e) {
-            console.warn('Erro ao gerar QR Code:', e);
-            document.body.removeChild(tempDiv);
-            callback('');
-        }
-    }
+            var btn = event ? event.target : document.querySelector('button[onclick*="baixarComprovantePDF"]');
+            var textoOriginal = '';
+            if (btn) {
+                textoOriginal = btn.innerText;
+                btn.innerText = '⏳ Gerando PDF...';
+                btn.disabled = true;
+            }
 
-    // =============================================
-    // GERAR QR CODE E CRIAR O PDF
-    // =============================================
-    gerarQRCodeImagem(linkCheckinQR, function(qrImage) {
-        var pdf = new jspdf.jsPDF({
-            unit: 'mm',
-            format: 'a4',
-            orientation: 'portrait'
-        });
+            // =============================================
+            // FUNÇÃO PARA GERAR QR CODE
+            // =============================================
+            function gerarQRCodeImagem(texto, callback) {
+                var tempDiv = document.createElement('div');
+                tempDiv.style.position = 'fixed';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.top = '0';
+                tempDiv.style.zIndex = '-1';
+                document.body.appendChild(tempDiv);
 
-        var pageWidth = 210;
-        var marginX = 20;
-        var marginY = 25;
-        var contentWidth = pageWidth - (marginX * 2);
+                var qrDiv = document.createElement('div');
+                qrDiv.id = 'temp-qr';
+                tempDiv.appendChild(qrDiv);
 
-        var y = marginY;
+                try {
+                    new QRCode(qrDiv, {
+                        text: texto,
+                        width: 150,
+                        height: 150,
+                        colorDark: "#694573",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
 
-        // CABEÇALHO
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(22);
-        pdf.setTextColor(105, 69, 115);
-        pdf.text('COMPROVANTE DE INSCRIÇÃO', pageWidth / 2, y, { align: 'center' });
-        y += 10;
+                    setTimeout(function () {
+                        var canvas = qrDiv.querySelector('canvas');
+                        var imgData = canvas ? canvas.toDataURL('image/png') : '';
+                        document.body.removeChild(tempDiv);
+                        callback(imgData);
+                    }, 300);
+                } catch (e) {
+                    console.warn('Erro ao gerar QR Code:', e);
+                    document.body.removeChild(tempDiv);
+                    callback('');
+                }
+            }
 
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(13);
-        pdf.setTextColor(134, 142, 150);
-        pdf.text(tituloEvento, pageWidth / 2, y, { align: 'center' });
-        y += 14;
+            // =============================================
+            // GERAR QR CODE E CRIAR O PDF
+            // =============================================
+            gerarQRCodeImagem(linkCheckinQR, function (qrImage) {
+                var pdf = new jspdf.jsPDF({
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                });
 
-        pdf.setDrawColor(105, 69, 115);
-        pdf.setLineWidth(0.5);
-        pdf.line(marginX, y, pageWidth - marginX, y);
-        y += 10;
+                var pageWidth = 210;
+                var marginX = 20;
+                var marginY = 25;
+                var contentWidth = pageWidth - (marginX * 2);
 
-        // Nº INSCRIÇÃO E DATA
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(9);
-        pdf.setTextColor(105, 69, 115);
-        pdf.text('Nº INSCRIÇÃO', marginX, y);
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(16);
-        pdf.setTextColor(73, 80, 87);
-        pdf.text(numeroInscricao, marginX, y + 7);
+                var y = marginY;
 
-        var x2 = marginX + (contentWidth / 2);
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(9);
-        pdf.setTextColor(105, 69, 115);
-        pdf.text('DATA/HORA', x2, y);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(12);
-        pdf.setTextColor(73, 80, 87);
-        pdf.text(dataHoraFormatada, x2, y + 7);
+                // CABEÇALHO
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(22);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text('COMPROVANTE DE INSCRIÇÃO', pageWidth / 2, y, { align: 'center' });
+                y += 10;
 
-        y += 18;
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(13);
+                pdf.setTextColor(134, 142, 150);
+                pdf.text(tituloEvento, pageWidth / 2, y, { align: 'center' });
+                y += 14;
 
-        pdf.setDrawColor(221, 221, 221);
-        pdf.setLineWidth(0.3);
-        pdf.setLineDashPattern([2, 2]);
-        pdf.line(marginX, y, pageWidth - marginX, y);
-        pdf.setLineDashPattern([]);
-        y += 8;
+                pdf.setDrawColor(105, 69, 115);
+                pdf.setLineWidth(0.5);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                y += 10;
 
-        // DADOS DO PARTICIPANTE
-        var ordemExibicao = ['Nome Completo', 'E-mail', 'Curso', 'WhatsApp', 'CPF'];
-        var dadosExibidos = 0;
-
-        ordemExibicao.forEach(function(rotulo) {
-            var valor = dadosInscricao[rotulo] || '';
-            if (valor && valor.trim() !== '') {
+                // Nº INSCRIÇÃO E DATA
                 pdf.setFont('helvetica', 'bold');
                 pdf.setFontSize(9);
                 pdf.setTextColor(105, 69, 115);
-                pdf.text(rotulo + ':', marginX, y);
-
-                var labelWidth = pdf.getTextWidth(rotulo + ':');
-                pdf.setFont('helvetica', 'normal');
-                pdf.setFontSize(11);
+                pdf.text('Nº INSCRIÇÃO', marginX, y);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(16);
                 pdf.setTextColor(73, 80, 87);
-                var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
-                pdf.text(valorLinhas, marginX + labelWidth + 5, y);
-                y += (valorLinhas.length * 7);
-                dadosExibidos++;
-            }
-        });
+                pdf.text(numeroInscricao, marginX, y + 7);
 
-        // Se não encontrou os dados, tenta buscar do comprovante na tela
-        if (dadosExibidos === 0) {
-            var comprovante = document.getElementById('comprovante-inscricao');
-            if (comprovante) {
-                var textos = comprovante.innerText.split('\n');
-                textos.forEach(function(linha) {
-                    linha = linha.trim();
-                    if (linha.includes(':')) {
-                        var partes = linha.split(':');
-                        var chave = partes[0].trim();
-                        var valor = partes.slice(1).join(':').trim();
-                        if (chave && valor && !chave.includes('Nº') && !chave.includes('Data')) {
-                            pdf.setFont('helvetica', 'bold');
-                            pdf.setFontSize(9);
-                            pdf.setTextColor(105, 69, 115);
-                            pdf.text(chave + ':', marginX, y);
+                var x2 = marginX + (contentWidth / 2);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(9);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text('DATA/HORA', x2, y);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(12);
+                pdf.setTextColor(73, 80, 87);
+                pdf.text(dataHoraFormatada, x2, y + 7);
 
-                            var labelWidth = pdf.getTextWidth(chave + ':');
-                            pdf.setFont('helvetica', 'normal');
-                            pdf.setFontSize(11);
-                            pdf.setTextColor(73, 80, 87);
-                            var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
-                            pdf.text(valorLinhas, marginX + labelWidth + 5, y);
-                            y += (valorLinhas.length * 7);
-                        }
+                y += 18;
+
+                pdf.setDrawColor(221, 221, 221);
+                pdf.setLineWidth(0.3);
+                pdf.setLineDashPattern([2, 2]);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                pdf.setLineDashPattern([]);
+                y += 8;
+
+                // DADOS DO PARTICIPANTE
+                var ordemExibicao = ['Nome Completo', 'E-mail', 'Curso', 'WhatsApp', 'CPF'];
+                var dadosExibidos = 0;
+
+                ordemExibicao.forEach(function (rotulo) {
+                    var valor = dadosInscricao[rotulo] || '';
+                    if (valor && valor.trim() !== '') {
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(105, 69, 115);
+                        pdf.text(rotulo + ':', marginX, y);
+
+                        var labelWidth = pdf.getTextWidth(rotulo + ':');
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(73, 80, 87);
+                        var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
+                        pdf.text(valorLinhas, marginX + labelWidth + 5, y);
+                        y += (valorLinhas.length * 7);
+                        dadosExibidos++;
                     }
                 });
+
+                // Se não encontrou os dados, tenta buscar do comprovante na tela
+                if (dadosExibidos === 0) {
+                    var comprovante = document.getElementById('comprovante-inscricao');
+                    if (comprovante) {
+                        var textos = comprovante.innerText.split('\n');
+                        textos.forEach(function (linha) {
+                            linha = linha.trim();
+                            if (linha.includes(':')) {
+                                var partes = linha.split(':');
+                                var chave = partes[0].trim();
+                                var valor = partes.slice(1).join(':').trim();
+                                if (chave && valor && !chave.includes('Nº') && !chave.includes('Data')) {
+                                    pdf.setFont('helvetica', 'bold');
+                                    pdf.setFontSize(9);
+                                    pdf.setTextColor(105, 69, 115);
+                                    pdf.text(chave + ':', marginX, y);
+
+                                    var labelWidth = pdf.getTextWidth(chave + ':');
+                                    pdf.setFont('helvetica', 'normal');
+                                    pdf.setFontSize(11);
+                                    pdf.setTextColor(73, 80, 87);
+                                    var valorLinhas = pdf.splitTextToSize(valor, contentWidth - labelWidth - 10);
+                                    pdf.text(valorLinhas, marginX + labelWidth + 5, y);
+                                    y += (valorLinhas.length * 7);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                y += 5;
+
+                // QR CODE NO PDF
+                if (qrImage) {
+                    var qrSize = 45;
+                    var qrX = (pageWidth - qrSize) / 2;
+                    var qrY = y;
+
+                    pdf.addImage(qrImage, 'PNG', qrX, qrY, qrSize, qrSize);
+                    y += qrSize + 5;
+
+                    pdf.setFont('helvetica', 'italic');
+                    pdf.setFontSize(7);
+                    pdf.setTextColor(134, 142, 150);
+                    pdf.text('Escaneie o QR Code para confirmar sua presença', pageWidth / 2, y, { align: 'center' });
+                    y += 6;
+                }
+
+                y += 10;
+
+                // RODAPÉ
+                pdf.setDrawColor(105, 69, 115);
+                pdf.setLineWidth(0.5);
+                pdf.line(marginX, y, pageWidth - marginX, y);
+                y += 8;
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(11);
+                pdf.setTextColor(105, 69, 115);
+                pdf.text(nomeOrganizador, pageWidth / 2, y, { align: 'center' });
+                y += 7;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(9);
+                pdf.setTextColor(134, 142, 150);
+                pdf.text('Este comprovante é sua confirmação de inscrição.', pageWidth / 2, y, { align: 'center' });
+                y += 5;
+                pdf.text('Guarde-o para o dia do evento.', pageWidth / 2, y, { align: 'center' });
+                y += 8;
+
+                pdf.setFont('helvetica', 'italic');
+                pdf.setFontSize(7);
+                pdf.setTextColor(173, 181, 189);
+                pdf.text('Comprovante gerado em ' + dataHoraFormatada, pageWidth / 2, y, { align: 'center' });
+
+                pdf.save('comprovante-inscricao.pdf');
+
+                console.log('✅ PDF com QR Code gerado com sucesso!', dadosInscricao);
+                if (btn) {
+                    btn.innerText = textoOriginal || '⬇️ Baixar PDF';
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // =============================================
+        // FUNÇÃO PARA ENVIAR COMPROVANTE POR E-MAIL
+        // =============================================
+        function enviarComprovanteEmail() {
+            console.log('📧 Enviando comprovante por e-mail...');
+
+            var dados = window.dadosInscricaoSalvos || {};
+            var tituloEvento = window.tituloEventoSalvo || 'Evento UFPA';
+            var nomeOrganizador = window.orgNomeSalvo || 'UFPA - Campus do Marajó/Breves';
+            var numeroInscricao = gerarNumeroInscricao();
+
+            var emailParticipante = dados['E-mail'] || '';
+            if (!emailParticipante) {
+                var form = document.getElementById('form-evento');
+                if (form) {
+                    var formData = new FormData(form);
+                    emailParticipante = formData.get('email') || '';
+                }
             }
+
+            if (!emailParticipante) {
+                alert('E-mail do participante não encontrado!');
+                return;
+            }
+
+            var agora = new Date();
+            var dataAtual = agora.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            var horaAtual = agora.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            var dataHoraFormatada = dataAtual + ' às ' + horaAtual;
+
+            // =============================================
+            // LINK PARA CONFIRMAR PRESENÇA
+            // =============================================
+            var linkCheckinQR = window.linkCheckinGlobal || (window.location.origin + '/checkin.html?id=' + (window.rowIndexGlobal || '0'));
+            console.log('📋 Link do QR Code para o e-mail:', linkCheckinQR);
+
+            var btn = event ? event.target : document.querySelector('button[onclick*="enviarComprovanteEmail"]');
+            var textoOriginal = '';
+            if (btn) {
+                textoOriginal = btn.innerText;
+                btn.innerText = '⏳ Enviando...';
+                btn.disabled = true;
+            }
+
+            // =============================================
+            // PREPARA OS DADOS PARA O TEMPLATE
+            // =============================================
+            var templateParams = {
+                tituloEvento: tituloEvento,
+                nomeOrganizador: nomeOrganizador,
+                numeroInscricao: numeroInscricao,
+                dataAtual: dataHoraFormatada,
+                nome: dados['Nome Completo'] || '',
+                email: dados['E-mail'] || '',
+                curso: dados['Curso'] || '',
+                whatsapp: dados['WhatsApp'] || '',
+                cpf: dados['CPF'] || '',
+                // =============================================
+                // LINK PARA CONFIRMAR PRESENÇA
+                // =============================================
+                linkCheckin: linkCheckinQR
+            };
+
+            console.log('📋 Dados enviados:', templateParams);
+
+            // =============================================
+            // ENVIA O E-MAIL
+            // =============================================
+            emailjs.send(
+                'service_30osulb',
+                'template_5ow4xye',
+                templateParams
+            )
+                .then(function (response) {
+                    console.log('✅ E-mail enviado com sucesso!', response);
+                    alert('📧 Comprovante enviado para ' + emailParticipante + ' com sucesso!');
+                    if (btn) {
+                        btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                        btn.disabled = false;
+                    }
+                })
+                .catch(function (error) {
+                    console.error('❌ Erro ao enviar e-mail:', error);
+                    alert('Erro ao enviar e-mail. Tente novamente mais tarde.');
+                    if (btn) {
+                        btn.innerText = textoOriginal || '📧 Enviar E-mail';
+                        btn.disabled = false;
+                    }
+                });
         }
-
-        y += 5;
-
-        // QR CODE NO PDF
-        if (qrImage) {
-            var qrSize = 45;
-            var qrX = (pageWidth - qrSize) / 2;
-            var qrY = y;
-
-            pdf.addImage(qrImage, 'PNG', qrX, qrY, qrSize, qrSize);
-            y += qrSize + 5;
-
-            pdf.setFont('helvetica', 'italic');
-            pdf.setFontSize(7);
-            pdf.setTextColor(134, 142, 150);
-            pdf.text('Escaneie o QR Code para confirmar sua presença', pageWidth / 2, y, { align: 'center' });
-            y += 6;
-        }
-
-        y += 10;
-
-        // RODAPÉ
-        pdf.setDrawColor(105, 69, 115);
-        pdf.setLineWidth(0.5);
-        pdf.line(marginX, y, pageWidth - marginX, y);
-        y += 8;
-
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(11);
-        pdf.setTextColor(105, 69, 115);
-        pdf.text(nomeOrganizador, pageWidth / 2, y, { align: 'center' });
-        y += 7;
-
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(9);
-        pdf.setTextColor(134, 142, 150);
-        pdf.text('Este comprovante é sua confirmação de inscrição.', pageWidth / 2, y, { align: 'center' });
-        y += 5;
-        pdf.text('Guarde-o para o dia do evento.', pageWidth / 2, y, { align: 'center' });
-        y += 8;
-
-        pdf.setFont('helvetica', 'italic');
-        pdf.setFontSize(7);
-        pdf.setTextColor(173, 181, 189);
-        pdf.text('Comprovante gerado em ' + dataHoraFormatada, pageWidth / 2, y, { align: 'center' });
-
-        pdf.save('comprovante-inscricao.pdf');
-
-        console.log('✅ PDF com QR Code gerado com sucesso!', dadosInscricao);
-        if (btn) {
-            btn.innerText = textoOriginal || '⬇️ Baixar PDF';
-            btn.disabled = false;
-        }
-    });
-}
-        
-// =============================================
-// FUNÇÃO PARA ENVIAR COMPROVANTE POR E-MAIL
-// =============================================
-function enviarComprovanteEmail() {
-    console.log('📧 Enviando comprovante por e-mail...');
-
-    var dados = window.dadosInscricaoSalvos || {};
-    var tituloEvento = window.tituloEventoSalvo || 'Evento UFPA';
-    var nomeOrganizador = window.orgNomeSalvo || 'UFPA - Campus do Marajó/Breves';
-    var numeroInscricao = gerarNumeroInscricao();
-
-    var emailParticipante = dados['E-mail'] || '';
-    if (!emailParticipante) {
-        var form = document.getElementById('form-evento');
-        if (form) {
-            var formData = new FormData(form);
-            emailParticipante = formData.get('email') || '';
-        }
-    }
-
-    if (!emailParticipante) {
-        alert('E-mail do participante não encontrado!');
-        return;
-    }
-
-    var agora = new Date();
-    var dataAtual = agora.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-    var horaAtual = agora.toLocaleTimeString('pt-BR', {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    var dataHoraFormatada = dataAtual + ' às ' + horaAtual;
-
-    // =============================================
-    // LINK PARA CONFIRMAR PRESENÇA
-    // =============================================
-    var linkCheckinQR = window.linkCheckinGlobal || (window.location.origin + '/checkin.html?id=' + (window.rowIndexGlobal || '0'));
-    console.log('📋 Link do QR Code para o e-mail:', linkCheckinQR);
-
-    var btn = event ? event.target : document.querySelector('button[onclick*="enviarComprovanteEmail"]');
-    var textoOriginal = '';
-    if (btn) {
-        textoOriginal = btn.innerText;
-        btn.innerText = '⏳ Enviando...';
-        btn.disabled = true;
-    }
-
-    // =============================================
-    // PREPARA OS DADOS PARA O TEMPLATE
-    // =============================================
-    var templateParams = {
-        tituloEvento: tituloEvento,
-        nomeOrganizador: nomeOrganizador,
-        numeroInscricao: numeroInscricao,
-        dataAtual: dataHoraFormatada,
-        nome: dados['Nome Completo'] || '',
-        email: dados['E-mail'] || '',
-        curso: dados['Curso'] || '',
-        whatsapp: dados['WhatsApp'] || '',
-        cpf: dados['CPF'] || '',
-        // =============================================
-        // LINK PARA CONFIRMAR PRESENÇA
-        // =============================================
-        linkCheckin: linkCheckinQR
-    };
-
-    console.log('📋 Dados enviados:', templateParams);
-
-    // =============================================
-    // ENVIA O E-MAIL
-    // =============================================
-    emailjs.send(
-        'service_30osulb',
-        'template_5ow4xye',
-        templateParams
-    )
-    .then(function(response) {
-        console.log('✅ E-mail enviado com sucesso!', response);
-        alert('📧 Comprovante enviado para ' + emailParticipante + ' com sucesso!');
-        if (btn) {
-            btn.innerText = textoOriginal || '📧 Enviar E-mail';
-            btn.disabled = false;
-        }
-    })
-    .catch(function(error) {
-        console.error('❌ Erro ao enviar e-mail:', error);
-        alert('Erro ao enviar e-mail. Tente novamente mais tarde.');
-        if (btn) {
-            btn.innerText = textoOriginal || '📧 Enviar E-mail';
-            btn.disabled = false;
-        }
-    });
-}
     </script>
 </body>
 
