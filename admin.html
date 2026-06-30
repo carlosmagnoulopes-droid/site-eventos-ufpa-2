@@ -9,7 +9,6 @@
     >
     <title>Painel Multieventos - Admin Pro</title>
     <style>
-        
         /* ============================================ */
         /* RESET E BASE                                 */
         /* ============================================ */
@@ -1332,7 +1331,7 @@
                         🔍 Resultados encontrados: <strong id="resultado-count">0</strong>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        
+
                         <button
                             class="export-btn export-btn-excel"
                             onclick="exportarParticipantesExcel()"
@@ -1406,6 +1405,114 @@
                     style="display:none; text-align:center; padding:30px; color:#888;"
                 >
                     📭 Nenhum participante inscrito ainda.
+                </div>
+            </div>
+            <!-- CARD 5.5: CHECK-IN MANUAL -->
+            <div
+                class="form-card"
+                id="card-checkin-manual"
+            >
+                <h2>📋 Check-in Manual</h2>
+
+                <!-- CAMPO DE BUSCA -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                    <input
+                        type="text"
+                        id="busca-checkin-manual"
+                        placeholder="🔍 Digite o nome do participante..."
+                        style="flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #e2ddd6; border-radius: 10px; font-size: 14px; font-family: inherit;"
+                    >
+                    <button
+                        class="btn-buscar"
+                        onclick="buscarParticipanteCheckin()"
+                    >🔍 Buscar</button>
+                    <button
+                        class="btn-limpar"
+                        onclick="limparBuscaCheckin()"
+                    >✕ Limpar</button>
+                </div>
+
+                <!-- RESULTADO DA BUSCA -->
+                <div
+                    id="resultado-checkin-manual"
+                    style="display: none;"
+                >
+                    <div
+                        id="info-participante"
+                        style="background: #f8f6f2; border-radius: 10px; padding: 20px; border: 1px solid #e2ddd6;"
+                    >
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+                            <div>
+                                <h3
+                                    id="checkin-nome"
+                                    style="color: #2d5a3f; margin: 0; font-size: 20px;"
+                                >Nome do Participante</h3>
+                                <p
+                                    id="checkin-email"
+                                    style="color: #868E96; margin: 5px 0 0 0;"
+                                >email@email.com</p>
+                                <p
+                                    id="checkin-curso"
+                                    style="color: #495057; margin: 5px 0;"
+                                >Curso</p>
+                                <p
+                                    id="checkin-status"
+                                    style="margin: 5px 0; font-weight: bold;"
+                                >Status: ⬜ Ausente</p>
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button
+                                    class="btn-submit"
+                                    id="btn-marcar-presenca"
+                                    onclick="marcarPresencaManual()"
+                                    style="background: #28a745; padding: 12px 30px;"
+                                >
+                                    ✅ Marcar Presença
+                                </button>
+                                <button
+                                    class="btn-submit"
+                                    id="btn-desmarcar-presenca"
+                                    onclick="desmarcarPresencaManual()"
+                                    style="background: #dc3545; padding: 12px 30px; display: none;"
+                                >
+                                    ❌ Desmarcar Presença
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            id="checkin-mensagem"
+                            style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"
+                        ></div>
+                    </div>
+                </div>
+
+                <!-- ESTATÍSTICAS -->
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                    <div
+                        style="background: #d4edda; padding: 10px 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
+                        <span style="font-weight: bold; color: #155724;">✅ Presentes</span>
+                        <span
+                            id="total-presentes-manual"
+                            style="font-weight: bold; font-size: 20px; color: #155724; display: block;"
+                        >0</span>
+                    </div>
+                    <div
+                        style="background: #f8d7da; padding: 10px 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
+                        <span style="font-weight: bold; color: #721c24;">⬜ Ausentes</span>
+                        <span
+                            id="total-ausentes-manual"
+                            style="font-weight: bold; font-size: 20px; color: #721c24; display: block;"
+                        >0</span>
+                    </div>
+                    <div
+                        style="background: #d1ecf1; padding: 10px 20px; border-radius: 8px; border: 1px solid #bee5eb;">
+                        <span style="font-weight: bold; color: #0c5460;">👥 Total</span>
+                        <span
+                            id="total-inscritos-manual"
+                            style="font-weight: bold; font-size: 20px; color: #0c5460; display: block;"
+                        >0</span>
+                    </div>
                 </div>
             </div>
             <!-- CARD 6: CERTIFICADOS -->
@@ -2113,6 +2220,7 @@
                             });
 
                             container.style.display = 'block';
+                            atualizarEstatisticasCheckin();
                         })
                         .catch(err => {
                             loading.style.display = 'none';
@@ -2258,7 +2366,7 @@
                         });
                 }
 
-                
+
                 // =============================================
                 // VARIÁVEIS PARA ARMAZENAR DADOS DA BUSCA
                 // =============================================
@@ -3476,6 +3584,262 @@
                     return Object.assign({}, PERSONALIZACAO_PADRAO);
                 }
                 // =============================================
+                // FUNÇÕES PARA CHECK-IN MANUAL
+                // =============================================
+
+                var participanteEncontrado = null;
+
+                function buscarParticipanteCheckin() {
+                    var termo = document.getElementById('busca-checkin-manual').value.trim();
+                    var resultadoDiv = document.getElementById('resultado-checkin-manual');
+
+                    if (!termo) {
+                        alert('Digite o nome do participante.');
+                        return;
+                    }
+
+                    // Busca nos participantes carregados
+                    var encontrado = null;
+                    for (var i = 0; i < todosParticipantes.length; i++) {
+                        var p = todosParticipantes[i];
+                        var nome = (p.nome || p['Nome Completo'] || '').toLowerCase();
+                        var email = (p.email || p['E-mail'] || '').toLowerCase();
+                        var cpf = (p.cpf || p['CPF'] || '').toLowerCase();
+                        var termoLower = termo.toLowerCase();
+
+                        if (nome.includes(termoLower) || email.includes(termoLower) || cpf.includes(termoLower)) {
+                            encontrado = p;
+                            break;
+                        }
+                    }
+
+                    if (!encontrado) {
+                        // Se não encontrou, mostra todos os que contêm o termo
+                        var resultados = todosParticipantes.filter(function (p) {
+                            var nome = (p.nome || p['Nome Completo'] || '').toLowerCase();
+                            return nome.includes(termo.toLowerCase());
+                        });
+
+                        if (resultados.length === 0) {
+                            alert('Nenhum participante encontrado com "' + termo + '".');
+                            resultadoDiv.style.display = 'none';
+                            return;
+                        } else if (resultados.length > 1) {
+                            // Mostra lista de resultados para o usuário escolher
+                            var mensagem = 'Encontrados ' + resultados.length + ' participantes:\n\n';
+                            resultados.forEach(function (p, index) {
+                                var nome = p.nome || p['Nome Completo'] || 'Participante';
+                                mensagem += (index + 1) + '. ' + nome + '\n';
+                            });
+                            mensagem += '\nDigite o nome completo para selecionar.';
+                            alert(mensagem);
+                            resultadoDiv.style.display = 'none';
+                            return;
+                        }
+                        encontrado = resultados[0];
+                    }
+
+                    // Mostra o participante encontrado
+                    participanteEncontrado = encontrado;
+                    mostrarParticipanteCheckin(encontrado);
+                }
+
+                function mostrarParticipanteCheckin(participante) {
+                    var resultadoDiv = document.getElementById('resultado-checkin-manual');
+                    var nome = participante.nome || participante['Nome Completo'] || 'Participante';
+                    var email = participante.email || participante['E-mail'] || '';
+                    var curso = participante.curso || participante['Curso'] || '';
+                    var cpf = participante.cpf || participante['CPF'] || '';
+                    var presente = participante.presente || '';
+                    var statusTexto = (presente && presente.includes('✅')) ? '✅ Presente' : '⬜ Ausente';
+                    var statusCor = (presente && presente.includes('✅')) ? '#28a745' : '#868E96';
+
+                    document.getElementById('checkin-nome').textContent = nome.toUpperCase();
+                    document.getElementById('checkin-email').textContent = '📧 ' + email;
+                    document.getElementById('checkin-curso').textContent = '📚 ' + curso;
+                    if (cpf) {
+                        document.getElementById('checkin-curso').textContent += ' | CPF: ' + cpf;
+                    }
+                    document.getElementById('checkin-status').textContent = 'Status: ' + statusTexto;
+                    document.getElementById('checkin-status').style.color = statusCor;
+
+                    // =============================================
+                    // GERENCIA OS BOTÕES
+                    // =============================================
+                    var btnMarcar = document.getElementById('btn-marcar-presenca');
+                    var btnDesmarcar = document.getElementById('btn-desmarcar-presenca');
+
+                    if (presente && presente.includes('✅')) {
+                        // Já está presente → mostra botão de desmarcar
+                        btnMarcar.style.display = 'none';
+                        btnDesmarcar.style.display = 'inline-flex';
+                        btnDesmarcar.disabled = false;
+                        btnDesmarcar.textContent = '❌ Desmarcar Presença';
+                    } else {
+                        // Ausente → mostra botão de marcar
+                        btnMarcar.style.display = 'inline-flex';
+                        btnMarcar.disabled = false;
+                        btnMarcar.textContent = '✅ Marcar Presença';
+                        btnDesmarcar.style.display = 'none';
+                    }
+
+                    resultadoDiv.style.display = 'block';
+                    document.getElementById('checkin-mensagem').style.display = 'none';
+                }
+
+                function marcarPresencaManual() {
+                    if (!participanteEncontrado) {
+                        alert('Nenhum participante selecionado.');
+                        return;
+                    }
+
+                    var presente = participanteEncontrado.presente || '';
+                    if (presente && presente.includes('✅')) {
+                        alert('Este participante já teve a presença marcada.');
+                        return;
+                    }
+
+                    if (!confirm('Marcar presença de ' + (participanteEncontrado.nome || participanteEncontrado['Nome Completo']) + '?')) {
+                        return;
+                    }
+
+                    var btn = document.getElementById('btn-marcar-presenca');
+                    btn.textContent = '⏳ Processando...';
+                    btn.disabled = true;
+
+                    var payload = {
+                        action: 'marcarPresenca',
+                        rowIndex: participanteEncontrado._rowIndex,
+                        dataHora: new Date().toLocaleString('pt-BR')
+                    };
+
+                    fetch(GOOGLE_API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                var msgDiv = document.getElementById('checkin-mensagem');
+                                msgDiv.style.display = 'block';
+                                msgDiv.style.background = '#d4edda';
+                                msgDiv.style.color = '#155724';
+                                msgDiv.style.border = '1px solid #c3e6cb';
+                                msgDiv.innerHTML = '✅ Presença marcada com sucesso para ' + (participanteEncontrado.nome || participanteEncontrado['Nome Completo']) + '!';
+
+                                // Atualiza o participante na lista
+                                participanteEncontrado.presente = '✅ Presente - ' + new Date().toLocaleString('pt-BR');
+                                mostrarParticipanteCheckin(participanteEncontrado);
+                                atualizarEstatisticasCheckin();
+                                carregarParticipantes(); // Recarrega a lista principal
+                            } else {
+                                throw new Error(data.message || 'Erro ao marcar presença.');
+                            }
+                        })
+                        .catch(err => {
+                            var msgDiv = document.getElementById('checkin-mensagem');
+                            msgDiv.style.display = 'block';
+                            msgDiv.style.background = '#f8d7da';
+                            msgDiv.style.color = '#721c24';
+                            msgDiv.style.border = '1px solid #f5c6cb';
+                            msgDiv.innerHTML = '❌ Erro ao marcar presença: ' + err.message;
+                        })
+                        .finally(function () {
+                            btn.textContent = '✅ Marcar Presença';
+                            btn.disabled = false;
+                        });
+                }
+                // =============================================
+                // FUNÇÃO PARA DESMARCAR PRESENÇA MANUAL
+                // =============================================
+                function desmarcarPresencaManual() {
+                    if (!participanteEncontrado) {
+                        alert('Nenhum participante selecionado.');
+                        return;
+                    }
+
+                    var presente = participanteEncontrado.presente || '';
+                    if (!presente || !presente.includes('✅')) {
+                        alert('Este participante não tem presença marcada para desmarcar.');
+                        return;
+                    }
+
+                    if (!confirm('Desmarcar presença de ' + (participanteEncontrado.nome || participanteEncontrado['Nome Completo']) + '?')) {
+                        return;
+                    }
+
+                    var btn = document.getElementById('btn-desmarcar-presenca');
+                    btn.textContent = '⏳ Processando...';
+                    btn.disabled = true;
+
+                    var payload = {
+                        action: 'desmarcarPresenca',
+                        rowIndex: participanteEncontrado._rowIndex
+                    };
+
+                    fetch(GOOGLE_API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                var msgDiv = document.getElementById('checkin-mensagem');
+                                msgDiv.style.display = 'block';
+                                msgDiv.style.background = '#f8d7da';
+                                msgDiv.style.color = '#721c24';
+                                msgDiv.style.border = '1px solid #f5c6cb';
+                                msgDiv.innerHTML = '❌ Presença desmarcada para ' + (participanteEncontrado.nome || participanteEncontrado['Nome Completo']) + '!';
+
+                                // Atualiza o participante na lista
+                                participanteEncontrado.presente = '';
+                                mostrarParticipanteCheckin(participanteEncontrado);
+                                atualizarEstatisticasCheckin();
+                                carregarParticipantes();
+                            } else {
+                                throw new Error(data.message || 'Erro ao desmarcar presença.');
+                            }
+                        })
+                        .catch(err => {
+                            var msgDiv = document.getElementById('checkin-mensagem');
+                            msgDiv.style.display = 'block';
+                            msgDiv.style.background = '#f8d7da';
+                            msgDiv.style.color = '#721c24';
+                            msgDiv.style.border = '1px solid #f5c6cb';
+                            msgDiv.innerHTML = '❌ Erro ao desmarcar presença: ' + err.message;
+                        })
+                        .finally(function () {
+                            btn.textContent = '❌ Desmarcar Presença';
+                            btn.disabled = false;
+                        });
+                }
+
+                function limparBuscaCheckin() {
+                    document.getElementById('busca-checkin-manual').value = '';
+                    document.getElementById('resultado-checkin-manual').style.display = 'none';
+                    participanteEncontrado = null;
+                }
+
+                function atualizarEstatisticasCheckin() {
+                    var total = todosParticipantes.length;
+                    var presentes = 0;
+                    todosParticipantes.forEach(function (p) {
+                        if (p.presente && p.presente.includes('✅')) {
+                            presentes++;
+                        }
+                    });
+                    var ausentes = total - presentes;
+
+                    document.getElementById('total-presentes-manual').textContent = presentes;
+                    document.getElementById('total-ausentes-manual').textContent = ausentes;
+                    document.getElementById('total-inscritos-manual').textContent = total;
+                }
+
+                // Atualiza as estatísticas sempre que a lista de participantes é carregada
+                // Modifique a função carregarParticipantes() para chamar atualizarEstatisticasCheckin()
+                // Adicione esta linha no final da função carregarParticipantes():
+                // atualizarEstatisticasCheckin();
+                // =============================================
                 // VERIFICA SE O USUÁRIO JÁ ESTÁ LOGADO
                 // =============================================
                 (function verificarLoginAutomatico() {
@@ -3497,7 +3861,9 @@
                         carregarFundoSalvo();
                         carregarPersonalizacaoCertificado();
                     }
+
                 })();
+
 
             </script>
 </body>
