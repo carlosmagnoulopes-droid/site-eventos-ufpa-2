@@ -716,6 +716,8 @@
             flex-wrap: wrap;
             align-items: center;
             margin-bottom: 18px;
+            width: 100%;
+            max-width: 100%;
         }
 
         .certificado-selecao select {
@@ -723,9 +725,12 @@
             border: 1.5px solid #e2ddd6;
             border-radius: 10px;
             font-size: 14px;
-            min-width: 220px;
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
             background: white;
             font-family: inherit;
+            box-sizing: border-box;
         }
 
         .certificado-selecao select:focus {
@@ -914,6 +919,7 @@
             .certificado-selecao {
                 flex-direction: column;
                 align-items: stretch;
+                width: 100%;
             }
 
             .btn-submit,
