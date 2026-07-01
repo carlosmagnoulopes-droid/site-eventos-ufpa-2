@@ -30,7 +30,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f3f0;
+            background: #156f557c;
             min-height: 100vh;
             padding: 24px;
             color: #2d2d2d;
@@ -977,6 +977,57 @@
                 font-size: 19px;
             }
         }
+
+        /* ============================================ */
+        /* CARDS QUE ABREM E FECHAM (ACORDEÃO)         */
+        /* ============================================ */
+        .card-collapsible {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-collapsible .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 16px;
+            color: #868E96;
+        }
+
+        .card-collapsible .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            opacity: 0;
+            padding: 0;
+        }
+
+        .card-content.open {
+            max-height: 5000px;
+            opacity: 1;
+            padding: 15px 0 0 0;
+        }
+
+        /* ============================================ */
+        /* MENSAGEM DE ERRO DO LOGIN                   */
+        /* ============================================ */
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .error-message.show {
+            display: block;
+        }
     </style>
 </head>
 
@@ -990,7 +1041,7 @@
         >
             <div class="login-box">
                 <h2>Área do Organizador</h2>
-                <form id="formLogin">
+                <form id="formLogin" autocomplete="off">
                     <div class="input-group">
                         <label>Usuário:</label>
                         <input
@@ -1044,383 +1095,470 @@
                 class="alert alert-error"
                 id="alertError"
             ></div>
-            <!-- CARD 1: EDITAR IDENTIDADE DO EVENTO (EXPANDIDO) -->
+            <!-- CARD 1: CONFIGURAÇÕES GERAIS -->
             <div class="form-card">
-                <h2>1. Configurações Gerais (Identidade do Evento)</h2>
-                <form id="formConfig">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Nome Principal do Evento:</label>
-                            <input
-                                type="text"
-                                id="configTitulo"
-                                required
-                                placeholder="Ex: I Seminário de Tecnologia"
-                            >
+                <div
+                    class="card-collapsible"
+                    onclick="toggleCard('config')"
+                >
+                    <h2 style="margin-bottom:0; border-left-color: #2d5a3f;">
+                        ⚙️ Configurações Gerais
+                        <span style="font-size:12px; font-weight:400; color:#868E96; margin-left:10px;">
+                            (Identidade do Evento)
+                        </span>
+                    </h2>
+                    <span
+                        class="toggle-icon open"
+                        id="card-icon-config"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-config"
+                >
+                    <form id="formConfig">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome Principal do Evento:</label>
+                                <input
+                                    type="text"
+                                    id="configTitulo"
+                                    required
+                                    placeholder="Ex: I Seminário de Tecnologia"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Subtítulo / Instituição:</label>
+                                <input
+                                    type="text"
+                                    id="configSubtitulo"
+                                    required
+                                    placeholder="Ex: UFPA - Campus Breves"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>📅 Data do Evento:</label>
+                                <input
+                                    type="text"
+                                    id="configDataEvento"
+                                    required
+                                    placeholder="Ex: Sexta, 26 de junho de 2026"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>🕐 Horário do Evento:</label>
+                                <input
+                                    type="text"
+                                    id="configHorarioEvento"
+                                    placeholder="Ex: 14h"
+                                >
+                                <small style="color:#868E96; font-size:11px;">Deixe em branco se não quiser exibir o
+                                    horário</small>
+                            </div>
+                            <div class="form-group">
+                                <label>📍 Local do Evento:</label>
+                                <input
+                                    type="text"
+                                    id="configLocalEvento"
+                                    placeholder="Ex: Auditório da UFPA"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>📍 Cidade do Evento:</label>
+                                <input
+                                    type="text"
+                                    id="configCidade"
+                                    placeholder="Ex: Breves - PA"
+                                >
+                                <small style="color:#868E96; font-size:11px;">Cidade onde o evento será
+                                    realizado</small>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Subtítulo / Instituição:</label>
-                            <input
-                                type="text"
-                                id="configSubtitulo"
-                                required
-                                placeholder="Ex: UFPA - Campus Breves"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label>📅 Data do Evento:</label>
-                            <input
-                                type="text"
-                                id="configDataEvento"
-                                required
-                                placeholder="Ex: Sexta, 26 de junho de 2026"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label>🕐 Horário do Evento:</label>
-                            <input
-                                type="text"
-                                id="configHorarioEvento"
-                                placeholder="Ex: 14h"
-                            >
-                            <small style="color:#868E96; font-size:11px;">Deixe em branco se não quiser exibir o
-                                horário</small>
-                        </div>
-                        <div class="form-group">
-                            <label>📍 Local do Evento:</label>
-                            <input
-                                type="text"
-                                id="configLocalEvento"
-                                placeholder="Ex: Auditório da UFPA"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label>📍 Cidade do Evento:</label>
-                            <input
-                                type="text"
-                                id="configCidade"
-                                placeholder="Ex: Breves - PA"
-                            >
-                            <small style="color:#868E96; font-size:11px;">Cidade onde o evento será realizado</small>
-                        </div>
-                    </div>
 
 
-                    <div
-                        class="form-group"
-                        style="margin-bottom:15px;"
-                    >
-                        <label>Texto Detalhado (Seção 'Sobre o Evento'):</label>
-                        <textarea
-                            id="configDescricao"
-                            required
-                            placeholder="Escreva a introdução acadêmica detalhada do evento..."
-                        ></textarea>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Nome da Organização:</label>
-                            <input
-                                type="text"
-                                id="configNomeOrg"
-                                required
-                                placeholder="Ex: Faculdade de Ciências Humanas"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label>Link da Foto/Logo do Organizador:</label>
-                            <input
-                                type="text"
-                                id="configFotoOrg"
-                                placeholder="Ex: https://site.com"
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="form-group"
-                        style="margin-bottom:15px;"
-                    >
-                        <label>Minibiografia da Organização:</label>
-                        <textarea
-                            id="configBioOrg"
-                            required
-                            placeholder="Breve resumo da comissão organizadora..."
-                        ></textarea>
-                    </div>
-                    <div
-                        class="form-group"
-                        style="margin-bottom:20px;"
-                    >
-                        <label>Link Direto do Banner de Fundo (Capa):</label>
-                        <input
-                            type="text"
-                            id="configBanner"
-                            placeholder="Ex: https://ibb.co"
+                        <div
+                            class="form-group"
+                            style="margin-bottom:15px;"
                         >
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn-submit"
-                        id="btnSalvarConfig"
-                    >Atualizar Informações Gerais do Site</button>
-                </form>
+                            <label>Texto Detalhado (Seção 'Sobre o Evento'):</label>
+                            <textarea
+                                id="configDescricao"
+                                required
+                                placeholder="Escreva a introdução acadêmica detalhada do evento..."
+                            ></textarea>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome da Organização:</label>
+                                <input
+                                    type="text"
+                                    id="configNomeOrg"
+                                    required
+                                    placeholder="Ex: Faculdade de Ciências Humanas"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Link da Foto/Logo do Organizador:</label>
+                                <input
+                                    type="text"
+                                    id="configFotoOrg"
+                                    placeholder="Ex: https://site.com"
+                                >
+                            </div>
+                        </div>
+                        <div
+                            class="form-group"
+                            style="margin-bottom:15px;"
+                        >
+                            <label>Minibiografia da Organização:</label>
+                            <textarea
+                                id="configBioOrg"
+                                required
+                                placeholder="Breve resumo da comissão organizadora..."
+                            ></textarea>
+                        </div>
+                        <div
+                            class="form-group"
+                            style="margin-bottom:20px;"
+                        >
+                            <label>Link Direto do Banner de Fundo (Capa):</label>
+                            <input
+                                type="text"
+                                id="configBanner"
+                                placeholder="Ex: https://ibb.co"
+                            >
+                        </div>
+                        <button
+                            type="submit"
+                            class="btn-submit"
+                            id="btnSalvarConfig"
+                        >Atualizar Informações Gerais do Site</button>
+                    </form>
+                </div>
             </div>
 
             <!-- CARD 2: CONFIGURAÇÃO DE CAMPOS DO FORMULÁRIO -->
             <div class="form-card">
-                <h2>2. Configuração dos Campos do Formulário de Inscrição</h2>
-                <form id="formCampoDinamico">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Identificador Técnico (Sem espaços/acentos):</label>
-                            <input
-                                type="text"
-                                id="campoId"
-                                required
-                                placeholder="Ex: cpf, cargo"
-                                style="text-transform: lowercase;"
-                            >
+                <div
+                    class="card-collapsible"
+                    onclick="toggleCard('campos')"
+                >
+                    <h2 style="margin-bottom:0; border-left-color: #d4a373;">
+                        📝 Campos do Formulário
+                    </h2>
+                    <span
+                        class="toggle-icon"
+                        id="card-icon-campos"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-campos"
+                >
+                    <form id="formCampoDinamico">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Identificador Técnico (Sem espaços/acentos):</label>
+                                <input
+                                    type="text"
+                                    id="campoId"
+                                    required
+                                    placeholder="Ex: cpf, cargo"
+                                    style="text-transform: lowercase;"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Rótulo / Pergunta da tela:</label>
+                                <input
+                                    type="text"
+                                    id="campoRotulo"
+                                    required
+                                    placeholder="Ex: Digite seu CPF:"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Entrada:</label>
+                                <select
+                                    id="campoTipo"
+                                    required
+                                    onchange="verificarTipoCampo(this.value)"
+                                >
+                                    <option value="text">Texto Simples</option>
+                                    <option value="tel">Telefone / WhatsApp</option>
+                                    <option value="email">E-mail Secundário</option>
+                                    <option value="select">Lista Suspensa (Opções)</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Rótulo / Pergunta da tela:</label>
-                            <input
-                                type="text"
-                                id="campoRotulo"
-                                required
-                                placeholder="Ex: Digite seu CPF:"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label>Tipo de Entrada:</label>
-                            <select
-                                id="campoTipo"
-                                required
-                                onchange="verificarTipoCampo(this.value)"
-                            >
-                                <option value="text">Texto Simples</option>
-                                <option value="tel">Telefone / WhatsApp</option>
-                                <option value="email">E-mail Secundário</option>
-                                <option value="select">Lista Suspensa (Opções)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div
-                        class="form-group"
-                        id="grupoOpcoes"
-                        style="display: none; margin-bottom: 15px;"
-                    >
-                        <label>Opções da Lista (Separe por vírgulas):</label>
-                        <input
-                            type="text"
-                            id="campoOpcoes"
-                            placeholder="Ex: Graduação, Mestrado, Doutorado"
+                        <div
+                            class="form-group"
+                            id="grupoOpcoes"
+                            style="display: none; margin-bottom: 15px;"
                         >
+                            <label>Opções da Lista (Separe por vírgulas):</label>
+                            <input
+                                type="text"
+                                id="campoOpcoes"
+                                placeholder="Ex: Graduação, Mestrado, Doutorado"
+                            >
+                        </div>
+                        <button
+                            type="submit"
+                            class="btn-submit-orange"
+                            id="btnSalvarCampo"
+                        >Criar Nova Pergunta no Formulário</button>
+                    </form>
+                    <div style="margin-top:20px;">
+                        <h3 style="font-size:14px; margin-bottom:10px; color:#3E2723;">Perguntas Adicionais Ativas:</h3>
+                        <div
+                            id="listaCamposGerenciar"
+                            style="display:flex; flex-wrap:wrap; gap:10px;"
+                        >Carregando perguntas...</div>
                     </div>
-                    <button
-                        type="submit"
-                        class="btn-submit-orange"
-                        id="btnSalvarCampo"
-                    >Criar Nova Pergunta no Formulário</button>
-                </form>
-                <div style="margin-top:20px;">
-                    <h3 style="font-size:14px; margin-bottom:10px; color:#3E2723;">Perguntas Adicionais Ativas:</h3>
-                    <div
-                        id="listaCamposGerenciar"
-                        style="display:flex; flex-wrap:wrap; gap:10px;"
-                    >Carregando perguntas...</div>
                 </div>
             </div>
 
             <!-- CARD 3: ADICIONAR ATIVIDADE -->
             <div class="form-card">
-                <h2>3. Grade de Horários (Cronograma)</h2>
-                <form id="formAtividade">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Horário (Ex: 09:00 - 10:30):</label>
-                            <input
-                                type="text"
-                                id="hora"
-                                required
-                                placeholder="Digite o horário"
-                            >
+                <div
+                    class="card-collapsible"
+                    onclick="toggleCard('programacao')"
+                >
+                    <h2 style="margin-bottom:0; border-left-color: #d4a373;">
+                        📅 Programação (Cronograma)
+                    </h2>
+                    <span
+                        class="toggle-icon"
+                        id="card-icon-programacao"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-programacao"
+                >
+                    <form id="formAtividade">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Horário (Ex: 09:00 - 10:30):</label>
+                                <input
+                                    type="text"
+                                    id="hora"
+                                    required
+                                    placeholder="Digite o horário"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label>Título da Atividade:</label>
+                                <input
+                                    type="text"
+                                    id="titulo"
+                                    required
+                                    placeholder="Nome da palestra ou mesa"
+                                >
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Título da Atividade:</label>
-                            <input
-                                type="text"
-                                id="titulo"
-                                required
-                                placeholder="Nome da palestra ou mesa"
-                            >
+                        <div
+                            class="form-group"
+                            style="margin-bottom:15px;"
+                        >
+                            <label>Detalhes / Palestrantes:</label>
+                            <textarea
+                                id="descricao"
+                                placeholder="Doutores, convidados e sala..."
+                            ></textarea>
                         </div>
-                    </div>
-                    <div
-                        class="form-group"
-                        style="margin-bottom:15px;"
-                    >
-                        <label>Detalhes / Palestrantes:</label>
-                        <textarea
-                            id="descricao"
-                            placeholder="Doutores, convidados e sala..."
-                        ></textarea>
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn-submit"
-                        id="btnSalvar"
-                    >Adicionar Atividade</button>
-                </form>
+                        <button
+                            type="submit"
+                            class="btn-submit"
+                            id="btnSalvar"
+                        >Adicionar Atividade</button>
+                    </form>
+                </div>
             </div>
 
             <!-- CARD 4: TABELA CRONOGRAMA COM EDIÇÃO -->
-            <div class="table-container">
-                <h2>Visualização do Cronograma Atual</h2>
+            <div class="form-card">
                 <div
-                    id="tableLoading"
-                    style="text-align:center; padding:20px; color:#666;"
-                >Buscando dados na planilha...</div>
-                <table
-                    id="tabelaAtividades"
-                    style="display:none;"
+                    class="card-collapsible"
+                    onclick="toggleCard('tabela')"
                 >
-                    <thead>
-                        <tr>
-                            <th style="width:15%">Horário</th>
-                            <th style="width:30%">Título</th>
-                            <th style="width:35%">Palestrantes/Descrição</th>
-                            <th style="width:20%">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpoTabela"></tbody>
-                </table>
+                    <h2 style="margin-bottom:0; border-left-color: #2d5a3f;">
+                        📋 Visualização do Cronograma
+                    </h2>
+                    <span
+                        class="toggle-icon"
+                        id="card-icon-tabela"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-tabela"
+                >
+                    <div class="table-container">
+                        <div
+                            id="tableLoading"
+                            style="text-align:center; padding:20px; color:#666;"
+                        >Buscando dados na planilha...</div>
+                        <table
+                            id="tabelaAtividades"
+                            style="display:none;"
+                        >
+                            <thead>
+                                <tr>
+                                    <th style="width:15%">Horário</th>
+                                    <th style="width:30%">Título</th>
+                                    <th style="width:35%">Palestrantes/Descrição</th>
+                                    <th style="width:20%">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="corpoTabela"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <!-- CARD 5: LISTA DE PARTICIPANTES -->
-            <div
-                class="form-card"
-                id="card-participantes"
-            >
-                <h2>5. Lista de Participantes</h2>
-                <!-- BOTÃO PARA CHECK-IN -->
-                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <a
-                        href="checkin.html"
-                        target="_blank"
-                        class="btn-submit"
-                        style="background: #17a2b8; text-decoration: none;"
-                    >
-                        📋 Check-in com QR Code
-                    </a>
-                </div>
-
-                <!-- CAMPO DE BUSCA -->
-                <div class="busca-container">
-                    <input
-                        type="text"
-                        id="busca-participante"
-                        placeholder="🔍 Buscar por nome, CPF ou e-mail..."
-                        onkeyup="buscarParticipante(event)"
-                    >
-                    <button
-                        class="btn-buscar"
-                        onclick="buscarParticipante()"
-                    >🔍 Buscar</button>
-                    <button
-                        class="btn-limpar"
-                        onclick="limparBusca()"
-                    >✕ Limpar</button>
-                </div>
-
+            <div class="form-card">
                 <div
-                    style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                    <div
-                        class="total-inscritos"
-                        id="total-inscritos"
-                    >
-                        👥 Total de Inscritos: <span id="total-count">0</span>
+                    class="card-collapsible"
+                    onclick="toggleCard('participantes')"
+                >
+                    <h2 style="margin-bottom:0; border-left-color: #2d5a3f;">
+                        👥 Lista de Participantes
+                        <span style="font-size:12px; font-weight:400; color:#868E96; margin-left:10px;">
+                            (Total: <span id="total-count-card">0</span>)
+                        </span>
+                    </h2>
+                    <span
+                        class="toggle-icon open"
+                        id="card-icon-participantes"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-participantes"
+                >
+                    <!-- BOTÃO PARA CHECK-IN -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <a
+                            href="checkin.html"
+                            target="_blank"
+                            class="btn-submit"
+                            style="background: #17a2b8; text-decoration: none;"
+                        >
+                            📋 Check-in com QR Code
+                        </a>
                     </div>
+
+                    <!-- CAMPO DE BUSCA -->
+                    <div class="busca-container">
+                        <input
+                            type="text"
+                            id="busca-participante"
+                            placeholder="🔍 Buscar por nome, CPF ou e-mail..."
+                            onkeyup="buscarParticipante(event)"
+                        >
+                        <button
+                            class="btn-buscar"
+                            onclick="buscarParticipante()"
+                        >🔍 Buscar</button>
+                        <button
+                            class="btn-limpar"
+                            onclick="limparBusca()"
+                        >✕ Limpar</button>
+                    </div>
+
                     <div
-                        id="resultado-info"
-                        class="resultado-busca-info"
+                        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <div
+                            class="total-inscritos"
+                            id="total-inscritos"
+                        >
+                            👥 Total de Inscritos: <span id="total-count">0</span>
+                        </div>
+                        <div
+                            id="resultado-info"
+                            class="resultado-busca-info"
+                            style="display:none;"
+                        >
+                            🔍 Resultados encontrados: <strong id="resultado-count">0</strong>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+
+                            <button
+                                class="export-btn export-btn-excel"
+                                onclick="exportarParticipantesExcel()"
+                            >
+                                📋 Exportar Excel
+                            </button>
+                            <button
+                                class="btn-submit-orange"
+                                onclick="carregarParticipantes()"
+                                style="padding: 10px 20px;"
+                            >
+                                🔄 Atualizar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        id="participantes-loading"
+                        style="text-align:center; padding:30px; color:#666;"
+                    >
+                        ⏳ Carregando lista de participantes...
+                    </div>
+
+                    <div
+                        class="table-participantes"
+                        id="participantes-container"
                         style="display:none;"
                     >
-                        🔍 Resultados encontrados: <strong id="resultado-count">0</strong>
+                        <table>
+                            <thead>
+                                <tr id="participantes-headers"></tr>
+                            </thead>
+                            <tbody id="participantes-body"></tbody>
+                        </table>
                     </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
 
-                        <button
-                            class="export-btn export-btn-excel"
-                            onclick="exportarParticipantesExcel()"
-                        >
-                            📋 Exportar Excel
-                        </button>
-                        <button
-                            class="btn-submit-orange"
-                            onclick="carregarParticipantes()"
-                            style="padding: 10px 20px;"
-                        >
-                            🔄 Atualizar
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    id="participantes-loading"
-                    style="text-align:center; padding:30px; color:#666;"
-                >
-                    ⏳ Carregando lista de participantes...
-                </div>
-
-                <div
-                    class="table-participantes"
-                    id="participantes-container"
-                    style="display:none;"
-                >
-                    <table>
-                        <thead>
-                            <tr id="participantes-headers"></tr>
-                        </thead>
-                        <tbody id="participantes-body"></tbody>
-                    </table>
-                </div>
-
-                <!-- PAGINAÇÃO -->
-                <div
-                    id="paginacao-container"
-                    class="paginacao-container"
-                    style="display:none;"
-                >
-                    <div class="paginacao-info">
-                        Mostrando <strong id="paginacao-inicio">0</strong> a <strong id="paginacao-fim">0</strong> de
-                        <strong id="paginacao-total">0</strong> registros
-                    </div>
+                    <!-- PAGINAÇÃO -->
                     <div
-                        class="paginacao-botoes"
-                        id="paginacao-botoes"
-                    ></div>
-                    <div class="paginacao-registros">
-                        <label for="paginacao-tamanho">Registros por página:</label>
-                        <select
-                            id="paginacao-tamanho"
-                            onchange="mudarTamanhoPagina()"
-                        >
-                            <option value="5">5</option>
-                            <option
-                                value="10"
-                                selected
-                            >10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
+                        id="paginacao-container"
+                        class="paginacao-container"
+                        style="display:none;"
+                    >
+                        <div class="paginacao-info">
+                            Mostrando <strong id="paginacao-inicio">0</strong> a <strong id="paginacao-fim">0</strong>
+                            de
+                            <strong id="paginacao-total">0</strong> registros
+                        </div>
+                        <div
+                            class="paginacao-botoes"
+                            id="paginacao-botoes"
+                        ></div>
+                        <div class="paginacao-registros">
+                            <label for="paginacao-tamanho">Registros por página:</label>
+                            <select
+                                id="paginacao-tamanho"
+                                onchange="mudarTamanhoPagina()"
+                            >
+                                <option value="5">5</option>
+                                <option
+                                    value="10"
+                                    selected
+                                >10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div
-                    id="participantes-empty"
-                    style="display:none; text-align:center; padding:30px; color:#888;"
-                >
-                    📭 Nenhum participante inscrito ainda.
+                    <div
+                        id="participantes-empty"
+                        style="display:none; text-align:center; padding:30px; color:#888;"
+                    >
+                        📭 Nenhum participante inscrito ainda.
+                    </div>
                 </div>
             </div>
             <!-- CARD 5.5: CHECK-IN MANUAL -->
@@ -1428,294 +1566,361 @@
                 class="form-card"
                 id="card-checkin-manual"
             >
-                <h2>📋 Check-in Manual</h2>
-
-                <!-- CAMPO DE BUSCA -->
-                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
-                    <input
-                        type="text"
-                        id="busca-checkin-manual"
-                        placeholder="🔍 Digite o nome do participante..."
-                        style="flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #e2ddd6; border-radius: 10px; font-size: 14px; font-family: inherit;"
-                    >
-                    <button
-                        class="btn-buscar"
-                        onclick="buscarParticipanteCheckin()"
-                    >🔍 Buscar</button>
-                    <button
-                        class="btn-limpar"
-                        onclick="limparBuscaCheckin()"
-                    >✕ Limpar</button>
-                </div>
-
-                <!-- RESULTADO DA BUSCA -->
                 <div
-                    id="resultado-checkin-manual"
-                    style="display: none;"
+                    class="card-collapsible"
+                    onclick="toggleCard('checkin')"
                 >
+                    <h2 style="margin-bottom:0; border-left-color: #17a2b8;">
+                        📋 Check-in Manual
+                    </h2>
+                    <span
+                        class="toggle-icon"
+                        id="card-icon-checkin"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-checkin"
+                >
+                    <!-- CAMPO DE BUSCA -->
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <input
+                            type="text"
+                            id="busca-checkin-manual"
+                            placeholder="🔍 Digite o nome do participante..."
+                            style="flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #e2ddd6; border-radius: 10px; font-size: 14px; font-family: inherit;"
+                        >
+                        <button
+                            class="btn-buscar"
+                            onclick="buscarParticipanteCheckin()"
+                        >🔍 Buscar</button>
+                        <button
+                            class="btn-limpar"
+                            onclick="limparBuscaCheckin()"
+                        >✕ Limpar</button>
+                    </div>
+
+                    <!-- RESULTADO DA BUSCA -->
                     <div
-                        id="info-participante"
-                        style="background: #f8f6f2; border-radius: 10px; padding: 20px; border: 1px solid #e2ddd6;"
+                        id="resultado-checkin-manual"
+                        style="display: none;"
                     >
                         <div
-                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
-                            <div>
-                                <h3
-                                    id="checkin-nome"
-                                    style="color: #2d5a3f; margin: 0; font-size: 20px;"
-                                >Nome do Participante</h3>
-                                <p
-                                    id="checkin-email"
-                                    style="color: #868E96; margin: 5px 0 0 0;"
-                                >email@email.com</p>
-                                <p
-                                    id="checkin-curso"
-                                    style="color: #495057; margin: 5px 0;"
-                                >Curso</p>
-                                <p
-                                    id="checkin-status"
-                                    style="margin: 5px 0; font-weight: bold;"
-                                >Status: ⬜ Ausente</p>
+                            id="info-participante"
+                            style="background: #f8f6f2; border-radius: 10px; padding: 20px; border: 1px solid #e2ddd6;"
+                        >
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+                                <div>
+                                    <h3
+                                        id="checkin-nome"
+                                        style="color: #2d5a3f; margin: 0; font-size: 20px;"
+                                    >Nome do Participante</h3>
+                                    <p
+                                        id="checkin-email"
+                                        style="color: #868E96; margin: 5px 0 0 0;"
+                                    >email@email.com</p>
+                                    <p
+                                        id="checkin-curso"
+                                        style="color: #495057; margin: 5px 0;"
+                                    >Curso</p>
+                                    <p
+                                        id="checkin-status"
+                                        style="margin: 5px 0; font-weight: bold;"
+                                    >Status: ⬜ Ausente</p>
+                                </div>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button
+                                        class="btn-submit"
+                                        id="btn-marcar-presenca"
+                                        onclick="marcarPresencaManual()"
+                                        style="background: #28a745; padding: 12px 30px;"
+                                    >
+                                        ✅ Marcar Presença
+                                    </button>
+                                    <button
+                                        class="btn-submit"
+                                        id="btn-desmarcar-presenca"
+                                        onclick="desmarcarPresencaManual()"
+                                        style="background: #dc3545; padding: 12px 30px; display: none;"
+                                    >
+                                        ❌ Desmarcar Presença
+                                    </button>
+                                </div>
                             </div>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <button
-                                    class="btn-submit"
-                                    id="btn-marcar-presenca"
-                                    onclick="marcarPresencaManual()"
-                                    style="background: #28a745; padding: 12px 30px;"
-                                >
-                                    ✅ Marcar Presença
-                                </button>
-                                <button
-                                    class="btn-submit"
-                                    id="btn-desmarcar-presenca"
-                                    onclick="desmarcarPresencaManual()"
-                                    style="background: #dc3545; padding: 12px 30px; display: none;"
-                                >
-                                    ❌ Desmarcar Presença
-                                </button>
-                            </div>
+                            <div
+                                id="checkin-mensagem"
+                                style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <!-- ESTATÍSTICAS -->
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                        <div
+                            style="background: #d4edda; padding: 10px 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
+                            <span style="font-weight: bold; color: #155724;">✅ Presentes</span>
+                            <span
+                                id="total-presentes-manual"
+                                style="font-weight: bold; font-size: 20px; color: #155724; display: block;"
+                            >0</span>
                         </div>
                         <div
-                            id="checkin-mensagem"
-                            style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"
-                        ></div>
-                    </div>
-                </div>
-
-                <!-- ESTATÍSTICAS -->
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
-                    <div
-                        style="background: #d4edda; padding: 10px 20px; border-radius: 8px; border: 1px solid #c3e6cb;">
-                        <span style="font-weight: bold; color: #155724;">✅ Presentes</span>
-                        <span
-                            id="total-presentes-manual"
-                            style="font-weight: bold; font-size: 20px; color: #155724; display: block;"
-                        >0</span>
-                    </div>
-                    <div
-                        style="background: #f8d7da; padding: 10px 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
-                        <span style="font-weight: bold; color: #721c24;">⬜ Ausentes</span>
-                        <span
-                            id="total-ausentes-manual"
-                            style="font-weight: bold; font-size: 20px; color: #721c24; display: block;"
-                        >0</span>
-                    </div>
-                    <div
-                        style="background: #d1ecf1; padding: 10px 20px; border-radius: 8px; border: 1px solid #bee5eb;">
-                        <span style="font-weight: bold; color: #0c5460;">👥 Total</span>
-                        <span
-                            id="total-inscritos-manual"
-                            style="font-weight: bold; font-size: 20px; color: #0c5460; display: block;"
-                        >0</span>
+                            style="background: #f8d7da; padding: 10px 20px; border-radius: 8px; border: 1px solid #f5c6cb;">
+                            <span style="font-weight: bold; color: #721c24;">⬜ Ausentes</span>
+                            <span
+                                id="total-ausentes-manual"
+                                style="font-weight: bold; font-size: 20px; color: #721c24; display: block;"
+                            >0</span>
+                        </div>
+                        <div
+                            style="background: #d1ecf1; padding: 10px 20px; border-radius: 8px; border: 1px solid #bee5eb;">
+                            <span style="font-weight: bold; color: #0c5460;">👥 Total</span>
+                            <span
+                                id="total-inscritos-manual"
+                                style="font-weight: bold; font-size: 20px; color: #0c5460; display: block;"
+                            >0</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- CARD 6: CERTIFICADOS -->
-            <div
-                class="form-card"
-                id="card-certificados"
-            >
-                <h2>6. Certificados de Participação</h2>
-                <!-- ============================================= -->
-                <!-- PERSONALIZAÇÃO DO CERTIFICADO                -->
-                <!-- ============================================= -->
+            <div class="form-card">
                 <div
-                    style="background: #f8f6f4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e0d5c1;">
-                    <h3 style="font-size: 14px; color: #694573; margin-bottom: 10px;">⚙️ Personalização do Certificado
-                    </h3>
+                    class="card-collapsible"
+                    onclick="toggleCard('certificados')"
+                >
+                    <h2 style="margin-bottom:0; border-left-color: #694573;">
+                        🎓 Certificados de Participação
+                    </h2>
+                    <span
+                        class="toggle-icon"
+                        id="card-icon-certificados"
+                    >▼</span>
+                </div>
+                <div
+                    class="card-content"
+                    id="card-content-certificados"
+                >
+                    <!-- ============================================= -->
+                    <!-- PERSONALIZAÇÃO DO CERTIFICADO                -->
+                    <!-- ============================================= -->
+                    <div
+                        style="background: #f8f6f4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e0d5c1;">
+                        <h3 style="font-size: 14px; color: #694573; margin-bottom: 10px;">⚙️ Personalização do
+                            Certificado
+                        </h3>
 
-                    <div class="personalizacao-grid">
-                        <!-- Link da Logo -->
-                        <div class="form-group personalizacao-full">
-                            <label for="cert-logo-url">🔗 Link da Logo (imagem no topo)</label>
+                        <div class="personalizacao-grid">
+                            <!-- Link da Logo -->
+                            <div class="form-group personalizacao-full">
+                                <label for="cert-logo-url">🔗 Link da Logo (imagem no topo)</label>
+                                <input
+                                    type="text"
+                                    id="cert-logo-url"
+                                    placeholder="https://seusite.com/logo.png"
+                                >
+                                <small style="color:#868E96; font-size:11px;">Deixe em branco para não exibir
+                                    logo.
+                                    Tamanho
+                                    recomendado: 120x40px</small>
+                            </div>
+
+                            <!-- Título -->
+                            <div class="form-group">
+                                <label for="cert-titulo">📌 Título do Certificado</label>
+                                <input
+                                    type="text"
+                                    id="cert-titulo"
+                                    value="CERTIFICADO DE PARTICIPAÇÃO"
+                                >
+                            </div>
+
+                            <!-- Subtítulo -->
+                            <div class="form-group">
+                                <label for="cert-subtitulo">📌 Subtítulo / Texto de abertura</label>
+                                <input
+                                    type="text"
+                                    id="cert-subtitulo"
+                                    value="Certificamos que"
+                                >
+                            </div>
+
+                            <!-- Carga Horária -->
+                            <div class="form-group">
+                                <label for="cert-carga">⏱️ Carga Horária</label>
+                                <input
+                                    type="text"
+                                    id="cert-carga"
+                                    value="20 horas"
+                                >
+                            </div>
+
+                            <!-- Cor da Linha -->
+                            <div class="form-group">
+                                <label for="cert-cor-linha">🎨 Cor da Linha Decorativa</label>
+                                <input
+                                    type="color"
+                                    id="cert-cor-linha"
+                                    value="#694573"
+                                    style="height:40px; padding:4px; cursor:pointer;"
+                                >
+                            </div>
+                            <!-- Nome do Assinante -->
+                            <div class="form-group">
+                                <label for="cert-assinante">✍️ Nome do Assinante (aparece na assinatura)</label>
+                                <input
+                                    type="text"
+                                    id="cert-assinante"
+                                    value="COMISSÃO ORGANIZADORA"
+                                    style="width:100%; padding:8px 12px; border:2px solid #e0d5c1; border-radius:6px; font-size:13px;"
+                                >
+                                <small style="color:#868E96; font-size:11px;">Nome que aparecerá abaixo da linha
+                                    de
+                                    assinatura</small>
+                            </div>
+
+
+                            <!-- Botões -->
+                            <div
+                                class="form-group personalizacao-full"
+                                style="display: flex; gap:10px; align-items: center; flex-wrap: wrap;"
+                            >
+                                <button
+                                    onclick="salvarPersonalizacaoCertificado()"
+                                    class="btn-submit"
+                                    style="background:#694573; padding:10px 25px;"
+                                >💾 Salvar Personalização</button>
+                                <button
+                                    onclick="restaurarPersonalizacaoCertificado()"
+                                    class="btn-submit"
+                                    style="background:#6c757d; padding:10px 25px;"
+                                >🔄 Restaurar Padrão</button>
+                                <span
+                                    id="cert-personalizacao-status"
+                                    class="personalizacao-status"
+                                >✅ Salvo!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ÁREA DE UPLOAD DA IMAGEM DE FUNDO -->
+                    <div class="upload-fundo-area">
+                        <h3>🖼️ Imagem de Fundo do Certificado</h3>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                             <input
                                 type="text"
-                                id="cert-logo-url"
-                                placeholder="https://seusite.com/logo.png"
+                                id="certificado-fundo-url"
+                                placeholder="Cole o link da imagem aqui (ex: https://seusite.com/fundo.png)"
                             >
-                            <small style="color:#868E96; font-size:11px;">Deixe em branco para não exibir logo. Tamanho
-                                recomendado: 120x40px</small>
+                            <button
+                                onclick="salvarFundoCertificado()"
+                                class="btn-salvar-fundo"
+                            >💾 Salvar Fundo</button>
+                            <button
+                                onclick="testarFundoCertificado()"
+                                class="btn-testar-fundo"
+                            >👁️ Testar</button>
+                            <button
+                                onclick="removerFundoCertificado()"
+                                class="btn-remover-fundo"
+                                style="background:#dc3545; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:700;"
+                            >🗑️ Remover Fundo</button>
                         </div>
-
-                        <!-- Título -->
-                        <div class="form-group">
-                            <label for="cert-titulo">📌 Título do Certificado</label>
-                            <input
-                                type="text"
-                                id="cert-titulo"
-                                value="CERTIFICADO DE PARTICIPAÇÃO"
-                            >
+                        <div style="margin-top: 10px; font-size: 12px; color: #868E96;">
+                            ⚠️ Use o link direto da imagem. Tamanho recomendado: 1200 x 848px (proporção A4
+                            paisagem).
+                            <br>💡 Hospede no Google Drive, Imgur ou seu servidor.
                         </div>
-
-                        <!-- Subtítulo -->
-                        <div class="form-group">
-                            <label for="cert-subtitulo">📌 Subtítulo / Texto de abertura</label>
-                            <input
-                                type="text"
-                                id="cert-subtitulo"
-                                value="Certificamos que"
-                            >
-                        </div>
-
-                        <!-- Carga Horária -->
-                        <div class="form-group">
-                            <label for="cert-carga">⏱️ Carga Horária</label>
-                            <input
-                                type="text"
-                                id="cert-carga"
-                                value="20 horas"
-                            >
-                        </div>
-
-                        <!-- Cor da Linha -->
-                        <div class="form-group">
-                            <label for="cert-cor-linha">🎨 Cor da Linha Decorativa</label>
-                            <input
-                                type="color"
-                                id="cert-cor-linha"
-                                value="#694573"
-                                style="height:40px; padding:4px; cursor:pointer;"
-                            >
-                        </div>
-                        <!-- Nome do Assinante -->
-                        <div class="form-group">
-                            <label for="cert-assinante">✍️ Nome do Assinante (aparece na assinatura)</label>
-                            <input
-                                type="text"
-                                id="cert-assinante"
-                                value="COMISSÃO ORGANIZADORA"
-                                style="width:100%; padding:8px 12px; border:2px solid #e0d5c1; border-radius:6px; font-size:13px;"
-                            >
-                            <small style="color:#868E96; font-size:11px;">Nome que aparecerá abaixo da linha de
-                                assinatura</small>
-                        </div>
-
-
-                        <!-- Botões -->
                         <div
-                            class="form-group personalizacao-full"
-                            style="display: flex; gap:10px; align-items: center; flex-wrap: wrap;"
+                            id="fundo-status"
+                            class="fundo-status"
+                        >✅ Fundo salvo com sucesso!</div>
+                    </div>
+
+                    <!-- SELEÇÃO DO PARTICIPANTE -->
+                    <div class="certificado-selecao">
+                        <label
+                            for="certificado-participante"
+                            style="font-weight:600; font-size:14px; color:#495057;"
                         >
+                            👤 Selecionar Participante:
+                        </label>
+                        <select id="certificado-participante">
+                            <option value="">Carregando participantes...</option>
+                        </select>
+                        <button
+                            onclick="gerarCertificado()"
+                            class="btn-submit"
+                            style="background:#694573; padding: 10px 25px;"
+                        >🎓 Gerar Certificado</button>
+                    </div>
+
+                    <!-- LOADING -->
+                    <div
+                        id="certificado-loading"
+                        style="text-align:center; padding:20px; color:#666; display:none;"
+                    >
+                        ⏳ Gerando certificado...
+                    </div>
+
+                    <!-- PREVIEW DO CERTIFICADO -->
+                    <div
+                        id="certificado-container"
+                        class="certificado-container"
+                        style="display:none;"
+                    >
+                        <div
+                            class="certificado-preview"
+                            id="certificado-preview"
+                        >
+                            <!-- O certificado será inserido aqui -->
+                        </div>
+                        <div class="certificado-acoes">
                             <button
-                                onclick="salvarPersonalizacaoCertificado()"
-                                class="btn-submit"
-                                style="background:#694573; padding:10px 25px;"
-                            >💾 Salvar Personalização</button>
+                                class="btn-baixar"
+                                onclick="baixarCertificado()"
+                            >⬇️ Baixar PDF</button>
                             <button
-                                onclick="restaurarPersonalizacaoCertificado()"
-                                class="btn-submit"
-                                style="background:#6c757d; padding:10px 25px;"
-                            >🔄 Restaurar Padrão</button>
-                            <span
-                                id="cert-personalizacao-status"
-                                class="personalizacao-status"
-                            >✅ Salvo!</span>
+                                class="btn-enviar"
+                                onclick="enviarCertificadoEmail()"
+                            >📧 Enviar por E-mail</button>
                         </div>
                     </div>
                 </div>
-                <!-- ÁREA DE UPLOAD DA IMAGEM DE FUNDO -->
-                <div class="upload-fundo-area">
-                    <h3>🖼️ Imagem de Fundo do Certificado</h3>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
-                        <input
-                            type="text"
-                            id="certificado-fundo-url"
-                            placeholder="Cole o link da imagem aqui (ex: https://seusite.com/fundo.png)"
-                        >
-                        <button
-                            onclick="salvarFundoCertificado()"
-                            class="btn-salvar-fundo"
-                        >💾 Salvar Fundo</button>
-                        <button
-                            onclick="testarFundoCertificado()"
-                            class="btn-testar-fundo"
-                        >👁️ Testar</button>
-                        <button
-                            onclick="removerFundoCertificado()"
-                            class="btn-remover-fundo"
-                            style="background:#dc3545; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:700;"
-                        >🗑️ Remover Fundo</button>
-                    </div>
-                    <div style="margin-top: 10px; font-size: 12px; color: #868E96;">
-                        ⚠️ Use o link direto da imagem. Tamanho recomendado: 1200 x 848px (proporção A4 paisagem).
-                        <br>💡 Hospede no Google Drive, Imgur ou seu servidor.
-                    </div>
-                    <div
-                        id="fundo-status"
-                        class="fundo-status"
-                    >✅ Fundo salvo com sucesso!</div>
-                </div>
-
-                <!-- SELEÇÃO DO PARTICIPANTE -->
-                <div class="certificado-selecao">
-                    <label
-                        for="certificado-participante"
-                        style="font-weight:600; font-size:14px; color:#495057;"
-                    >
-                        👤 Selecionar Participante:
-                    </label>
-                    <select id="certificado-participante">
-                        <option value="">Carregando participantes...</option>
-                    </select>
-                    <button
-                        onclick="gerarCertificado()"
-                        class="btn-submit"
-                        style="background:#694573; padding: 10px 25px;"
-                    >🎓 Gerar Certificado</button>
-                </div>
-
-                <!-- LOADING -->
-                <div
-                    id="certificado-loading"
-                    style="text-align:center; padding:20px; color:#666; display:none;"
-                >
-                    ⏳ Gerando certificado...
-                </div>
-
-                <!-- PREVIEW DO CERTIFICADO -->
-                <div
-                    id="certificado-container"
-                    class="certificado-container"
-                    style="display:none;"
-                >
-                    <div
-                        class="certificado-preview"
-                        id="certificado-preview"
-                    >
-                        <!-- O certificado será inserido aqui -->
-                    </div>
-                    <div class="certificado-acoes">
-                        <button
-                            class="btn-baixar"
-                            onclick="baixarCertificado()"
-                        >⬇️ Baixar PDF</button>
-                        <button
-                            class="btn-enviar"
-                            onclick="enviarCertificadoEmail()"
-                        >📧 Enviar por E-mail</button>
-                    </div>
-                </div>
+            </div>
+            <!-- FOOTER -->
+            <div style="
+                background: white;
+                border-radius: 14px;
+                padding: 20px 28px;
+                margin-top: 24px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+                border: 1px solid rgba(0,0,0,0.03);
+                text-align: center;
+            ">
+                <p style="
+                    font-size: 13px;
+                    color: #868E96;
+                    margin: 0;
+                    font-weight: 400;
+                ">
+                    Desenvolvido por
+                    <strong style="color: #2d5a3f; font-weight: 600;">
+                        CARLOS MAGNO LOPES
+                    </strong>
+                    <span style="color: #d4a373; margin: 0 5px;">•</span>
+                    <span style="color: #adb5bd; font-size: 12px;">
+                        Painel de Gestão de Eventos
+                    </span>
+                </p>
+                <p style="
+                    font-size: 11px;
+                    color: #adb5bd;
+                    margin: 5px 0 0 0;
+                    font-weight: 300;
+                ">
+                    Universidade Federal do Pará - Campus Universitário do Marajó / Breves
+                </p>
             </div>
             <!-- MODAL DE EDIÇÃO (OCULTO INICIALMENTE) -->
             <div
@@ -1849,10 +2054,22 @@
                 });
 
                 btnLogout.onclick = function () {
+                    // Oculta o painel e mostra o login
                     painelScreen.style.display = 'none';
                     loginScreen.style.display = 'flex';
+
+                    // Remove os dados salvos
                     localStorage.removeItem('adminLogado');
                     localStorage.removeItem('adminUsuario');
+
+                    // =============================================
+                    // LIMPA OS CAMPOS DE LOGIN (NOVO)
+                    // =============================================
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+
+                    // Oculta a mensagem de erro
+                    document.getElementById('loginError').style.display = 'none';
                 };
                 // Carrega os dados das Configurações Gerais do Servidor
                 function carregarConfigsPai() {
@@ -3879,7 +4096,23 @@
                     }
 
                 })();
+                // =============================================
+                // FUNÇÃO PARA ABRIR/FECHAR CARDS
+                // =============================================
+                function toggleCard(cardId) {
+                    var content = document.getElementById('card-content-' + cardId);
+                    var icon = document.getElementById('card-icon-' + cardId);
 
+                    if (!content || !icon) return;
+
+                    if (content.classList.contains('open')) {
+                        content.classList.remove('open');
+                        icon.classList.remove('open');
+                    } else {
+                        content.classList.add('open');
+                        icon.classList.add('open');
+                    }
+                }
 
             </script>
 </body>
